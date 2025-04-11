@@ -1,0 +1,540 @@
+// ✅ FINAL CODE TO INTEGRATE — App.jsx
+// Fitness RPG Phase 1: Login → Character Creation → Narrative → Workouts → Quiz → Boss → Reward
+// Includes year group, quiz debuffs, BlazePod penalty, loot reward
+
+import { useState } from "react";
+
+const quizQuestions = [
+  { q: 'What is "blue" in Spanish?', a: "azul", options: ["rojo", "verde", "azul"] },
+  { q: 'What is "yellow" in Welsh?', a: "melyn", options: ["glas", "melyn", "coch"] },
+  { q: 'What is "cat" in Spanish?', a: "gato", options: ["gato", "perro", "pez"] },
+  { q: 'What is "black" in Welsh?', a: "du", options: ["du", "gwyn", "glas"] },
+  { q: 'What is "one" in Spanish?', a: "uno", options: ["dos", "tres", "uno"] },
+  { q: 'What is "six" in Welsh?', a: "chwech", options: ["tri", "pump", "chwech"] },
+];
+
+function App() {
+  const [signedIn, setSignedIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [gameState, setGameState] = useState({
+    characterCreated: false,
+    studentName: "",
+    yearGroup: "",
+    goal: "",
+    bodyWeight: 0,
+    introStage: 0,
+    currentRoom: 1,
+    workoutCount: 0,
+    explorationLog: [],
+    quizStage: 0,
+    quizScore: 0,
+    bossReady: false,
+    bossDefeated: false,
+    interrupted: false,
+    missedBlazePods: 2,
+    lootUnlocked: [],
+  });
+  const [workoutLog, setWorkoutLog] = useState({
+    exerciseInput: { name: "", sets: "", reps: "", weight: "" },
+    strengthExercises: [],
+    cardioInput: { distance: "", calories: "" },
+    machineName: "",
+    cardioExercises: [],
+  });
+
+  if (!signedIn) {
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>🔐 Student Sign In</h2>
+        <input
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <br />
+        <input
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <br />
+        <button onClick={() => setSignedIn(true)}>Sign In</button>
+      </div>
+    );
+  }
+
+  if (!gameState.characterCreated) {
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>🎮 Character Creation</h2>
+        <input
+          placeholder="Name"
+          value={gameState.studentName}
+          onChange={(e) =>
+            setGameState({ ...gameState, studentName: e.target.value })
+          }
+        />
+        <br />
+        <select
+          value={gameState.yearGroup}
+          onChange={(e) => setGameState({ ...gameState, yearGroup: e.target.value })}
+        >
+          <option value="">Select Year Group</option>
+          <option value="Year 7">Year 7</option>
+          <option value="Year 8">Year 8</option>
+          <option value="Year 9">Year 9</option>
+          <option value="Year 10">Year 10</option>
+          <option value="Year 11">Year 11</option>
+        </select>
+        <br />
+        <select
+          value={gameState.goal}
+          onChange={(e) => setGameState({ ...gameState, goal: e.target.value })}
+        >
+          <option value="">Select goal</option>
+          <option value="strength">Strength</option>
+          <option value="endurance">Endurance</option>
+          <option value="hybrid">Hybrid</option>
+        </select>
+        <br />
+        <input
+          type="number"
+          placeholder="Your Body Weight (kg)"
+          value={gameState.bodyWeight === 0 ? "" : gameState.bodyWeight}
+          onChange={(e) =>
+            setGameState({ ...gameState, bodyWeight: +e.target.value })
+          }
+        />
+        <br />
+        <button
+          onClick={() => setGameState({ ...gameState, characterCreated: true })}
+        >
+          Start Game
+        </button>
+      </div>
+    );
+  }
+  if (gameState.introStage === 0)
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>🧊 Locked In</h2>
+        <p>
+          You were stuffed into a locker by bullies. You shouted for help, but
+          no one came. Then… the evacuation alarm rang. Panic erupted outside.
+          You screamed… and passed out from the lack of air.
+        </p>
+        <p>⏱️ 24 hours later…</p>
+        <p>
+          You awake—cold, cramped, and alone. The building is silent. Lights
+          flicker. You scream again… nothing.
+        </p>
+        <p>
+          💥 Using the last of your strength, you kick the locker door until it
+          swings open. You collapse out onto the changing room floor, freezing
+          cold.
+        </p>
+        <p>You must get warm fast or risk freezing in the dark...</p>
+        <button onClick={() => setGameState({ ...gameState, introStage: 1 })}>
+          Get Moving
+        </button>
+      </div>
+    );
+
+  if (gameState.introStage === 1)
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>🔥 Warm-Up</h2>
+        <p>
+          Your muscles ache. You shuffle across the room, rubbing your arms. You
+          spot a dusty rowing machine still plugged in.
+        </p>
+        <p>🏃 To raise your heart rate, complete a 500m row.</p>
+        <button onClick={() => setGameState({ ...gameState, introStage: 2 })}>
+          Row Complete
+        </button>
+      </div>
+    );
+  if (gameState.introStage === 2)
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>🧍 Mobility Stretch</h2>
+        <p>
+          With your blood flowing, you explore the changing room. A locker lies
+          tipped on its side—underneath it, something shiny glints in the
+          flickering light.
+        </p>
+        <p>
+          You crawl forward… but your body is still stiff from the locker. You
+          can’t quite reach.
+        </p>
+        <p>🦵 Perform 10 lunges and 10 arm circles to loosen up.</p>
+        <button onClick={() => setGameState({ ...gameState, introStage: 3 })}>
+          Stretch Complete
+        </button>
+      </div>
+    );
+
+  if (gameState.introStage === 3)
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>🔧 Escape Options</h2>
+        <p>
+          You finally grab the object—it’s a flathead screwdriver. Not much… but
+          it could help.
+        </p>
+        <p>
+          You check the door: locked. But maybe you can loosen it. Or… there's a
+          bench nearby. Could you climb and escape through the ceiling tiles?
+        </p>
+        <p>🧠 Choose your escape route:</p>
+        <p>💪 Slam the screwdriver into the lock—10 slam balls</p>
+        <p>⚡ Leap onto the bench and push up into the tiles—10 jump squats</p>
+        <button onClick={() => setGameState({ ...gameState, introStage: 4 })}>
+          Break Out
+        </button>
+      </div>
+    );
+  if (gameState.introStage === 4 && gameState.workoutCount <= 3) {
+    if (gameState.workoutCount === 0) {
+      return (
+        <div style={{ padding: 20 }}>
+          <h2>🏃 Escape to the Corridor</h2>
+          <p>
+            You burst out into the hallway—the emergency lights flicker red. The
+            corridor is in ruins: lockers ripped open, bags spilled across the
+            floor.
+          </p>
+          <p>
+            🎒 You clutch the empty bag you found earlier. Time to fill it with
+            anything useful.
+          </p>
+          <p>
+            In the distance… a metallic dragging sound echoes through the
+            darkness.
+          </p>
+          <p>
+            You spot the Languages Department ahead. One door is slightly
+            ajar—Mr Watkins’ room.
+          </p>
+          <button
+            onClick={() =>
+              setGameState({
+                ...gameState,
+                workoutCount: 1,
+                currentRoom: 1,
+                introStage: 4,
+              })
+            }
+          >
+            Enter Mr Watkins' Room
+          </button>
+        </div>
+      );
+    }
+    let classroomName, roomDescription;
+
+    if (gameState.currentRoom === 1) {
+      classroomName = "Mr Watkins'";
+      roomDescription = "You scavenge the room for supplies. Log your workout below:";
+    } else if (gameState.currentRoom === 2) {
+      classroomName = "Miss John's";
+      roomDescription = "You head further into the Languages corridor. Miss John's classroom is barely lit. Desks are overturned and chairs are jammed against the back of the door. You squeeze through. There’s a faint buzzing—maybe the lights? Or something else. You need to scavenge supplies quickly and quietly.";
+    } else if (gameState.currentRoom === 3) {
+      classroomName = "Mrs Roche's";
+      roomDescription = "You cautiously enter Mrs Roche's classroom. It's quiet—too quiet. You begin your workout, but halfway through, you hear movement outside...";
+    }
+
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>📚 {classroomName} Classroom — Session {gameState.currentRoom}</h2>
+        <p>{roomDescription}</p>
+        {gameState.goal === "strength" ? (
+          <>
+            <input
+              placeholder="Exercise"
+              value={workoutLog.exerciseInput.name}
+              onChange={(e) =>
+                setWorkoutLog({
+                  ...workoutLog,
+                  exerciseInput: {
+                    ...workoutLog.exerciseInput,
+                    name: e.target.value,
+                  },
+                })
+              }
+            />
+            <input
+              placeholder="Sets"
+              value={workoutLog.exerciseInput.sets}
+              onChange={(e) =>
+                setWorkoutLog({
+                  ...workoutLog,
+                  exerciseInput: {
+                    ...workoutLog.exerciseInput,
+                    sets: e.target.value,
+                  },
+                })
+              }
+            />
+            <input
+              placeholder="Reps"
+              value={workoutLog.exerciseInput.reps}
+              onChange={(e) =>
+                setWorkoutLog({
+                  ...workoutLog,
+                  exerciseInput: {
+                    ...workoutLog.exerciseInput,
+                    reps: e.target.value,
+                  },
+                })
+              }
+            />
+            <input
+              placeholder="Weight (kg)"
+              value={workoutLog.exerciseInput.weight}
+              onChange={(e) =>
+                setWorkoutLog({
+                  ...workoutLog,
+                  exerciseInput: {
+                    ...workoutLog.exerciseInput,
+                    weight: e.target.value,
+                  },
+                })
+              }
+            />
+            <button
+              onClick={() => {
+                if (
+                  workoutLog.exerciseInput.name &&
+                  workoutLog.exerciseInput.sets &&
+                  workoutLog.exerciseInput.reps &&
+                  workoutLog.exerciseInput.weight
+                ) {
+                  setWorkoutLog({
+                    ...workoutLog,
+                    strengthExercises: [
+                      ...workoutLog.strengthExercises,
+                      { ...workoutLog.exerciseInput },
+                    ],
+                    exerciseInput: { name: "", sets: "", reps: "", weight: "" },
+                  });
+                }
+              }}
+            >
+              Add Exercise
+            </button>
+            <ul>
+              {workoutLog.strengthExercises.map((ex, idx) => (
+                <li key={idx}>
+                  {ex.name} {ex.sets}x{ex.reps} @ {ex.weight}kg
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <>
+            <input
+              placeholder="Machine (Treadmill / Rower)"
+              value={workoutLog.machineName}
+              onChange={(e) =>
+                setWorkoutLog({ ...workoutLog, machineName: e.target.value })
+              }
+            />
+            <input
+              placeholder="Distance (km)"
+              value={workoutLog.cardioInput.distance}
+              onChange={(e) =>
+                setWorkoutLog({
+                  ...workoutLog,
+                  cardioInput: {
+                    ...workoutLog.cardioInput,
+                    distance: e.target.value,
+                  },
+                })
+              }
+            />
+            <input
+              placeholder="Calories Burned"
+              value={workoutLog.cardioInput.calories}
+              onChange={(e) =>
+                setWorkoutLog({
+                  ...workoutLog,
+                  cardioInput: {
+                    ...workoutLog.cardioInput,
+                    calories: e.target.value,
+                  },
+                })
+              }
+            />
+            <button
+              onClick={() => {
+                if (
+                  workoutLog.machineName &&
+                  workoutLog.cardioInput.distance &&
+                  workoutLog.cardioInput.calories
+                ) {
+                  setWorkoutLog({
+                    ...workoutLog,
+                    cardioExercises: [
+                      ...workoutLog.cardioExercises,
+                      {
+                        machine: workoutLog.machineName,
+                        distance: workoutLog.cardioInput.distance,
+                        calories: workoutLog.cardioInput.calories,
+                      },
+                    ],
+                    cardioInput: { distance: "", calories: "" },
+                    machineName: "",
+                  });
+                }
+              }}
+            >
+              Add Cardio
+            </button>
+            <ul>
+              {workoutLog.cardioExercises.map((ex, idx) => (
+                <li key={idx}>
+                  {ex.machine} - {ex.distance}km, {ex.calories} cal
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        <button
+          onClick={() => {
+            const currentClassroom = gameState.currentRoom;
+            const newRoom = currentClassroom + 1;
+            const newCount = gameState.workoutCount + 1;
+            const log = [
+              ...gameState.explorationLog,
+              `Workout ${newCount} completed in ${classroomName}.`,
+            ];
+
+            if (classroomName === "Mrs Roche's") {
+              setGameState({
+                ...gameState,
+                workoutCount: newCount,
+                currentRoom: newRoom,
+                explorationLog: log,
+                introStage: 5,
+                interrupted: true,
+              });
+            } else {
+              setGameState({
+                ...gameState,
+                workoutCount: newCount,
+                currentRoom: newRoom,
+                explorationLog: log,
+              });
+            }
+
+            setWorkoutLog({
+              exerciseInput: { name: "", sets: "", reps: "", weight: "" },
+              strengthExercises: [],
+              cardioInput: { distance: "", calories: "" },
+              cardioExercises: [],
+              machineName: "",
+            });
+          }}
+        >
+          Finish Scavenge
+        </button>
+        <p>📒 Supplies Collected: {gameState.explorationLog.join(" | ")}</p>
+      </div>
+    );
+  }
+
+  if (
+    gameState.introStage === 5 &&
+    gameState.quizStage < quizQuestions.length
+  ) {
+    const q = quizQuestions[gameState.quizStage];
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>🚪 The Door Slams Shut!</h2>
+        <p>A strange puzzle appears on the door. You hear footsteps approaching fast...</p>
+        <p><strong>Answer quickly! Incorrect answers will power up the boss!</strong></p>
+        <h3>{q.q}</h3>
+        {q.options.map((opt) => (
+          <button
+            key={opt}
+            onClick={() =>
+              setGameState({
+                ...gameState,
+                quizScore:
+                  opt === q.a ? gameState.quizScore + 1 : gameState.quizScore,
+                quizStage: gameState.quizStage + 1,
+              })
+            }
+          >
+            {opt}
+          </button>
+        ))}
+      </div>
+    );
+  }
+  if (
+    gameState.introStage === 5 &&
+    gameState.quizStage >= quizQuestions.length &&
+    !gameState.bossReady
+  ) {
+    setGameState((prev) => ({ ...prev, bossReady: true }));
+    return (
+      <div style={{ padding: 20 }}>
+        <p>Quiz complete! Preparing boss battle...</p>
+      </div>
+    );
+  }
+
+  if (gameState.bossReady && !gameState.bossDefeated) {
+    const debuffText =
+      gameState.quizScore < 3
+        ? "🔥 Debuffs active: Fire Breath and Bull Charge incoming! Perform burpees and bear crawls!"
+        : gameState.quizScore < 5
+        ? "🔥 Debuff active: Fire Breath! Extra burpees required!"
+        : "✅ No debuffs. You are fully prepared!";
+
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>👹 Boss Fight: Mutated Mrs Roche</h2>
+        <p>{debuffText}</p>
+        <p>🏋️ 21-15-9: Box jumps, slam balls, bear crawls</p>
+        <p>⚡ Missed BlazePods: {gameState.missedBlazePods} → Burn {gameState.missedBlazePods * 5} calories post-fight!</p>
+        <button
+          onClick={() =>
+            setGameState({ ...gameState, bossDefeated: true })
+          }
+        >
+          Complete Battle
+        </button>
+      </div>
+    );
+  }
+  if (gameState.bossDefeated) {
+    const loot = ["🧾 Workout Logbook", "🎽 Cosmetic Reward"];
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>🎉 Victory!</h2>
+        <p>You earn:</p>
+        <ul>
+          {loot.map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+        </ul>
+        <p>🏅 Year Group: {gameState.yearGroup}</p>
+        <p>📘 Note: You must burn {gameState.missedBlazePods * 5} calories to clear BlazePod penalty!</p>
+        <p>💬 “You did it! This logbook will track your training as you head deeper into the school…”</p>
+        <button onClick={() => window.location.reload()}>Restart Game</button>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+export default App;
+
