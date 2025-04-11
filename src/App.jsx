@@ -1,13 +1,18 @@
 import { useState } from "react";
-import SignIn from "./SignIn";
-import CharacterCreation from "./CharacterCreation";
-import GamePhase from "./GamePhase"; // Ensure this matches the exact file name
+import SignIn from "./components/SignIn";
+import CharacterCreation from "./components/CharacterCreation";
+import GamePhase from "./components/GamePhase";
 
 function App() {
   const [signedIn, setSignedIn] = useState(false);
   const [gameState, setGameState] = useState({
     characterCreated: false,
-    currentPhase: "intro",
+    introStage: 0,
+    quizStage: 0,
+    bossReady: false,
+    bossDefeated: false,
+    missedBlazePods: 2,
+    lootUnlocked: [],
   });
 
   if (!signedIn) {
@@ -15,13 +20,7 @@ function App() {
   }
 
   if (!gameState.characterCreated) {
-    return (
-      <CharacterCreation
-        onComplete={(characterData) =>
-          setGameState({ ...gameState, ...characterData, characterCreated: true })
-        }
-      />
-    );
+    return <CharacterCreation gameState={gameState} setGameState={setGameState} />;
   }
 
   return <GamePhase gameState={gameState} setGameState={setGameState} />;
