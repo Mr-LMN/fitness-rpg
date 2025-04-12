@@ -1,41 +1,90 @@
-import React from "react";
+import React, { useState } from "react";
+import WorkoutLogger from "../WorkoutLogger";
 
 function Room1({ setGameState, gameState }) {
-  const handleContinue = () => {
-    // Log the workout and transition to the next room
+  const [workoutUploaded, setWorkoutUploaded] = useState(false);
+  const [scavengeCompleted, setScavengeCompleted] = useState(false);
+  const [foundItem, setFoundItem] = useState(null);
+
+  const handleUploadWorkout = () => {
+    setWorkoutUploaded(true);
     setGameState((prev) => ({
       ...prev,
       annotations: [
         ...prev.annotations,
         {
           room: "Mr. Watkins' Room",
-          activity: "Workout completed",
+          activity: "Workout uploaded",
           timestamp: new Date().toISOString(),
         },
       ],
-      completedRooms: [...prev.completedRooms, "Mr. Watkins' Room"],
-      currentRoom: "Mrs. John's Room", // Move to Room2
     }));
   };
 
+  const handleScavenge = () => {
+    const lootItem = "Crumpled School Map";
+    setFoundItem(lootItem);
+    setScavengeCompleted(true);
+
+    setGameState((prev) => ({
+      ...prev,
+      inventory: [...(prev.inventory || []), lootItem],
+      annotations: [
+        ...prev.annotations,
+        {
+          room: "Mr. Watkins' Room",
+          activity: `Found ${lootItem}`,
+          timestamp: new Date().toISOString(),
+        },
+      ],
+      visibleRooms: [...prev.visibleRooms, "Mrs. John's Room"],
+    }));
+  };
+
+  const handleRest = () => {
+    setGameState((prev) => ({
+      ...prev,
+      completedRooms: [...prev.completedRooms, "Mr. Watkins' Room"],
+      currentRoom: null,
+      introStage: 5, // Clearly move back to the Map component
+      showOverlay: true,
+      annotations: [
+        ...prev.annotations,
+        {
+          room: "Mr. Watkins' Room",
+          activity: "Rested overnight",
+          timestamp: new Date().toISOString(),
+        },
+      ],
+    }));
+  };
+  
+
   return (
-    <div>
+    <div className="room-container">
       <h1>Mr. Watkins' Room</h1>
-      <p>You have entered Mr. Watkins' classroom. It's eerily quiet.</p>
-      <p>Dust floats in the light. Papers are scattered across the desks.</p>
-      <p>You step inside, unsure if you're alone...</p>
+      {!workoutUploaded && (
+        <>
+          <p>You cautiously enter Mr. Watkins' classroom. The eerie silence provides the perfect atmosphere to log your workout.</p>
+          <WorkoutLogger roomNumber={1} setGameState={setGameState} />
+          <button onClick={handleUploadWorkout}>Upload Your Workout</button>
+        </>
+      )}
 
-      {/* Display current game progress */}
-      <div>
-        <h3>Game Progress:</h3>
-        <ul>
-          {gameState.completedRooms.map((room, index) => (
-            <li key={index}>{room}</li>
-          ))}
-        </ul>
-      </div>
+      {workoutUploaded && !scavengeCompleted && (
+        <>
+          <p>Workout uploaded successfully! Let's see what useful items you can find around here.</p>
+          <button onClick={handleScavenge}>See Your Scavenging Results</button>
+        </>
+      )}
 
-      <button onClick={handleContinue}>Continue</button>
+      {scavengeCompleted && foundItem && (
+        <>
+          <p>Success! You've found a <strong>{foundItem}</strong>. The map reveals previously hidden locations, including Mrs. John's Room.</p>
+          <p>It's been a long day. You decide it’s safest to rest here tonight and consider your next move in the morning.</p>
+          <button onClick={handleRest}>Rest Up for the Night</button>
+        </>
+      )}
     </div>
   );
 }

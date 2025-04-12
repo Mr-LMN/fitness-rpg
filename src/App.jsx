@@ -21,10 +21,11 @@ function App() {
   const [gameState, setGameState] = useState({
     characterCreated: false,
     introStage: 0,
-    currentRoom: null,
-    completedRooms: [],
-    visibleRooms: [],
+    currentRoom: "Mr. Watkins' Room", // Game starts here
     annotations: [],
+    inventory: [],
+    visibleRooms: ["Mr. Watkins' Room"], // Initially visible rooms
+    completedRooms: [],
     bossReady: false,
     bossDefeated: false,
     missedBlazePods: 0,
@@ -68,79 +69,23 @@ function App() {
           );
         }
         if (gameState.currentRoom === "Mr. Watkins' Room") {
-          return (
-            <Room1
-              setGameState={() =>
-                setGameState((prev) => ({
-                  ...prev,
-                  completedRooms: [...prev.completedRooms, "Mr. Watkins' Room"],
-                  currentRoom: "Mrs. John's Room", // Move to Room2
-                }))
-              }
-            />
-          );
+          return <Room1 setGameState={setGameState} gameState={gameState} />;
         }
         if (gameState.currentRoom === "Mrs. John's Room") {
-          return (
-            <Room2
-              setGameState={() =>
-                setGameState((prev) => ({
-                  ...prev,
-                  completedRooms: [...prev.completedRooms, "Mrs. John's Room"],
-                  currentRoom: "Mrs. Roche's Room", // Move to Room3Boss
-                }))
-              }
-            />
-          );
+          return <Room2 setGameState={setGameState} gameState={gameState} />;
         }
         if (gameState.currentRoom === "Mrs. Roche's Room") {
           if (!gameState.triggeredQuiz) {
-            return (
-              <Room3Boss
-                setGameState={() =>
-                  setGameState((prev) => ({
-                    ...prev,
-                    triggeredQuiz: true,
-                  }))
-                }
-              />
-            );
+            return <Room3Boss setGameState={setGameState} gameState={gameState} />;
           }
           if (gameState.triggeredQuiz && gameState.bossPhase === 0) {
-            return (
-              <QuizPhase
-                setGameState={() =>
-                  setGameState((prev) => ({
-                    ...prev,
-                    bossPhase: 1,
-                  }))
-                }
-              />
-            );
+            return <QuizPhase setGameState={setGameState} gameState={gameState} />;
           }
           if (gameState.bossPhase === 1 || gameState.bossPhase === 2) {
-            return (
-              <BossFightPhase
-                setGameState={() =>
-                  setGameState((prev) => ({
-                    ...prev,
-                    bossPhase: prev.bossPhase + 1,
-                  }))
-                }
-              />
-            );
+            return <BossFightPhase setGameState={setGameState} gameState={gameState} />;
           }
           if (gameState.bossPhase === 3) {
-            return (
-              <GamePhase
-                setGameState={() =>
-                  setGameState((prev) => ({
-                    ...prev,
-                    victory: true, // Mark game as finished
-                  }))
-                }
-              />
-            );
+            return <GamePhase setGameState={setGameState} gameState={gameState} />;
           }
         }
         break;

@@ -20,14 +20,14 @@ function Map({ gameState, setGameState }) {
   const [dynamicRooms, setDynamicRooms] = useState([]);
 
   useEffect(() => {
-    const updated = allRooms.map((room) => {
+    const updatedRooms = allRooms.map((room) => {
       let status = "fogged";
       if (completedRooms.includes(room.name)) status = "cleared";
       else if (room.name === currentRoom) status = "current";
       else if (visibleRooms.includes(room.name)) status = "visible";
       return { ...room, status };
     });
-    setDynamicRooms(updated);
+    setDynamicRooms(updatedRooms);
   }, [currentRoom, completedRooms, visibleRooms]);
 
   const handleRoomClick = (roomName) => {
@@ -35,33 +35,38 @@ function Map({ gameState, setGameState }) {
       setGameState((prev) => ({
         ...prev,
         currentRoom: roomName,
-        introStage: 6, // triggers GamePhase or room logic
+        introStage: 6,
+        showOverlay: true,
       }));
     }
   };
 
   return (
-    <div className="map">
-      {dynamicRooms.map((room, index) => (
-        <div
-          key={index}
-          className={`room ${room.status}`}
-          style={{ top: `${room.y}px`, left: `${room.x}px` }}
-          onClick={() => handleRoomClick(room.name)}
-        >
-          {room.status !== "fogged" ? room.name : "?"}
-        </div>
-      ))}
+    <div className="map-container">
+      <h2>Your Map</h2>
+      <div className="map">
+        {dynamicRooms.map((room, index) => (
+          <div
+            key={index}
+            className={`room ${room.status}`}
+            style={{ top: `${room.y}px`, left: `${room.x}px` }}
+            onClick={() => handleRoomClick(room.name)}
+          >
+            {room.status !== "fogged" ? room.name : "?"}
+          </div>
+        ))}
 
-      {(annotations || []).map((annotation, index) => (
-        <div
-          key={index}
-          className="annotation"
-          style={{ top: `${annotation.y}px`, left: `${annotation.x}px` }}
-        >
-          {annotation.text}
-        </div>
-      ))}
+        {(annotations || []).map((annotation, index) => (
+          <div
+            key={index}
+            className="annotation"
+            style={{ top: `${annotation.y}px`, left: `${annotation.x}px` }}
+          >
+            {annotation.text}
+          </div>
+        ))}
+      </div>
+      <p className="map-instructions">Click on visible rooms to explore and continue your adventure!</p>
     </div>
   );
 }
