@@ -2,11 +2,15 @@ import React from "react";
 
 function MapIntroduction({ setGameState }) {
   const handleViewMap = () => {
-    // Transition to map view and unlock Mr. Watkins' Room
+    if (typeof setGameState !== "function") {
+      console.error("setGameState is not a function. Please check the props passed to MapIntroduction.");
+      return;
+    }
+
     setGameState((prev) => ({
       ...prev,
-      introStage: 5,
-      visibleRooms: ["Mr. Watkins' Room"] // fog-of-war start point
+      introStage: 5, // Transition to map view stage
+      visibleRooms: [...prev.visibleRooms, "Mr. Watkins' Room"], // Safely add "Mr. Watkins' Room"
     }));
   };
 
@@ -14,17 +18,27 @@ function MapIntroduction({ setGameState }) {
     <div style={{ padding: 20 }}>
       <h2>🎒 A New Beginning</h2>
       <p>
-        After escaping, you stumble upon a dusty old <strong>bag</strong> by the lockers. It's torn, but still usable.
-        Inside, you find a faded <strong>student map</strong> of Pencoedtre High School—scribbled with notes and warnings.
+        You step into the dim hallway, breathing heavy after escaping the locker room.
+        Just as you start to gather your bearings, something crunches under your foot.
       </p>
       <p>
-        You sling the bag over your shoulder. It'll help you <em>store useful items</em> along the way.
+        A torn, dusty <strong>school bag</strong> lies abandoned near the lockers. Its straps are frayed,
+        but it feels sturdy enough to carry what you need.
       </p>
       <p>
-        🗺️ <em>Languages Wing, Maths Block, Science Labs…</em> The layout is still clear enough to follow.
+        Inside, you find a battered <strong>pamphlet-style school map</strong>, marked with strange scribbles:
+        <em>“DO NOT ENTER - Roche?”</em> scrawled in red. Some rooms are circled. Others crossed out.
       </p>
-      <p>✨ New areas will unlock as you progress. Mr. Watkins' room seems ajar—you decide to investigate there first.</p>
-      <button onClick={handleViewMap}>View School Map</button>
+      <p>
+        Alongside it, an old sticky note: <em>“If you're reading this... stick to the Languages Wing.”</em>
+      </p>
+      <p>
+        You sling the bag over your shoulder. From now on, you can collect supplies and keep track of your path.
+      </p>
+      <p>
+        Mr. Watkins' room looks slightly ajar. It might be worth investigating first.
+      </p>
+      <button onClick={handleViewMap}>View Map and Begin Exploring</button>
     </div>
   );
 }

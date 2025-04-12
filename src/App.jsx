@@ -1,20 +1,20 @@
 import { useState } from "react";
 import SignIn from "./components/SignIn";
 import CharacterCreation from "./components/CharacterCreation";
-import IntroPhase from "./phases/IntroPhase";
-import WarmUpPhase from "./phases/WarmUpPhase";
-import MobilityPhase from "./phases/MobilityPhase";
-import EscapePhase from "./phases/EscapePhase";
-import MapIntroduction from "./MapIntroduction";
-import Map from "./Map";
-import Room1 from "./phases/Room1";
-import Room2 from "./phases/Room2";
-import Room3Boss from "./phases/Room3Boss";
-import QuizPhase from "./phases/QuizPhase";
-import BossFightPhase from "./phases/BossFightPhase";
-import GamePhase from "./GamePhase";
-import VictoryPhase from "./phases/VictoryPhase";
-import RoomNarrativeOverlay from "./RoomNarrativeOverlay";
+import IntroPhase from "./components/phases/IntroPhase";
+import WarmUpPhase from "./components/phases/WarmUpPhase";
+import MobilityPhase from "./components/phases/MobilityPhase";
+import EscapePhase from "./components/phases/EscapePhase";
+import MapIntroduction from "./components/MapIntroduction";
+import Map from "./components/Map";
+import Room1 from "./components/phases/Room1";
+import Room2 from "./components/phases/Room2";
+import Room3Boss from "./components/phases/Room3Boss";
+import QuizPhase from "./components/phases/QuizPhase";
+import BossFightPhase from "./components/phases/BossFightPhase";
+import GamePhase from "./components/GamePhase";
+import VictoryPhase from "./components/phases/VictoryPhase";
+import RoomNarrativeOverlay from "./components/RoomNarrativeOverlay";
 
 function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -32,7 +32,7 @@ function App() {
     triggeredQuiz: false,
     bossPhase: 0,
     victory: false,
-    showOverlay: true, // NEW
+    showOverlay: true,
   });
 
   const renderPhase = () => {
@@ -41,53 +41,117 @@ function App() {
       return <CharacterCreation gameState={gameState} setGameState={setGameState} />;
 
     switch (gameState.introStage) {
-      case 0: return <IntroPhase setGameState={setGameState} />;
-      case 1: return <WarmUpPhase setGameState={setGameState} />;
-      case 2: return <MobilityPhase setGameState={setGameState} />;
-      case 3: return <EscapePhase setGameState={setGameState} />;
-      case 4: return <MapIntroduction setGameState={setGameState} />;
-      case 5: return <Map gameState={gameState} setGameState={setGameState} />;
+      case 0:
+        return <IntroPhase setGameState={setGameState} />;
+      case 1:
+        return <WarmUpPhase setGameState={setGameState} />;
+      case 2:
+        return <MobilityPhase setGameState={setGameState} />;
+      case 3:
+        return <EscapePhase setGameState={setGameState} />;
+      case 4:
+        return <MapIntroduction setGameState={setGameState} />;
+      case 5:
+        return <Map gameState={gameState} setGameState={setGameState} />;
       case 6:
         if (gameState.showOverlay) {
           return (
             <RoomNarrativeOverlay
               roomName={gameState.currentRoom}
               onContinue={() =>
-                setGameState((prev) => ({ ...prev, showOverlay: false }))
+                setGameState((prev) => ({
+                  ...prev,
+                  showOverlay: false,
+                }))
               }
             />
           );
         }
-        if (gameState.currentRoom === "Mr. Watkins' Room")
-          return <Room1 setGameState={setGameState} gameState={gameState} />;
-        if (gameState.currentRoom === "Mrs. John's Room")
-          return <Room2 setGameState={setGameState} gameState={gameState} />;
+        if (gameState.currentRoom === "Mr. Watkins' Room") {
+          return (
+            <Room1
+              setGameState={() =>
+                setGameState((prev) => ({
+                  ...prev,
+                  completedRooms: [...prev.completedRooms, "Mr. Watkins' Room"],
+                  currentRoom: "Mrs. John's Room", // Move to Room2
+                }))
+              }
+            />
+          );
+        }
+        if (gameState.currentRoom === "Mrs. John's Room") {
+          return (
+            <Room2
+              setGameState={() =>
+                setGameState((prev) => ({
+                  ...prev,
+                  completedRooms: [...prev.completedRooms, "Mrs. John's Room"],
+                  currentRoom: "Mrs. Roche's Room", // Move to Room3Boss
+                }))
+              }
+            />
+          );
+        }
         if (gameState.currentRoom === "Mrs. Roche's Room") {
-          if (!gameState.triggeredQuiz)
-            return <Room3Boss setGameState={setGameState} />;
-          if (gameState.triggeredQuiz && gameState.bossPhase === 0)
-            return <QuizPhase setGameState={setGameState} />;
-          if (gameState.bossPhase === 1 || gameState.bossPhase === 2)
+          if (!gameState.triggeredQuiz) {
+            return (
+              <Room3Boss
+                setGameState={() =>
+                  setGameState((prev) => ({
+                    ...prev,
+                    triggeredQuiz: true,
+                  }))
+                }
+              />
+            );
+          }
+          if (gameState.triggeredQuiz && gameState.bossPhase === 0) {
+            return (
+              <QuizPhase
+                setGameState={() =>
+                  setGameState((prev) => ({
+                    ...prev,
+                    bossPhase: 1,
+                  }))
+                }
+              />
+            );
+          }
+          if (gameState.bossPhase === 1 || gameState.bossPhase === 2) {
             return (
               <BossFightPhase
-                gameState={gameState}
-                setGameState={setGameState}
+                setGameState={() =>
+                  setGameState((prev) => ({
+                    ...prev,
+                    bossPhase: prev.bossPhase + 1,
+                  }))
+                }
               />
             );
-          if (gameState.bossPhase === 3)
+          }
+          if (gameState.bossPhase === 3) {
             return (
               <GamePhase
-                gameState={gameState}
-                setGameState={setGameState}
+                setGameState={() =>
+                  setGameState((prev) => ({
+                    ...prev,
+                    victory: true, // Mark game as finished
+                  }))
+                }
               />
             );
+          }
+        }
+        break;
+      case 7:
+        if (gameState.victory) {
+          return <VictoryPhase gameState={gameState} />;
         }
         break;
       default:
-        break;
+        console.log("Unknown phase");
     }
-
-    if (gameState.victory) return <VictoryPhase setGameState={setGameState} />;
 
     return <div>Something went wrong. No valid phase loaded.</div>;
   };
