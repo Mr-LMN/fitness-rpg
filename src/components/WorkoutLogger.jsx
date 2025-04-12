@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function WorkoutLogger({ roomNumber, gameState, setGameState }) {
+function WorkoutLogger({ roomNumber, setGameState }) {
   const [exerciseInput, setExerciseInput] = useState({ name: "", sets: "", reps: "", weight: "" });
   const [workoutLog, setWorkoutLog] = useState([]);
 

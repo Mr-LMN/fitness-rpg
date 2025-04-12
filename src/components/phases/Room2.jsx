@@ -83,7 +83,7 @@ function Room2({ gameState, setGameState }) {
             </button>
           ))}
         </div>
-        <p>Lives Remaining: {Array.from({ length: lives }, (_, i) => "❤️").join(" ")}</p>
+        <p>Lives Remaining: {Array.from({ length: lives }, () => "❤️").join(" ")}</p>
         <p>Keypad Code: {keypadCode.join("") || "____"}</p>
         {lives === 0 && (
           <button onClick={handleBruteForce}>Brute Force the Safe</button>

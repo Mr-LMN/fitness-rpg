@@ -1,17 +1,30 @@
 import React from "react";
-import "./styles/Map.css";
 
-function MapIntroduction({ onClose }) {
+function MapIntroduction({ setGameState }) {
+  const handleViewMap = () => {
+    // Transition to map view and unlock Mr. Watkins' Room
+    setGameState((prev) => ({
+      ...prev,
+      introStage: 5,
+      visibleRooms: ["Mr. Watkins' Room"] // fog-of-war start point
+    }));
+  };
+
   return (
-    <div className="map-intro-overlay">
-      <div className="map-intro-content">
-        <h2>🗺️ You Found a Map!</h2>
-        <p>
-          You pick up a student pamphlet-style map of Pencoedtre High School. 
-          It’s a bit scribbled, but it will help you navigate the school.
-        </p>
-        <button onClick={onClose}>View Map</button>
-      </div>
+    <div style={{ padding: 20 }}>
+      <h2>🎒 A New Beginning</h2>
+      <p>
+        After escaping, you stumble upon a dusty old <strong>bag</strong> by the lockers. It's torn, but still usable.
+        Inside, you find a faded <strong>student map</strong> of Pencoedtre High School—scribbled with notes and warnings.
+      </p>
+      <p>
+        You sling the bag over your shoulder. It'll help you <em>store useful items</em> along the way.
+      </p>
+      <p>
+        🗺️ <em>Languages Wing, Maths Block, Science Labs…</em> The layout is still clear enough to follow.
+      </p>
+      <p>✨ New areas will unlock as you progress. Mr. Watkins' room seems ajar—you decide to investigate there first.</p>
+      <button onClick={handleViewMap}>View School Map</button>
     </div>
   );
 }

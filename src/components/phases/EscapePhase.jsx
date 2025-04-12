@@ -1,7 +1,16 @@
-function EscapePhase({ setGameState }) {
+import React, { useState } from "react";
+
+function EscapePhase({ setGameState, slamBallGoal = 10, squatJumpGoal = 15 }) {
+  const [slamBalls, setSlamBalls] = useState(0);
+  const [jumpSquats, setJumpSquats] = useState(0);
+
   const handleBreakOut = () => {
-    // Update introStage to 4 for the Corridor phase
-    setGameState((prev) => ({ ...prev, introStage: 4 }));
+    if (slamBalls >= slamBallGoal || jumpSquats >= squatJumpGoal) {
+      alert("You successfully escaped the locker room!");
+      setGameState((prev) => ({ ...prev, introStage: 4 })); // ✅ Progress to MapIntroduction
+    } else {
+      alert("Complete the required exercises to escape!");
+    }
   };
 
   return (
@@ -15,8 +24,16 @@ function EscapePhase({ setGameState }) {
         you climb and escape through the ceiling tiles?
       </p>
       <p>🧠 Choose your escape route:</p>
-      <p>💪 Slam the screwdriver into the lock—10 slam balls</p>
-      <p>⚡ Leap onto the bench and push up into the tiles—10 jump squats</p>
+      <div>
+        <p>💪 Use the screwdriver to jimmy the lock—{slamBallGoal} slam balls</p>
+        <button onClick={() => setSlamBalls(slamBalls + 1)}>Do Slam Ball</button>
+        <p>Progress: {slamBalls}/{slamBallGoal}</p>
+      </div>
+      <div>
+        <p>⚡ Leap onto the bench and push up into the tiles—{squatJumpGoal} squat jumps</p>
+        <button onClick={() => setJumpSquats(jumpSquats + 1)}>Do Squat Jump</button>
+        <p>Progress: {jumpSquats}/{squatJumpGoal}</p>
+      </div>
       <button onClick={handleBreakOut}>Break Out</button>
     </div>
   );

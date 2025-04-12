@@ -1,45 +1,59 @@
 import React, { useState, useEffect } from "react";
-import "./styles/Map.css"; // Updated path to Map.css
+import "./styles/Map.css";
 
-const rooms = [
-  { name: "Locker Room", x: 50, y: 200, status: "completed" },
-  { name: "Mr. Watkins' Room", x: 150, y: 100, status: "locked" },
-  { name: "Mrs. John's Room", x: 300, y: 200, status: "locked" },
-  { name: "Mrs. Roche's Room", x: 450, y: 100, status: "locked" },
-  { name: "Fitness Suite", x: 600, y: 200, status: "locked" },
+const allRooms = [
+  { name: "Locker Room", x: 50, y: 200 },
+  { name: "Mr. Watkins' Room", x: 150, y: 100 },
+  { name: "Mrs. John's Room", x: 300, y: 200 },
+  { name: "Mrs. Roche's Room", x: 450, y: 100 },
+  { name: "Fitness Suite", x: 600, y: 200 },
 ];
 
-function Map({ currentRoom, completedRooms, annotations }) {
-  const [dynamicRooms, setDynamicRooms] = useState(rooms);
+function Map({ gameState, setGameState }) {
+  const {
+    currentRoom = "",
+    completedRooms = [],
+    visibleRooms = [],
+    annotations = [],
+  } = gameState;
+
+  const [dynamicRooms, setDynamicRooms] = useState([]);
 
   useEffect(() => {
-    const updatedRooms = rooms.map((room) => {
-      if (completedRooms.includes(room.name)) {
-        return { ...room, status: "completed" };
-      }
-      if (room.name === currentRoom) {
-        return { ...room, status: "current" };
-      }
-      return room; // Default to locked
+    const updated = allRooms.map((room) => {
+      let status = "fogged";
+      if (completedRooms.includes(room.name)) status = "cleared";
+      else if (room.name === currentRoom) status = "current";
+      else if (visibleRooms.includes(room.name)) status = "visible";
+      return { ...room, status };
     });
-    setDynamicRooms(updatedRooms);
-  }, [currentRoom, completedRooms]);
+    setDynamicRooms(updated);
+  }, [currentRoom, completedRooms, visibleRooms]);
+
+  const handleRoomClick = (roomName) => {
+    if (visibleRooms.includes(roomName)) {
+      setGameState((prev) => ({
+        ...prev,
+        currentRoom: roomName,
+        introStage: 6, // triggers GamePhase or room logic
+      }));
+    }
+  };
 
   return (
     <div className="map">
-      {/* Render Rooms */}
       {dynamicRooms.map((room, index) => (
         <div
           key={index}
           className={`room ${room.status}`}
           style={{ top: `${room.y}px`, left: `${room.x}px` }}
+          onClick={() => handleRoomClick(room.name)}
         >
-          {room.name}
+          {room.status !== "fogged" ? room.name : "?"}
         </div>
       ))}
 
-      {/* Render Annotations */}
-      {annotations.map((annotation, index) => (
+      {(annotations || []).map((annotation, index) => (
         <div
           key={index}
           className="annotation"
