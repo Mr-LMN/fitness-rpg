@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import WorkoutLogger from "../WorkoutLogger";
-import QuizPhase from "../QuizPhase";
+import QuizPhase from "./QuizPhase";
 import "../styles/Room3Boss.css";
 
 const bossQuizQuestions = [

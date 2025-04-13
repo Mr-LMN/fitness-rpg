@@ -5,47 +5,72 @@ function QuizPhase({ questions, onComplete, showImpossibleFinal = false }) {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [quizComplete, setQuizComplete] = useState(false);
 
-  const questionPool =
-    questions && questions.length > 0
-      ? questions
-      : [
-          { q: "What is 'blue' in Spanish?", options: ["Azul", "Rojo", "Verde"], correct: "Azul" },
-          { q: "What is 'yellow' in Welsh?", options: ["Melyn", "Du", "Glas"], correct: "Melyn" },
-          { q: "Translate 'apple' to Spanish.", options: ["Manzana", "Pera", "Uva"], correct: "Manzana" },
-          { q: "What is 'cat' in Spanish?", options: ["Perro", "Gato", "Caballo"], correct: "Gato" },
-          { q: "What is 'black' in Welsh?", options: ["Du", "Glas", "Gwyn"], correct: "Du" },
-        ];
+  const defaultPool = [
+    {
+      q: "What is 'blue' in Spanish?",
+      options: [
+        { label: "Azul", correct: true },
+        { label: "Rojo", correct: false },
+        { label: "Verde", correct: false },
+      ],
+    },
+    {
+      q: "What is 'yellow' in Welsh?",
+      options: [
+        { label: "Melyn", correct: true },
+        { label: "Du", correct: false },
+        { label: "Glas", correct: false },
+      ],
+    },
+    {
+      q: "Translate 'apple' to Spanish.",
+      options: [
+        { label: "Manzana", correct: true },
+        { label: "Pera", correct: false },
+        { label: "Uva", correct: false },
+      ],
+    },
+    {
+      q: "What is 'cat' in Spanish?",
+      options: [
+        { label: "Gato", correct: true },
+        { label: "Perro", correct: false },
+        { label: "Caballo", correct: false },
+      ],
+    },
+    {
+      q: "What is 'black' in Welsh?",
+      options: [
+        { label: "Du", correct: true },
+        { label: "Glas", correct: false },
+        { label: "Gwyn", correct: false },
+      ],
+    },
+  ];
 
-  const totalQuestions = showImpossibleFinal
-    ? questionPool.length + 1
-    : questionPool.length;
+  const questionPool = questions && questions.length > 0 ? questions : defaultPool;
+  const totalQuestions = showImpossibleFinal ? questionPool.length + 1 : questionPool.length;
 
-  const handleAnswer = (answer) => {
-    if (currentQuestion < questionPool.length) {
-      if (answer === questionPool[currentQuestion].correct) {
-        setCorrectAnswers((prev) => prev + 1);
-      }
+  const handleAnswer = (option) => {
+    if (currentQuestion < questionPool.length && option.correct) {
+      setCorrectAnswers((prev) => prev + 1);
     }
-    if (currentQuestion + 1 === totalQuestions) {
+
+    const nextQuestion = currentQuestion + 1;
+    if (nextQuestion === totalQuestions) {
       setQuizComplete(true);
       onComplete(correctAnswers);
-      return;
+    } else {
+      setCurrentQuestion(nextQuestion);
     }
-    setCurrentQuestion((prev) => prev + 1);
   };
 
   if (quizComplete) {
     return (
-      <div style={{ padding: 20 }}>
+      <div className="quiz-container">
         <h2>🎉 Quiz Complete</h2>
         <p>You answered {correctAnswers} questions correctly.</p>
-        <button
-          onClick={() =>
-            onComplete(correctAnswers)
-          }
-        >
-          Continue
-        </button>
+        <button onClick={() => onComplete(correctAnswers)}>Continue</button>
       </div>
     );
   }
@@ -54,18 +79,22 @@ function QuizPhase({ questions, onComplete, showImpossibleFinal = false }) {
     ? questionPool[currentQuestion]
     : {
         q: "Translate 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch' into English:",
-        options: ["Yes", "No", "What did you just say?", "I give up"],
-        correct: null,
+        options: [
+          { label: "Yes", correct: false },
+          { label: "No", correct: false },
+          { label: "What did you just say?", correct: false },
+          { label: "I give up", correct: false },
+        ],
       };
 
   return (
-    <div style={{ padding: 20 }}>
+    <div className="quiz-container">
       <h2>📖 The Quiz</h2>
-      <p>{current.q}</p>
-      <div>
+      <p className="quiz-question">{current.q}</p>
+      <div className="quiz-options">
         {current.options.map((option, index) => (
-          <button key={index} onClick={() => handleAnswer(option)}>
-            {option}
+          <button key={index} onClick={() => handleAnswer(option)} className="quiz-option-btn">
+            {option.label}
           </button>
         ))}
       </div>

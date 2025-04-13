@@ -47,6 +47,7 @@ function Room2({ setGameState, gameState }) {
   const [quizActive, setQuizActive] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [lootFound, setLootFound] = useState(null);
+  const [mapUpdated, setMapUpdated] = useState(false);
 
   const handleUploadWorkout = () => {
     setWorkoutUploaded(true);
@@ -100,6 +101,7 @@ function Room2({ setGameState, gameState }) {
     setGameState((prev) => ({
       ...prev,
       completedRooms: [...prev.completedRooms, "Mrs. John's Room"],
+      visibleRooms: [...prev.visibleRooms, "Mrs. Roche's Room"],
       currentRoom: null,
       introStage: 5,
       showOverlay: true,

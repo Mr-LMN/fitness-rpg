@@ -11,7 +11,6 @@ import Room1 from "./components/phases/Room1";
 import Room2 from "./components/phases/Room2";
 import Room3Boss from "./components/phases/Room3Boss";
 import QuizPhase from "./components/phases/QuizPhase";
-import GamePhase from "./components/GamePhase";
 import VictoryPhase from "./components/phases/VictoryPhase";
 import RoomNarrativeOverlay from "./components/RoomNarrativeOverlay";
 import FinalBossPhase from "./components/phases/FinalBossPhase";
