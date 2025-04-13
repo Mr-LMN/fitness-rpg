@@ -1,62 +1,151 @@
-import React, { useState, useEffect } from "react";
-import Map from "../Map";
+import React, { useEffect, useState } from "react";
+import WorkoutLogger from "../WorkoutLogger";
+import QuizPhase from "../QuizPhase";
+import "../styles/Room3Boss.css";
 
-function Room3Boss() {
-  const [timer, setTimer] = useState(0);
-  const [shadowyFigure, setShadowyFigure] = useState(false);
-  const [escapeStarted, setEscapeStarted] = useState(false);
-  const [completedRooms, setCompletedRooms] = useState(["Locker Room", "Mr. Watkins' Room", "Mrs. John's Room"]);
-  const [currentRoom, setCurrentRoom] = useState("Mrs. Roche's Room");
-  const [annotations, setAnnotations] = useState([
-    { text: "Strange noises?", x: 450, y: 80 },
-  ]);
+const bossQuizQuestions = [
+  {
+    question: "What is the Spanish word for 'yellow'?",
+    options: [
+      { label: "Amarillo", correct: true },
+      { label: "Rojo", correct: false },
+      { label: "Verde", correct: false },
+      { label: "Gris", correct: false },
+    ],
+  },
+  {
+    question: "How do you say 'thank you' in Welsh?",
+    options: [
+      { label: "Diolch", correct: true },
+      { label: "Croeso", correct: false },
+      { label: "Hwyl", correct: false },
+      { label: "Cymru", correct: false },
+    ],
+  },
+  {
+    question: "Translate 'blue' to Spanish:",
+    options: [
+      { label: "Azul", correct: true },
+      { label: "Negro", correct: false },
+      { label: "Rosa", correct: false },
+      { label: "Blanco", correct: false },
+    ],
+  },
+  {
+    question: "What does 'nos da' mean in Welsh?",
+    options: [
+      { label: "Good night", correct: true },
+      { label: "Good morning", correct: false },
+      { label: "Hello", correct: false },
+      { label: "Goodbye", correct: false },
+    ],
+  },
+  {
+    question: "How do you say 'dog' in Spanish?",
+    options: [
+      { label: "Perro", correct: true },
+      { label: "Gato", correct: false },
+      { label: "Caballo", correct: false },
+      { label: "Vaca", correct: false },
+    ],
+  },
+  {
+    question: "Translate 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch' into English:",
+    options: [
+      { label: "Yes", correct: false },
+      { label: "No", correct: false },
+      { label: "What did you just say?", correct: false },
+      { label: "I give up", correct: false },
+    ],
+  },
+];
+
+function Room3Boss({ setGameState, gameState }) {
+  const [workoutLogged, setWorkoutLogged] = useState(false);
+  const [alarmTriggered, setAlarmTriggered] = useState(false);
+  const [quizStarted, setQuizStarted] = useState(false);
+  const [bossPhase, setBossPhase] = useState(0);
 
   useEffect(() => {
-    if (escapeStarted) {
-      const interval = setInterval(() => {
-        setTimer((prev) => prev + 1);
-      }, 1000);
-
-      if (timer === 10) {
-        setShadowyFigure(true);
-        setAnnotations((prev) => [
-          ...prev,
-          { text: "Shadowy figure spotted!", x: 450, y: 120 },
-        ]);
-      }
-
-      return () => clearInterval(interval);
+    if (workoutLogged) {
+      const timer = setTimeout(() => {
+        setAlarmTriggered(true);
+      }, 10000); // 10 seconds for dev build
+      return () => clearTimeout(timer);
     }
-  }, [timer, escapeStarted]);
+  }, [workoutLogged]);
 
-  const startWorkout = () => {
-    setEscapeStarted(true);
+  const handleQuizComplete = (correctAnswers) => {
+    setGameState((prev) => ({
+      ...prev,
+      quizScore: correctAnswers,
+    }));
+    setBossPhase(1);
   };
 
-  const handleEscapeRoom = () => {
-    alert("You escaped Mrs. Roche's room!");
-    setCompletedRooms((prev) => [...prev, "Mrs. Roche's Room"]);
-    setCurrentRoom("Fitness Suite");
-    setAnnotations((prev) => [
+  const handlePhaseOneComplete = () => {
+    setBossPhase(2);
+  };
+
+  const handlePhaseTwoComplete = () => {
+    setGameState((prev) => ({
       ...prev,
-      { text: "Final Battle Prep", x: 600, y: 180 },
-    ]);
+      completedRooms: [...prev.completedRooms, "Mrs. Roche's Room"],
+      visibleRooms: [...prev.visibleRooms, "Fitness Suite"],
+      introStage: 5, // Show map next
+    }));
   };
 
   return (
-    <div className="room3boss-container">
-      <h2>Mrs. Roche's Room</h2>
-      <Map
-        currentRoom={currentRoom}
-        completedRooms={completedRooms}
-        annotations={annotations}
-      />
-      {!escapeStarted && (
-        <button onClick={startWorkout}>Start Workout</button>
+    <div className="room-container">
+      <h1>Mrs. Roche's Classroom</h1>
+
+      {bossPhase === 0 && !workoutLogged && (
+        <>
+          <p>Everything seems normal. You take a breath and prepare to log your workout.</p>
+          <WorkoutLogger roomNumber={3} setGameState={setGameState} />
+          <button onClick={() => setWorkoutLogged(true)}>Upload Your Workout</button>
+        </>
       )}
-      {shadowyFigure && <p>A shadowy figure is approaching... The door slams shut!</p>}
-      {escapeStarted && shadowyFigure && (
-        <button onClick={handleEscapeRoom}>Escape Room</button>
+
+      {bossPhase === 0 && workoutLogged && !alarmTriggered && (
+        <p>You feel strangely calm... but something isn't right.</p>
+      )}
+
+      {bossPhase === 0 && alarmTriggered && !quizStarted && (
+        <>
+          <p>⚠️ An alarm blares. The door slams shut. Six glowing locks appear. You're trapped.</p>
+          <p>To escape, answer each question to unlock the bolts... but something tells you the last one isn't quite right.</p>
+          <button onClick={() => setQuizStarted(true)}>Begin Quiz</button>
+        </>
+      )}
+
+      {bossPhase === 0 && quizStarted && (
+        <QuizPhase
+          questions={bossQuizQuestions}
+          onComplete={handleQuizComplete}
+          showImpossibleFinal={true}
+        />
+      )}
+
+      {bossPhase === 1 && (
+        <>
+          <h2>👹 Mutated Mrs. Roche uses Ground Stomp!</h2>
+          <p>You must jump onto the desk to avoid the shockwave.</p>
+          <p><strong>Complete 15 Burpee Box Jumps</strong> to survive.</p>
+          <WorkoutLogger roomNumber={3} setGameState={setGameState} />
+          <button onClick={handlePhaseOneComplete}>I Logged My Burpee Box Jumps</button>
+        </>
+      )}
+
+      {bossPhase === 2 && (
+        <>
+          <h2>🐉 Roche spins violently with a Whipping Spiral!</h2>
+          <p>You must laterally leap to avoid the tail — or risk being slammed against the walls.</p>
+          <p><strong>Complete 20 Lateral Bunny Hops over the Free Weight Bench</strong> to dodge.</p>
+          <WorkoutLogger roomNumber={3} setGameState={setGameState} />
+          <button onClick={handlePhaseTwoComplete}>Run for the door!</button>
+        </>
       )}
     </div>
   );

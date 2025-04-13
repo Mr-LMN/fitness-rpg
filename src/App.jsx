@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import SignIn from "./components/SignIn";
 import CharacterCreation from "./components/CharacterCreation";
 import IntroPhase from "./components/phases/IntroPhase";
@@ -11,21 +11,21 @@ import Room1 from "./components/phases/Room1";
 import Room2 from "./components/phases/Room2";
 import Room3Boss from "./components/phases/Room3Boss";
 import QuizPhase from "./components/phases/QuizPhase";
-import BossFightPhase from "./components/phases/BossFightPhase";
 import GamePhase from "./components/GamePhase";
 import VictoryPhase from "./components/phases/VictoryPhase";
 import RoomNarrativeOverlay from "./components/RoomNarrativeOverlay";
+import FinalBossPhase from "./components/phases/FinalBossPhase";
 
 function App() {
   const [signedIn, setSignedIn] = useState(false);
   const [gameState, setGameState] = useState({
     characterCreated: false,
     introStage: 0,
-    currentRoom: "Mr. Watkins' Room", // Game starts here
+    currentRoom: null,
+    completedRooms: [],
+    visibleRooms: ["Mr. Watkins' Room"],
     annotations: [],
     inventory: [],
-    visibleRooms: ["Mr. Watkins' Room"], // Initially visible rooms
-    completedRooms: [],
     bossReady: false,
     bossDefeated: false,
     missedBlazePods: 0,
@@ -69,24 +69,16 @@ function App() {
           );
         }
         if (gameState.currentRoom === "Mr. Watkins' Room") {
-          return <Room1 setGameState={setGameState} gameState={gameState} />;
+          return <Room1 setGameState={setGameState} />;
         }
         if (gameState.currentRoom === "Mrs. John's Room") {
-          return <Room2 setGameState={setGameState} gameState={gameState} />;
+          return <Room2 setGameState={setGameState} />;
         }
         if (gameState.currentRoom === "Mrs. Roche's Room") {
-          if (!gameState.triggeredQuiz) {
-            return <Room3Boss setGameState={setGameState} gameState={gameState} />;
-          }
-          if (gameState.triggeredQuiz && gameState.bossPhase === 0) {
-            return <QuizPhase setGameState={setGameState} gameState={gameState} />;
-          }
-          if (gameState.bossPhase === 1 || gameState.bossPhase === 2) {
-            return <BossFightPhase setGameState={setGameState} gameState={gameState} />;
-          }
-          if (gameState.bossPhase === 3) {
-            return <GamePhase setGameState={setGameState} gameState={gameState} />;
-          }
+          return <Room3Boss setGameState={setGameState} gameState={gameState} />;
+        }
+        if (gameState.currentRoom === "Fitness Suite") {
+          return <FinalBossPhase setGameState={setGameState} gameState={gameState} />;
         }
         break;
       case 7:

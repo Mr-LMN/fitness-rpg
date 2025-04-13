@@ -43,12 +43,12 @@ function Map({ gameState, setGameState }) {
 
   return (
     <div className="map-container">
-      <h2>Your Map</h2>
+      <h2 className="map-title">🗺️ School Map</h2>
       <div className="map">
         {dynamicRooms.map((room, index) => (
           <div
             key={index}
-            className={`room ${room.status}`}
+            className={`room ${room.status} ${room.status === "fogged" ? "flicker" : ""}`}
             style={{ top: `${room.y}px`, left: `${room.x}px` }}
             onClick={() => handleRoomClick(room.name)}
           >
@@ -66,7 +66,9 @@ function Map({ gameState, setGameState }) {
           </div>
         ))}
       </div>
-      <p className="map-instructions">Click on visible rooms to explore and continue your adventure!</p>
+      <p className="map-instructions">
+        🔍 Click on any visible room to investigate. Rooms will reveal themselves as you explore!
+      </p>
     </div>
   );
 }

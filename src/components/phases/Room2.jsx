@@ -1,131 +1,163 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import WorkoutLogger from "../WorkoutLogger";
+import SafeQuizEvent from "../events/SafeQuizEvent";
 
-function Room2({ gameState, setGameState }) {
-  const [safeEventTriggered, setSafeEventTriggered] = useState(false);
+const languageQuestions = [
+  {
+    question: "What is the Spanish word for 'red'?",
+    options: [
+      { label: "Rojo", correct: true },
+      { label: "Azul", correct: false },
+      { label: "Verde", correct: false },
+      { label: "Negro", correct: false },
+    ],
+  },
+  {
+    question: "What does 'feliz' mean in Spanish?",
+    options: [
+      { label: "Sad", correct: false },
+      { label: "Happy", correct: true },
+      { label: "Tired", correct: false },
+      { label: "Angry", correct: false },
+    ],
+  },
+  {
+    question: "What is the Spanish word for 'Monday'?",
+    options: [
+      { label: "Lunes", correct: true },
+      { label: "Martes", correct: false },
+      { label: "Jueves", correct: false },
+      { label: "Domingo", correct: false },
+    ],
+  },
+  {
+    question: "Translate 'verde' to English:",
+    options: [
+      { label: "Green", correct: true },
+      { label: "Blue", correct: false },
+      { label: "Yellow", correct: false },
+      { label: "Orange", correct: false },
+    ],
+  },
+];
+
+function Room2({ setGameState, gameState }) {
+  const [workoutUploaded, setWorkoutUploaded] = useState(false);
+  const [safeDiscovered, setSafeDiscovered] = useState(false);
   const [quizActive, setQuizActive] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [lives, setLives] = useState(3);
-  const [keypadCode, setKeypadCode] = useState([]);
-  const [safeOpened, setSafeOpened] = useState(false);
+  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [lootFound, setLootFound] = useState(null);
 
-  const questions = [
-    { q: "What is 'blue' in Spanish?", options: ["Azul", "Rojo", "Verde"], correct: "Azul", digit: 5 },
-    { q: "What is 'yellow' in Welsh?", options: ["Melyn", "Du", "Glas"], correct: "Melyn", digit: 3 },
-    { q: "Translate 'cat' into Spanish.", options: ["Perro", "Gato", "Caballo"], correct: "Gato", digit: 8 },
-    { q: "What is 'black' in Welsh?", options: ["Du", "Glas", "Gwyn"], correct: "Du", digit: 7 },
-  ];
-
-  const handleAnswer = (answer) => {
-    const current = questions[currentQuestion];
-
-    if (answer === current.correct) {
-      // Add digit to keypad code
-      setKeypadCode((prev) => [...prev, current.digit]);
-      alert(`Correct! You received digit ${current.digit} for the keypad.`);
-    } else {
-      setLives((prev) => prev - 1);
-      alert(`Incorrect! You have ${lives - 1} lives remaining.`);
-    }
-
-    if (lives - 1 === 0) {
-      alert("You've lost all your lives! You'll need to brute force the safe.");
-      setQuizActive(false);
-      return;
-    }
-
-    // Move to the next question or unlock the safe
-    if (currentQuestion + 1 < questions.length) {
-      setCurrentQuestion((prev) => prev + 1);
-    } else {
-      alert(`You unlocked the safe! The code is ${keypadCode.join("")}.`);
-      const loot = "Golden Croissant";
-      setGameState((prev) => ({
-        ...prev,
-        explorationLog: [
-          ...prev.explorationLog,
-          `Room 2 - Unlocked the safe with code ${keypadCode.join("")} and found a ${loot}`,
-        ],
-      }));
-      setSafeOpened(true);
-    }
-  };
-
-  const handleBruteForce = () => {
-    alert(
-      "You brute force the safe open! Perform 15 Ground to Overheads to retrieve the loot."
-    );
-    const loot = "Basic Survival Kit";
+  const handleUploadWorkout = () => {
+    setWorkoutUploaded(true);
+    setSafeDiscovered(true);
     setGameState((prev) => ({
       ...prev,
-      explorationLog: [
-        ...prev.explorationLog,
-        `Room 2 - Brute forced the safe and found a ${loot}`,
+      annotations: [
+        ...prev.annotations,
+        {
+          room: "Mrs. John's Room",
+          activity: "Workout uploaded",
+          timestamp: new Date().toISOString(),
+        },
       ],
     }));
-    setSafeOpened(true);
   };
 
-  const handleFinishScavenge = () => {
-    setSafeEventTriggered(true);
+  const handleQuizSuccess = (loot) => {
+    setQuizCompleted(true);
+    setLootFound(loot);
+    setGameState((prev) => ({
+      ...prev,
+      inventory: [...prev.inventory, loot],
+      annotations: [
+        ...prev.annotations,
+        {
+          room: "Mrs. John's Room",
+          activity: `Unlocked safe and found: ${loot}`,
+          timestamp: new Date().toISOString(),
+        },
+      ],
+    }));
   };
 
-  if (quizActive && !safeOpened) {
-    const current = questions[currentQuestion];
-    return (
-      <div style={{ padding: 20 }}>
-        <h2>🔒 The Safe - Quiz</h2>
-        <p>{current.q}</p>
-        <div>
-          {current.options.map((option, index) => (
-            <button key={index} onClick={() => handleAnswer(option)}>
-              {option}
-            </button>
-          ))}
-        </div>
-        <p>Lives Remaining: {Array.from({ length: lives }, () => "❤️").join(" ")}</p>
-        <p>Keypad Code: {keypadCode.join("") || "____"}</p>
-        {lives === 0 && (
-          <button onClick={handleBruteForce}>Brute Force the Safe</button>
-        )}
-      </div>
-    );
-  }
+  const handleQuizFailure = () => {
+    setQuizCompleted(true);
+    setGameState((prev) => ({
+      ...prev,
+      annotations: [
+        ...prev.annotations,
+        {
+          room: "Mrs. John's Room",
+          activity: "Failed safe quiz - fitness penalty triggered",
+          timestamp: new Date().toISOString(),
+        },
+      ],
+    }));
+  };
 
-  if (safeOpened) {
-    return (
-      <div style={{ padding: 20 }}>
-        <h2>🏕️ Room 2 - Resting Spot</h2>
-        <p>
-          After unlocking the safe, you retrieve the item and prepare for the
-          challenges ahead.
-        </p>
-        <button onClick={() => setGameState((prev) => ({ ...prev, introStage: 5 }))}>
-          Proceed to Mrs. Roche's Classroom
-        </button>
-      </div>
-    );
-  }
-
-  if (safeEventTriggered && !quizActive) {
-    return (
-      <div style={{ padding: 20 }}>
-        <h2>🔒 The Safe</h2>
-        <p>
-          You find a safe under Miss John's desk. The combination is locked,
-          but a note hints at the answers to some KS3 language questions.
-        </p>
-        <button onClick={() => setQuizActive(true)}>Start Quiz</button>
-      </div>
-    );
-  }
+  const handleReturnToMap = () => {
+    setGameState((prev) => ({
+      ...prev,
+      completedRooms: [...prev.completedRooms, "Mrs. John's Room"],
+      currentRoom: null,
+      introStage: 5,
+      showOverlay: true,
+    }));
+  };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>📚 Miss John's Classroom — Session 2</h2>
-      <p>You scavenge the room for supplies. Log your workout below.</p>
-      <WorkoutLogger roomNumber={2} gameState={gameState} setGameState={setGameState} />
-      <button onClick={handleFinishScavenge}>Finish Scavenge</button>
+    <div className="room-container">
+      <h1>Mrs. John's Room</h1>
+
+      {!workoutUploaded && (
+        <>
+          <p>You arrive in Mrs. John's classroom. It's eerily quiet, but there's space to complete your next workout.</p>
+          <WorkoutLogger roomNumber={2} setGameState={setGameState} />
+          <button onClick={handleUploadWorkout}>Upload Your Workout</button>
+        </>
+      )}
+
+      {safeDiscovered && !quizActive && !quizCompleted && (
+        <>
+          <p>While catching your breath, you notice a flicker under the teacher's desk. It's a dusty digital safe with a keypad!</p>
+          <button onClick={() => setQuizActive(true)}>Attempt to Unlock the Safe</button>
+        </>
+      )}
+
+      {quizActive && !quizCompleted && (
+        <SafeQuizEvent
+          questionPool={languageQuestions}
+          onSuccess={handleQuizSuccess}
+          onFailure={handleQuizFailure}
+          roomName="Mrs. John's Room"
+        />
+      )}
+
+      {quizCompleted && (
+        <>
+          {lootFound ? (
+            <>
+              <p>You found <strong>{lootFound}</strong> inside the safe. Nicely done!</p>
+              <p>Inside the safe, you also find a scribbled note:</p>
+              <blockquote>
+                "If anyone finds this, Roche has barricaded herself in the far room. I heard growling… Stay away unless you're ready."
+              </blockquote>
+              <p>You pocket the bar and steel yourself. It might be time to face what’s in there.</p>
+            </>
+          ) : (
+            <>
+              <p>You couldn't crack the safe. You'll need to complete 15 ground-to-overheads to brute force it open.</p>
+              <p>After forcing it open, you find a crumpled note:</p>
+              <blockquote>
+                "Roche… far room… something’s wrong… don’t go alone."
+              </blockquote>
+              <p>You swallow hard. Time to prepare.</p>
+            </>
+          )}
+          <button onClick={handleReturnToMap}>Return to the Map</button>
+        </>
+      )}
     </div>
   );
 }

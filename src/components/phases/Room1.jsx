@@ -5,6 +5,7 @@ function Room1({ setGameState, gameState }) {
   const [workoutUploaded, setWorkoutUploaded] = useState(false);
   const [scavengeCompleted, setScavengeCompleted] = useState(false);
   const [foundItem, setFoundItem] = useState(null);
+  const [restReady, setRestReady] = useState(false);
 
   const handleUploadWorkout = () => {
     setWorkoutUploaded(true);
@@ -22,9 +23,10 @@ function Room1({ setGameState, gameState }) {
   };
 
   const handleScavenge = () => {
-    const lootItem = "Crumpled School Map";
+    const lootItem = "Map Piece #1 (Crumpled School Map)";
     setFoundItem(lootItem);
     setScavengeCompleted(true);
+    setRestReady(true);
 
     setGameState((prev) => ({
       ...prev,
@@ -46,7 +48,7 @@ function Room1({ setGameState, gameState }) {
       ...prev,
       completedRooms: [...prev.completedRooms, "Mr. Watkins' Room"],
       currentRoom: null,
-      introStage: 5, // Clearly move back to the Map component
+      introStage: 5,
       showOverlay: true,
       annotations: [
         ...prev.annotations,
@@ -58,14 +60,14 @@ function Room1({ setGameState, gameState }) {
       ],
     }));
   };
-  
 
   return (
     <div className="room-container">
       <h1>Mr. Watkins' Room</h1>
+
       {!workoutUploaded && (
         <>
-          <p>You cautiously enter Mr. Watkins' classroom. The eerie silence provides the perfect atmosphere to log your workout.</p>
+          <p>You cautiously enter the abandoned classroom. The stale air and dust hint that no one has been here for a while. It's the perfect moment to focus and log your workout.</p>
           <WorkoutLogger roomNumber={1} setGameState={setGameState} />
           <button onClick={handleUploadWorkout}>Upload Your Workout</button>
         </>
@@ -73,15 +75,18 @@ function Room1({ setGameState, gameState }) {
 
       {workoutUploaded && !scavengeCompleted && (
         <>
-          <p>Workout uploaded successfully! Let's see what useful items you can find around here.</p>
+          <p>With your body re-energized, you notice something odd under a pile of worksheets. You kneel to investigate...</p>
           <button onClick={handleScavenge}>See Your Scavenging Results</button>
         </>
       )}
 
-      {scavengeCompleted && foundItem && (
+      {scavengeCompleted && foundItem && !restReady && (
+        <p>You pocket the <strong>{foundItem}</strong>. It shows another room labeled "Mrs. John's Room" – previously unknown. A breakthrough!</p>
+      )}
+
+      {restReady && (
         <>
-          <p>Success! You've found a <strong>{foundItem}</strong>. The map reveals previously hidden locations, including Mrs. John's Room.</p>
-          <p>It's been a long day. You decide it’s safest to rest here tonight and consider your next move in the morning.</p>
+          <p>Feeling the fatigue set in, you choose to rest in a safe corner. Tomorrow, you'll explore the newly revealed room.</p>
           <button onClick={handleRest}>Rest Up for the Night</button>
         </>
       )}
