@@ -10,7 +10,10 @@ function MapIntroduction({ setGameState }) {
     setGameState((prev) => ({
       ...prev,
       introStage: 5, // Transition to map view stage
-      visibleRooms: [...prev.visibleRooms, "Mr. Watkins' Room"], // Safely add "Mr. Watkins' Room"
+      // Add "Mr. Watkins' Room" only if it hasn't been added already
+      visibleRooms: prev.visibleRooms.includes("Mr. Watkins' Room")
+        ? prev.visibleRooms
+        : [...prev.visibleRooms, "Mr. Watkins' Room"],
     }));
   };
 
