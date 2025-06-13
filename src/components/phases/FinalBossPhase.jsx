@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ParallaxDust from "../ParallaxDust";
+import BlazePods from "../BlazePods";
 import "../styles/RoomScene.css";
 
 function FinalBossPhase({ setGameState }) {
@@ -39,16 +40,18 @@ function FinalBossPhase({ setGameState }) {
   };
 
   return (
-    <div className="room-container">
+    <div className={`room-container ${battleStarted ? "interaction" : ""}`}>
       <img src="/FitnessSuite.png" alt="Fitness Suite" className="scene-image" />
       <ParallaxDust />
-      <h1>🏋️ Final Battle: Operation Slamstorm</h1>
-      <h2>🔥 Hero Workout: 21-15-9</h2>
-      <ul>
-        <li>21 Calories on Assault Bike</li>
-        <li>15 Slam Balls</li>
-        <li>9 Burpees</li>
-      </ul>
+      <BlazePods />
+      <div className="room-content rpg-text">
+        <h1>🏋️ Final Battle: Operation Slamstorm</h1>
+        <h2>🔥 Hero Workout: 21-15-9</h2>
+        <ul>
+          <li>21 Calories on Assault Bike</li>
+          <li>15 Slam Balls</li>
+          <li>9 Burpees</li>
+        </ul>
 
       {!battleStarted && (
         <>
@@ -73,16 +76,17 @@ function FinalBossPhase({ setGameState }) {
         </>
       )}
 
-      {battleFinished && (
-        <div className="victory-summary">
-          <h3>🎉 Victory Achieved!</h3>
+        {battleFinished && (
+          <div className="victory-summary">
+            <h3>🎉 Victory Achieved!</h3>
           <p>Mutated Mrs. Roche collapses in defeat, the air clearing as silence returns.</p>
           <p>You completed <strong>Operation Slamstorm</strong> in <strong>{timer} seconds</strong>.</p>
           <p>Your heroic effort has been immortalized on the school leaderboard.</p>
+          </div>
+        )}
         </div>
-      )}
-    </div>
-  );
+      </div>
+    );
 }
 
 export default FinalBossPhase;
