@@ -103,7 +103,11 @@ function Room3Boss({ setGameState, gameState }) {
       {bossPhase === 0 && !workoutLogged && (
         <>
           <p>Everything seems normal. You take a breath and prepare to log your workout.</p>
-          <WorkoutLogger roomNumber={3} setGameState={setGameState} />
+          <WorkoutLogger
+            roomNumber={3}
+            setGameState={setGameState}
+            workoutFocus={gameState.workoutFocus}
+          />
           <button onClick={() => setWorkoutLogged(true)}>Upload Your Workout</button>
         </>
       )}
@@ -133,7 +137,11 @@ function Room3Boss({ setGameState, gameState }) {
           <h2>👹 Mutated Mrs. Roche uses Ground Stomp!</h2>
           <p>You must jump onto the desk to avoid the shockwave.</p>
           <p><strong>Complete 15 Burpee Box Jumps</strong> to survive.</p>
-          <WorkoutLogger roomNumber={3} setGameState={setGameState} />
+          <WorkoutLogger
+            roomNumber={3}
+            setGameState={setGameState}
+            workoutFocus={gameState.workoutFocus}
+          />
           <button onClick={handlePhaseOneComplete}>I Logged My Burpee Box Jumps</button>
         </>
       )}
@@ -143,7 +151,11 @@ function Room3Boss({ setGameState, gameState }) {
           <h2>🐉 Roche spins violently with a Whipping Spiral!</h2>
           <p>You must laterally leap to avoid the tail — or risk being slammed against the walls.</p>
           <p><strong>Complete 20 Lateral Bunny Hops over the Free Weight Bench</strong> to dodge.</p>
-          <WorkoutLogger roomNumber={3} setGameState={setGameState} />
+          <WorkoutLogger
+            roomNumber={3}
+            setGameState={setGameState}
+            workoutFocus={gameState.workoutFocus}
+          />
           <button onClick={handlePhaseTwoComplete}>Run for the door!</button>
         </>
       )}
