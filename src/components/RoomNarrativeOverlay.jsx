@@ -1,5 +1,12 @@
 import React from "react";
+import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi";
 import "./styles/Overlay.css";
+
+const avatarIcons = {
+  pirate: <GiPirateCaptain />,
+  knight: <GiBlackKnightHelm />,
+  ninja: <GiNinjaHead />,
+};
 
 function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
   const introText = {
@@ -25,7 +32,7 @@ function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
   return (
     <div className="overlay-bg">
       <div className="overlay-box">
-        {avatar && <div className="overlay-avatar">{avatar}</div>}
+        {avatar && <div className="overlay-avatar">{avatarIcons[avatar]}</div>}
         {lines.map((line, index) => (
           <p key={index}>{line}</p>
         ))}
