@@ -4,7 +4,17 @@
   "security": {
     "allowedHostnames": [
       "registry.npmjs.org",
-      "vitejs.dev"
+      "registry.yarnpkg.com",
+      "cdn.jsdelivr.net",
+      "vitejs.dev",
+      "api.mapbox.com",
+      "fonts.googleapis.com",
+      "fonts.gstatic.com",
+      "unpkg.com",
+      "images.unsplash.com",
+      "api.github.com",
+      "github.com",
+      "ghcr.io"
     ]
   }
 }
