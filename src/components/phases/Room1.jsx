@@ -64,22 +64,23 @@ function Room1({ setGameState, gameState }) {
   };
 
   return (
-    <div className="room-container">
+    <div className={`room-container ${!workoutUploaded ? "interaction" : ""}`}>
       <img src="/Mr_WatkinsRoom.png" alt="Mr Watkins' Room" className="scene-image" />
       <ParallaxDust />
-      <h1>Mr. Watkins' Room</h1>
+      <div className="room-content rpg-text">
+        <h1>Mr. Watkins' Room</h1>
 
-      {!workoutUploaded && (
-        <>
-          <p>You cautiously enter the abandoned classroom. The stale air and dust hint that no one has been here for a while. It's the perfect moment to focus and log your workout.</p>
-          <WorkoutLogger
-            roomNumber={1}
-            setGameState={setGameState}
-            workoutFocus={gameState.workoutFocus}
-          />
-          <button onClick={handleUploadWorkout}>Upload Your Workout</button>
-        </>
-      )}
+        {!workoutUploaded && (
+          <>
+            <p>You cautiously enter the abandoned classroom. The stale air and dust hint that no one has been here for a while. It's the perfect moment to focus and log your workout.</p>
+            <WorkoutLogger
+              roomNumber={1}
+              setGameState={setGameState}
+              workoutFocus={gameState.workoutFocus}
+            />
+            <button onClick={handleUploadWorkout}>Upload Your Workout</button>
+          </>
+        )}
 
       {workoutUploaded && !scavengeCompleted && (
         <>
@@ -92,12 +93,13 @@ function Room1({ setGameState, gameState }) {
         <p>You pocket the <strong>{foundItem}</strong>. It shows another room labeled "Mrs. John's Room" – previously unknown. A breakthrough!</p>
       )}
 
-      {restReady && (
-        <>
-          <p>Feeling the fatigue set in, you choose to rest in a safe corner. Tomorrow, you'll explore the newly revealed room.</p>
-          <button onClick={handleRest}>Rest Up for the Night</button>
-        </>
-      )}
+        {restReady && (
+          <>
+            <p>Feeling the fatigue set in, you choose to rest in a safe corner. Tomorrow, you'll explore the newly revealed room.</p>
+            <button onClick={handleRest}>Rest Up for the Night</button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

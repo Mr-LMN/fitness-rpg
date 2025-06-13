@@ -11,3 +11,28 @@
   border-radius: 8px;
   margin-bottom: 15px;
 }
+.room-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.rpg-text {
+  font-family: "Papyrus", fantasy;
+  text-shadow: 2px 2px 4px #000;
+}
+
+.room-container.interaction .scene-image {
+  opacity: 0.3;
+  transform: scale(0.95);
+  transition: opacity 0.3s, transform 0.3s;
+}

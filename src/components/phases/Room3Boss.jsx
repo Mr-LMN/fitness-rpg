@@ -99,10 +99,11 @@ function Room3Boss({ setGameState, gameState }) {
   };
 
   return (
-    <div className="room-container">
+    <div className={`room-container ${((bossPhase === 0 && !workoutLogged) || quizStarted || bossPhase > 0) ? "interaction" : ""}`}>
       <img src="/Mrs_RochesRoom.png" alt="Mrs. Roche's Room" className="scene-image" />
       <ParallaxDust />
-      <h1>Mrs. Roche's Classroom</h1>
+      <div className="room-content rpg-text">
+        <h1>Mrs. Roche's Classroom</h1>
 
       {bossPhase === 0 && !workoutLogged && (
         <>
@@ -163,6 +164,7 @@ function Room3Boss({ setGameState, gameState }) {
           <button onClick={handlePhaseTwoComplete}>Run for the door!</button>
         </>
       )}
+      </div>
     </div>
   );
 }

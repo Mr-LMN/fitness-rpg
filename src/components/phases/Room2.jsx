@@ -111,10 +111,11 @@ function Room2({ setGameState, gameState }) {
   };
 
   return (
-    <div className="room-container">
+    <div className={`room-container ${(!workoutUploaded || quizActive) ? "interaction" : ""}`}>
       <img src="/Mrs_JohnsRoom.png" alt="Mrs. John's Room" className="scene-image" />
       <ParallaxDust />
-      <h1>Mrs. John's Room</h1>
+      <div className="room-content rpg-text">
+        <h1>Mrs. John's Room</h1>
 
       {!workoutUploaded && (
         <>
@@ -168,6 +169,7 @@ function Room2({ setGameState, gameState }) {
           <button onClick={handleReturnToMap}>Return to the Map</button>
         </>
       )}
+      </div>
     </div>
   );
 }
