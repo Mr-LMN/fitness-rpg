@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import WorkoutLogger from "../WorkoutLogger";
 import QuizPhase from "./QuizPhase";
+import ParallaxDust from "../ParallaxDust";
 import "../styles/Room3Boss.css";
+import "../styles/RoomScene.css";
 
 const bossQuizQuestions = [
   {
@@ -98,6 +100,8 @@ function Room3Boss({ setGameState, gameState }) {
 
   return (
     <div className="room-container">
+      <img src="/Mrs_RochesRoom.png" alt="Mrs. Roche's Room" className="scene-image" />
+      <ParallaxDust />
       <h1>Mrs. Roche's Classroom</h1>
 
       {bossPhase === 0 && !workoutLogged && (

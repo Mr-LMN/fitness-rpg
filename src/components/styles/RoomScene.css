@@ -1,0 +1,13 @@
+.room-container {
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  color: #fff;
+  text-align: center;
+}
+
+.scene-image {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}

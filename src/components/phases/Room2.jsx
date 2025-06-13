@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import WorkoutLogger from "../WorkoutLogger";
 import SafeQuizEvent from "../events/SafeQuizEvent";
+import ParallaxDust from "../ParallaxDust";
+import "../styles/RoomScene.css";
 
 const languageQuestions = [
   {
@@ -110,6 +112,8 @@ function Room2({ setGameState, gameState }) {
 
   return (
     <div className="room-container">
+      <img src="/Mrs_JohnsRoom.png" alt="Mrs. John's Room" className="scene-image" />
+      <ParallaxDust />
       <h1>Mrs. John's Room</h1>
 
       {!workoutUploaded && (

@@ -1,8 +1,12 @@
 import React from "react";
+import ParallaxDust from "../ParallaxDust";
+import "../styles/RoomScene.css";
 
 function IntroPhase({ setGameState }) {
   return (
-    <div style={{ padding: 20 }}>
+    <div className="room-container">
+      <img src="/locker_Room.png" alt="Locker Room" className="scene-image" />
+      <ParallaxDust />
       <h2>🧊 Locked In</h2>
       <p>
         You were stuffed into a locker by bullies. You shouted for help, but no one came.

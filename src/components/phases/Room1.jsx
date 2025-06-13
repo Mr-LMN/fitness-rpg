@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import WorkoutLogger from "../WorkoutLogger";
+import ParallaxDust from "../ParallaxDust";
+import "../styles/RoomScene.css";
 
 function Room1({ setGameState, gameState }) {
   const [workoutUploaded, setWorkoutUploaded] = useState(false);
@@ -63,6 +65,8 @@ function Room1({ setGameState, gameState }) {
 
   return (
     <div className="room-container">
+      <img src="/Mr_WatkinsRoom.png" alt="Mr Watkins' Room" className="scene-image" />
+      <ParallaxDust />
       <h1>Mr. Watkins' Room</h1>
 
       {!workoutUploaded && (
