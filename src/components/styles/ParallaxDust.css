@@ -17,19 +17,19 @@
   height: 200%;
   background-image: radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px);
   background-size: 3px 3px;
-  animation: dust-float 40s linear infinite;
+  animation: dust-float 50s linear infinite;
 }
 
 .dust1 {
-  animation-duration: 40s;
+  animation-duration: 50s;
 }
 
 .dust2 {
-  animation-duration: 55s;
+  animation-duration: 65s;
 }
 
 .dust3 {
-  animation-duration: 70s;
+  animation-duration: 80s;
 }
 
 @keyframes dust-float {

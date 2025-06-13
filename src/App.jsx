@@ -23,7 +23,7 @@ function App() {
     yearGroup: "",
     gender: "",
     workoutFocus: "",
-    avatar: "🙂",
+    avatar: "pirate",
     introStage: 0,
     currentRoom: null,
     completedRooms: [],

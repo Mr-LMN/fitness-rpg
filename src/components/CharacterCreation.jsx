@@ -1,8 +1,13 @@
 import React from "react";
+import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi";
 import "./styles/CharacterCreation.css";
 
 function CharacterCreation({ gameState, setGameState }) {
-  const avatars = ["🙂", "😎", "👾"];
+  const avatars = [
+    { id: "pirate", icon: <GiPirateCaptain /> },
+    { id: "knight", icon: <GiBlackKnightHelm /> },
+    { id: "ninja", icon: <GiNinjaHead /> },
+  ];
 
   return (
     <div className="character-creation-container">
@@ -49,13 +54,13 @@ function CharacterCreation({ gameState, setGameState }) {
           <option value="strength">Strength</option>
         </select>
         <div className="avatar-selection">
-          {avatars.map((av) => (
+          {avatars.map(({ id, icon }) => (
             <span
-              key={av}
-              className={`avatar-option ${gameState.avatar === av ? "selected" : ""}`}
-              onClick={() => setGameState({ ...gameState, avatar: av })}
+              key={id}
+              className={`avatar-option ${gameState.avatar === id ? "selected" : ""}`}
+              onClick={() => setGameState({ ...gameState, avatar: id })}
             >
-              {av}
+              {icon}
             </span>
           ))}
         </div>
