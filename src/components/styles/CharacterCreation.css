@@ -1,0 +1,41 @@
+.character-creation-container {
+  background-image: url('/global-bg.png');
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.character-creation-box {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.character-creation-box input,
+.character-creation-box select {
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+}
+
+.avatar-selection {
+  margin: 10px 0;
+}
+
+.avatar-option {
+  font-size: 2rem;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.avatar-option.selected {
+  transform: scale(1.3);
+}

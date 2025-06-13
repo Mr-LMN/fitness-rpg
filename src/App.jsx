@@ -19,6 +19,11 @@ function App() {
   const [signedIn, setSignedIn] = useState(false);
   const [gameState, setGameState] = useState({
     characterCreated: false,
+    studentName: "",
+    yearGroup: "",
+    gender: "",
+    workoutFocus: "",
+    avatar: "🙂",
     introStage: 0,
     currentRoom: null,
     completedRooms: [],
@@ -58,6 +63,7 @@ function App() {
           return (
             <RoomNarrativeOverlay
               roomName={gameState.currentRoom}
+              avatar={gameState.avatar}
               onContinue={() =>
                 setGameState((prev) => ({
                   ...prev,
@@ -68,10 +74,20 @@ function App() {
           );
         }
         if (gameState.currentRoom === "Mr. Watkins' Room") {
-          return <Room1 setGameState={setGameState} />;
+          return (
+            <Room1
+              setGameState={setGameState}
+              gameState={gameState}
+            />
+          );
         }
         if (gameState.currentRoom === "Mrs. John's Room") {
-          return <Room2 setGameState={setGameState} />;
+          return (
+            <Room2
+              setGameState={setGameState}
+              gameState={gameState}
+            />
+          );
         }
         if (gameState.currentRoom === "Mrs. Roche's Room") {
           return <Room3Boss setGameState={setGameState} gameState={gameState} />;

@@ -115,7 +115,11 @@ function Room2({ setGameState, gameState }) {
       {!workoutUploaded && (
         <>
           <p>You arrive in Mrs. John's classroom. It's eerily quiet, but there's space to complete your next workout.</p>
-          <WorkoutLogger roomNumber={2} setGameState={setGameState} />
+          <WorkoutLogger
+            roomNumber={2}
+            setGameState={setGameState}
+            workoutFocus={gameState.workoutFocus}
+          />
           <button onClick={handleUploadWorkout}>Upload Your Workout</button>
         </>
       )}
