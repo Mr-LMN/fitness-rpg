@@ -1,0 +1,55 @@
+.leaderboard-container {
+  background-image: url('/global-bg.png');
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+  border-radius: 8px;
+  color: #fff;
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.lb-filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.lb-filters select {
+  padding: 5px 10px;
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 4px;
+}
+
+.lb-grids {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.lb-section {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.lb-section h3 {
+  margin-top: 0;
+  font-size: 16px;
+  text-align: center;
+  color: #a4c639;
+}
+
+.lb-section ol {
+  list-style: decimal inside;
+  padding-left: 0;
+  margin: 0;
+}
+
+.lb-section li {
+  margin: 4px 0;
+}

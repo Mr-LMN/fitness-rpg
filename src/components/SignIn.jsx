@@ -1,5 +1,6 @@
 import React from "react";
 import "./styles/SignIn.css";
+import Leaderboard from "./Leaderboard";
 
 function SignIn({ onSignIn }) {
   return (
@@ -10,6 +11,7 @@ function SignIn({ onSignIn }) {
         <input placeholder="Password" type="password" />
         <button onClick={onSignIn}>Sign In</button>
       </div>
+      <Leaderboard />
     </div>
   );
 }
