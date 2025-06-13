@@ -1,28 +1,22 @@
-diff --git a/.devcontainer/devcontainer.json b/.devcontainer/devcontainer.json
-index 58c49d7bc8c9cb47edf1d02f4c7eabdda3622d55..5dbc5b9d9915bed207fdd8286e3f72947e0b2dc6 100644
---- a/.devcontainer/devcontainer.json
-+++ b/.devcontainer/devcontainer.json
-@@ -1,20 +1,22 @@
- {
-   "name": "Node DevContainer",
-   "image": "mcr.microsoft.com/devcontainers/typescript-node:18",
-   "security": {
-     "allowedHostnames": [
-       "registry.npmjs.org",
-       "registry.yarnpkg.com",
-       "cdn.jsdelivr.net",
-+      "npmjs.org",
-       "vitejs.dev",
-       "api.mapbox.com",
-       "fonts.googleapis.com",
-       "fonts.gstatic.com",
-       "unpkg.com",
-       "images.unsplash.com",
-       "api.github.com",
-       "github.com",
-       "ghcr.io"
-     ]
--  }
-+  },
-+  "runArgs": ["--network=host"]
- }
+{
+  "name": "Node DevContainer",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:18",
+  "security": {
+    "allowedHostnames": [
+      "github.com",
+      "api.github.com",
+      "registry.npmjs.org",
+      "npmjs.org",
+      "unpkg.com",
+      "fonts.googleapis.com",
+      "fonts.gstatic.com",
+      "vitejs.dev",
+      "cdn.jsdelivr.net",
+      "registry.yarnpkg.com",
+      "api.mapbox.com",
+      "images.unsplash.com",
+      "ghcr.io"
+    ]
+  },
+  "runArgs": ["--network=host"]
+}
