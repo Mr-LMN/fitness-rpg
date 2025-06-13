@@ -9,9 +9,9 @@ function RoomNarrativeOverlay({ roomName, onContinue }) {
       "You step inside, unsure if you're alone…"
     ],
     "Mrs. John's Room": [
-      "A faint tapping echoes through the hallway as you approach Mrs. John's room.",
-      "The door creaks open… there's a strong smell of cleaning fluid and something else.",
-      "Better be quick in here."
+      "You head further into the Languages corridor. Mrs. John's classroom is barely lit.",
+      "Desks are overturned and chairs are jammed against the back of the door. You squeeze through.",
+      "There's a faint buzzing—maybe the lights? Or something else. You need to scavenge supplies quickly and quietly."
     ],
     "Mrs. Roche's Room": [
       "The air feels heavier as you reach Mrs. Roche's classroom.",

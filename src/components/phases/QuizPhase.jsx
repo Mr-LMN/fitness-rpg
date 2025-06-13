@@ -52,15 +52,18 @@ function QuizPhase({ questions, onComplete, showImpossibleFinal = false }) {
   const totalQuestions = showImpossibleFinal ? questionPool.length + 1 : questionPool.length;
 
   const handleAnswer = (option) => {
-    if (currentQuestion < questionPool.length && option.correct) {
-      setCorrectAnswers((prev) => prev + 1);
-    }
+    const isCorrect =
+      currentQuestion < questionPool.length && option.correct;
+    const updatedCorrect = isCorrect
+      ? correctAnswers + 1
+      : correctAnswers;
 
     const nextQuestion = currentQuestion + 1;
     if (nextQuestion === totalQuestions) {
+      setCorrectAnswers(updatedCorrect);
       setQuizComplete(true);
-      onComplete(correctAnswers);
     } else {
+      setCorrectAnswers(updatedCorrect);
       setCurrentQuestion(nextQuestion);
     }
   };
