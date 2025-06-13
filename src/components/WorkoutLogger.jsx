@@ -89,7 +89,7 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
             }
           />
         </>
-      )
+      )}
       <button onClick={handleAddExercise}>Add Exercise</button>
 
       <ul>
