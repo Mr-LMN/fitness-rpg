@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import ParallaxDust from "../ParallaxDust";
+import "../styles/RoomScene.css";
 
 function FinalBossPhase({ setGameState }) {
   const [timer, setTimer] = useState(0);
@@ -38,6 +40,8 @@ function FinalBossPhase({ setGameState }) {
 
   return (
     <div className="room-container">
+      <img src="/FitnessSuite.png" alt="Fitness Suite" className="scene-image" />
+      <ParallaxDust />
       <h1>🏋️ Final Battle: Operation Slamstorm</h1>
       <h2>🔥 Hero Workout: 21-15-9</h2>
       <ul>

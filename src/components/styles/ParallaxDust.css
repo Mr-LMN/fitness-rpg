@@ -1,0 +1,42 @@
+.dust-layer {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.dust {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+  background-size: 3px 3px;
+  animation: dust-float 40s linear infinite;
+}
+
+.dust1 {
+  animation-duration: 40s;
+}
+
+.dust2 {
+  animation-duration: 55s;
+}
+
+.dust3 {
+  animation-duration: 70s;
+}
+
+@keyframes dust-float {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(50%, -50%, 0);
+  }
+}

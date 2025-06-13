@@ -1,6 +1,10 @@
 /* General Map Container Styling */
 .map-container {
   background-color: #1b1b1b;
+  background-image: url('/global-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: multiply;
   border: 4px solid #333;
   border-radius: 8px;
   padding: 20px;
