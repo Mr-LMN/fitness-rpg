@@ -1,3 +1,5 @@
+import React from "react";
+
 function WarmUpPhase({ setGameState }) {
   return (
     <div style={{ padding: 20 }}>

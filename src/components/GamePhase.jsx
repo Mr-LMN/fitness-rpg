@@ -1,3 +1,4 @@
+import React from "react";
 import IntroPhase from "./phases/IntroPhase";
 import WarmUpPhase from "./phases/WarmUpPhase";
 import MobilityPhase from "./phases/MobilityPhase";

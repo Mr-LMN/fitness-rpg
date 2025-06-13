@@ -1,3 +1,5 @@
+import React from "react";
+
 function VictoryPhase({ gameState }) {
   return (
     <div style={{ padding: 20 }}>

@@ -1,3 +1,5 @@
+import React from "react";
+
 function BossFightPhase({ gameState, setGameState }) {
   const lootBasedOnPerformance = () => {
     if (gameState.quizScore >= 5) {
