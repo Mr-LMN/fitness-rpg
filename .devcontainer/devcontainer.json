@@ -1,0 +1,10 @@
+{
+  "name": "Node DevContainer",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:18",
+  "security": {
+    "allowedHostnames": [
+      "registry.npmjs.org",
+      "vitejs.dev"
+    ]
+  }
+}
