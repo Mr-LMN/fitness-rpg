@@ -28,3 +28,13 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.enhanced-reading {
+  background-color: #fffae5;
+  color: #000;
+  font-size: 1.1rem;
+}
+
+.enhanced-reading .rpg-text {
+  font-size: 1.2rem;
+}
+

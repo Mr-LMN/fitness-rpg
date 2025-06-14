@@ -114,7 +114,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className={gameState.enhancedReading ? "enhanced-reading" : ""}>
       {signedIn && gameState.characterCreated && (
         <XPBar
           avatar={gameState.avatar}

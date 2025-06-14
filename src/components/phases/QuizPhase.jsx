@@ -70,12 +70,56 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
     },
   ];
 
+  const extraPool = [
+    {
+      q: "How do you say 'hello' in Welsh?",
+      options: [
+        { label: "Helo", correct: true },
+        { label: "Diolch", correct: false },
+        { label: "Hwyl", correct: false },
+      ],
+    },
+    {
+      q: "Translate 'school' to Welsh.",
+      options: [
+        { label: "Ysgol", correct: true },
+        { label: "Ty", correct: false },
+        { label: "Bws", correct: false },
+      ],
+    },
+    {
+      q: "What is 'red' in Spanish?",
+      options: [
+        { label: "Rojo", correct: true },
+        { label: "Negro", correct: false },
+        { label: "Verde", correct: false },
+      ],
+    },
+    {
+      q: "How do you say 'goodbye' in Welsh?",
+      options: [
+        { label: "Hwyl fawr", correct: true },
+        { label: "Nos da", correct: false },
+        { label: "Croeso", correct: false },
+      ],
+    },
+  ];
+
   // Build question pool
   const questionPool = useMemo(() => {
     let pool = Array.isArray(questions) && questions.length > 0 ? [...questions] : [...defaultPool];
-    let finalQ = null;
+    pool = pool.sort(() => Math.random() - 0.5);
+
+    // ensure at least 6 questions before the final one
+    let extraIndex = 0;
+    while (pool.length < 6) {
+      pool.push(extraPool[extraIndex % extraPool.length]);
+      extraIndex += 1;
+    }
+    pool = pool.slice(0, 6);
+
     if (showImpossibleFinal) {
-      finalQ = {
+      const finalQ = {
         q: "Translate 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch' into English:",
         options: [
           { label: "Yes", correct: false },
@@ -84,9 +128,9 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
           { label: "I give up", correct: false },
         ],
       };
+      pool.push(finalQ);
     }
-    pool = pool.sort(() => Math.random() - 0.5);
-    if (finalQ) pool.push(finalQ);
+
     return pool;
   }, [questions, showImpossibleFinal]);
 
