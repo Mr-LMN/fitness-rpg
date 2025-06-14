@@ -18,5 +18,6 @@ To create a production build, run `npm run build` and serve the resulting `dist`
 ## Accessibility
 
 The character creation screen includes an **Enhanced Reading Mode** toggle for
-users with dyslexia or vision impairments. When enabled, the interface uses
-a higher contrast background and larger fonts to improve readability.
+users with dyslexia or vision impairments. When enabled, the entire game uses
+a higher contrast background and larger fonts to improve readability, including
+all narration and workout cards.

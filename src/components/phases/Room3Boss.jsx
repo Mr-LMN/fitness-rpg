@@ -53,12 +53,12 @@ const bossQuizQuestions = [
     ],
   },
   {
-    q: "Translate 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch' into English:",
+    q: "What is the Welsh word for 'school'?",
     options: [
-      { label: "Yes", correct: false },
-      { label: "No", correct: false },
-      { label: "What did you just say?", correct: false },
-      { label: "I give up", correct: false },
+      { label: "Ysgol", correct: true },
+      { label: "Cartref", correct: false },
+      { label: "Bws", correct: false },
+      { label: "Cwch", correct: false },
     ],
   },
 ];
@@ -155,13 +155,8 @@ function Room3Boss({ setGameState, gameState }) {
         <>
           <h2>👹 Mutated Mrs. Roche uses Ground Stomp!</h2>
           <p>You must jump onto the desk to avoid the shockwave.</p>
-          <p><strong>Complete 15 Burpee Box Jumps</strong> to survive.</p>
-          <WorkoutLogger
-            roomNumber={3}
-            setGameState={setGameState}
-            workoutFocus={gameState.workoutFocus}
-          />
-          <button onClick={handlePhaseOneComplete}>I Logged My Burpee Box Jumps</button>
+          <p><strong>Perform 15 Burpee Box Jumps</strong> to survive.</p>
+          <button onClick={handlePhaseOneComplete}>I've done that</button>
         </>
       )}
 
@@ -169,13 +164,8 @@ function Room3Boss({ setGameState, gameState }) {
         <>
           <h2>🐉 Roche spins violently with a Whipping Spiral!</h2>
           <p>You must laterally leap to avoid the tail — or risk being slammed against the walls.</p>
-          <p><strong>Complete 20 Lateral Bunny Hops over the Free Weight Bench</strong> to dodge.</p>
-          <WorkoutLogger
-            roomNumber={3}
-            setGameState={setGameState}
-            workoutFocus={gameState.workoutFocus}
-          />
-          <button onClick={handlePhaseTwoComplete}>Run for the door!</button>
+          <p><strong>Perform 20 Lateral Bunny Hops over the Free Weight Bench</strong> to dodge.</p>
+          <button onClick={handlePhaseTwoComplete}>I've done that</button>
         </>
       )}
       </div>
