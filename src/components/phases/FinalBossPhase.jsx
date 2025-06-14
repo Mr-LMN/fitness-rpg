@@ -31,6 +31,14 @@ function FinalBossPhase({ setGameState }) {
       ...prev,
       bossDefeated: true,
       victory: true,
+      badges: [
+        ...prev.badges,
+        ...(prev.badges.includes("bossVanquisher") ? [] : ["bossVanquisher"]),
+        ...(timer <= 120 && !prev.badges.includes("speedRunner")
+          ? ["speedRunner"]
+          : []),
+        ...(timer <= 100 && !prev.badges.includes("topTen") ? ["topTen"] : []),
+      ],
       leaderboardEntry: {
         time: timer,
         date: new Date().toISOString(),
