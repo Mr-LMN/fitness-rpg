@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import "../styles/Quiz.css";
 
 function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) {
   // Default question pool
@@ -43,6 +44,30 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
         { label: "Gwyn", correct: false },
       ],
     },
+    {
+      q: "Translate 'house' to Spanish.",
+      options: [
+        { label: "Casa", correct: true },
+        { label: "Carro", correct: false },
+        { label: "Mesa", correct: false },
+      ],
+    },
+    {
+      q: "How do you say 'book' in Welsh?",
+      options: [
+        { label: "Llyfr", correct: true },
+        { label: "Cadair", correct: false },
+        { label: "Dwr", correct: false },
+      ],
+    },
+    {
+      q: "What is 'please' in Spanish?",
+      options: [
+        { label: "Por favor", correct: true },
+        { label: "Buenos días", correct: false },
+        { label: "Gracias", correct: false },
+      ],
+    },
   ];
 
   // Build question pool
@@ -59,7 +84,7 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
         ],
       });
     }
-    return pool;
+    return pool.sort(() => Math.random() - 0.5);
   }, [questions, showImpossibleFinal]);
 
   const totalQuestions = questionPool.length;
@@ -68,11 +93,25 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [quizComplete, setQuizComplete] = useState(false);
+  const [penalty, setPenalty] = useState("");
+
+  const penaltyExercises = [
+    "3 Burpees",
+    "3 Squat Jumps",
+    "3 Star Jumps",
+    "3 Push-ups",
+  ];
 
   // Handle answer click
   const handleAnswer = (option) => {
     const isCorrect = !!option.correct;
-    isCorrect && setCorrectAnswers((c) => c + 1);
+    if (isCorrect) {
+      setCorrectAnswers((c) => c + 1);
+    } else {
+      const random = penaltyExercises[Math.floor(Math.random() * penaltyExercises.length)];
+      setPenalty(`❌ Wrong! Do ${random}!`);
+      setTimeout(() => setPenalty(""), 3000);
+    }
 
     const nextIndex = currentQuestion + 1;
     if (nextIndex < totalQuestions) {
@@ -111,6 +150,7 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
           </button>
         ))}
       </div>
+      {penalty && <p className="penalty-message">{penalty}</p>}
     </div>
   );
 }
