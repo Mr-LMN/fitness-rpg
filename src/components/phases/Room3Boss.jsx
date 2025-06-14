@@ -100,7 +100,11 @@ function Room3Boss({ setGameState, gameState }) {
 
   return (
     <div className={`room-container ${((bossPhase === 0 && !workoutLogged) || quizStarted || bossPhase > 0) ? "interaction" : ""}`}>
-      <img src="/Mrs_RochesRoom.png" alt="Mrs. Roche's Room" className="scene-image" />
+      <img
+        src={alarmTriggered && !quizStarted ? "/quiz_door.png" : "/Mrs_RochesRoom.png"}
+        alt="Mrs. Roche's Room"
+        className="scene-image"
+      />
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h1>Mrs. Roche's Classroom</h1>
