@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import "../styles/SafeQuizEvent.css";
+
+const baseUrl = import.meta.env.BASE_URL || "/";
 
 const SafeQuizEvent = ({ questionPool, onSuccess, onFailure, roomName }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -45,6 +48,7 @@ const SafeQuizEvent = ({ questionPool, onSuccess, onFailure, roomName }) => {
 
   return (
     <div className="safe-event">
+      <img src={`${baseUrl}safe.png`} alt="Digital Safe" className="safe-image" />
       <h2>🔐 Digital Safe - {roomName}</h2>
       <p><strong>Lives:</strong> {"❤️".repeat(lives)} {"🤍".repeat(3 - lives)}</p>
       <p>{currentQuestion?.question}</p>

@@ -1,0 +1,13 @@
+.safe-event {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+}
+
+.safe-image {
+  width: 200px;
+  margin: 0 auto 15px;
+  display: block;
+}
