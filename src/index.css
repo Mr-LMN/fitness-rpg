@@ -1,19 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background-color: #121212;
+  color: #eee;
 }
 
 button {
   padding: 10px 20px;
   font-size: 16px;
   background-color: #007bff;
-  color: white;
+  color: #fff;
   border: none;
   cursor: pointer;
+  border-radius: 4px;
 }
-
-button:hover {
+button:hover:not(:disabled) {
   background-color: #0056b3;
 }
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
