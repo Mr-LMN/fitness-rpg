@@ -12,18 +12,26 @@
 }
 
 .badge-case {
-  background: #fff;
-  padding: 20px;
-  max-width: 300px;
+  background: #f5f5dc;
+  padding: 30px;
+  max-width: 400px;
   border-radius: 8px;
   text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: "Papyrus", fantasy;
+}
+
+.badge-case ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
 }
 
 .badge-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
 .badge-item .icon {
@@ -31,7 +39,16 @@
 }
 
 .badge-img {
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
+}
+
+.badge-item .label {
+  font-weight: bold;
+}
+
+.badge-item .desc {
+  font-size: 0.9em;
+  color: #333;
 }

@@ -71,7 +71,9 @@ function Map({ gameState, setGameState }) {
       <p className="map-instructions">
         🔍 Click on any visible room to investigate. Rooms will reveal themselves as you explore!
       </p>
-      <button onClick={() => setShowBadges(true)}>View Badges</button>
+      <button className="badge-button" onClick={() => setShowBadges(true)}>
+        View Badges
+      </button>
       {showBadges && (
         <BadgeCase badges={gameState.badges} onClose={() => setShowBadges(false)} />
       )}
