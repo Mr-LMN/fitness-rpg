@@ -72,9 +72,10 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
 
   // Build question pool
   const questionPool = useMemo(() => {
-    const pool = Array.isArray(questions) && questions.length > 0 ? [...questions] : [...defaultPool];
+    let pool = Array.isArray(questions) && questions.length > 0 ? [...questions] : [...defaultPool];
+    let finalQ = null;
     if (showImpossibleFinal) {
-      pool.push({
+      finalQ = {
         q: "Translate 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch' into English:",
         options: [
           { label: "Yes", correct: false },
@@ -82,9 +83,11 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
           { label: "What did you just say?", correct: false },
           { label: "I give up", correct: false },
         ],
-      });
+      };
     }
-    return pool.sort(() => Math.random() - 0.5);
+    pool = pool.sort(() => Math.random() - 0.5);
+    if (finalQ) pool.push(finalQ);
+    return pool;
   }, [questions, showImpossibleFinal]);
 
   const totalQuestions = questionPool.length;
@@ -94,6 +97,7 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [quizComplete, setQuizComplete] = useState(false);
   const [penalty, setPenalty] = useState("");
+  const [finalWrong, setFinalWrong] = useState(false);
 
   const penaltyExercises = [
     "3 Burpees",
@@ -105,8 +109,13 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
   // Handle answer click
   const handleAnswer = (option) => {
     const isCorrect = !!option.correct;
+    const isLast = currentQuestion === totalQuestions - 1;
+
     if (isCorrect) {
       setCorrectAnswers((c) => c + 1);
+    } else if (showImpossibleFinal && isLast) {
+      setFinalWrong(true);
+      setPenalty("");
     } else {
       const random = penaltyExercises[Math.floor(Math.random() * penaltyExercises.length)];
       setPenalty(`❌ Wrong! Do ${random}!`);
@@ -127,6 +136,12 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
       <div className="quiz-container">
         <h2>🎉 Quiz Complete</h2>
         <p>You answered {correctAnswers} out of {totalQuestions} correctly.</p>
+        {finalWrong && (
+          <p>
+            A mutated figure charges at you! You dive aside as it smashes the
+            door open.
+          </p>
+        )}
         <button onClick={() => onComplete(correctAnswers)}>Continue</button>
       </div>
     );
