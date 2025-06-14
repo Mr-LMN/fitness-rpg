@@ -77,10 +77,14 @@ function Room3Boss({ setGameState, gameState }) {
     }
   }, [workoutLogged]);
 
-  const handleQuizComplete = (correctAnswers) => {
+  const handleQuizComplete = (correctAnswers, totalQuestions) => {
     setGameState((prev) => ({
       ...prev,
       quizScore: correctAnswers,
+      badges:
+        correctAnswers === totalQuestions && !prev.badges.includes("quizMaster")
+          ? [...prev.badges, "quizMaster"]
+          : prev.badges,
     }));
     setBossPhase(1);
   };

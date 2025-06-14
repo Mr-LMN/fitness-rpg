@@ -6,6 +6,7 @@ const SafeQuizEvent = ({ questionPool, onSuccess, onFailure, roomName }) => {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [loot, setLoot] = useState(null);
+  const [mistakes, setMistakes] = useState(0);
 
   const currentQuestion = questionPool[currentQuestionIndex];
 
@@ -19,10 +20,11 @@ const SafeQuizEvent = ({ questionPool, onSuccess, onFailure, roomName }) => {
         setLoot(reward);
         setQuizCompleted(true);
         setFeedback("Safe unlocked!");
-        onSuccess(reward);
+        onSuccess(reward, mistakes === 0);
       }
     } else {
       setLives((prev) => prev - 1);
+      setMistakes((m) => m + 1);
       setFeedback("Incorrect ❌");
 
       if (lives - 1 === 0) {

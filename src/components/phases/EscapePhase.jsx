@@ -9,7 +9,13 @@ function EscapePhase({ setGameState, slamBallGoal = 10, squatJumpGoal = 15 }) {
   const handleBreakOut = () => {
     if (slamBalls >= slamBallGoal || jumpSquats >= squatJumpGoal) {
       alert("You successfully escaped the locker room!");
-      setGameState((prev) => ({ ...prev, introStage: 4 })); // ✅ Progress to MapIntroduction
+      setGameState((prev) => ({
+        ...prev,
+        introStage: 4, // ✅ Progress to MapIntroduction
+        badges: prev.badges.includes("lockerEscapee")
+          ? prev.badges
+          : [...prev.badges, "lockerEscapee"],
+      }));
     } else {
       alert("Complete the required exercises to escape!");
     }

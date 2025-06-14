@@ -29,6 +29,18 @@ const badgeDefinitions = {
     label: "Top 10",
     description: "Reached the leaderboard Top 10!",
   },
+  lockerEscapee: {
+    icon: <GiBookmarklet />,
+    image: `${baseUrl}Badges/LockerRoomEscape_Badge.png`,
+    label: "Locker Escapee",
+    description: "Escaped the locker room!",
+  },
+  quizMaster: {
+    icon: <GiBookmarklet />,
+    image: `${baseUrl}Badges/QuizMaster.png`,
+    label: "Quiz Master",
+    description: "Answered every quiz question correctly!",
+  },
 };
 
 function BadgeCase({ badges = [], onClose }) {
