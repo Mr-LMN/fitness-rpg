@@ -142,7 +142,7 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
             door open.
           </p>
         )}
-        <button onClick={() => onComplete(correctAnswers)}>Continue</button>
+        <button onClick={() => onComplete(correctAnswers, totalQuestions)}>Continue</button>
       </div>
     );
   }

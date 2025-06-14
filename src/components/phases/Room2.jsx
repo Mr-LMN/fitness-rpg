@@ -67,12 +67,16 @@ function Room2({ setGameState, gameState }) {
     }));
   };
 
-  const handleQuizSuccess = (loot) => {
+  const handleQuizSuccess = (loot, perfect) => {
     setQuizCompleted(true);
     setLootFound(loot);
     setGameState((prev) => ({
       ...prev,
       inventory: [...prev.inventory, loot],
+      badges:
+        perfect && !prev.badges.includes("quizMaster")
+          ? [...prev.badges, "quizMaster"]
+          : prev.badges,
       annotations: [
         ...prev.annotations,
         {
