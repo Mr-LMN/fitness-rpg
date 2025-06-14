@@ -29,3 +29,9 @@
 .badge-item .icon {
   font-size: 1.4em;
 }
+
+.badge-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
