@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ParallaxDust from "../ParallaxDust";
 import BlazePods from "../BlazePods";
+import { playSound } from "../../utils";
 import "../styles/RoomScene.css";
 
 function FinalBossPhase({ setGameState }) {
@@ -29,6 +30,7 @@ function FinalBossPhase({ setGameState }) {
 
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + 50,
       bossDefeated: true,
       victory: true,
       badges: [
@@ -45,6 +47,7 @@ function FinalBossPhase({ setGameState }) {
         workout: "Operation Slamstorm",
       },
     }));
+    playSound();
   };
 
   return (
