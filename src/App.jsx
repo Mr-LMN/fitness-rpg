@@ -42,6 +42,7 @@ function App() {
     bossPhase: 0,
     victory: false,
     showOverlay: true,
+    enhancedReading: false,
   });
 
   const renderPhase = () => {

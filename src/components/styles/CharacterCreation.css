@@ -39,3 +39,25 @@
 .avatar-option.selected {
   transform: scale(1.3);
 }
+
+.enhanced-reading .character-creation-box {
+  background: #fffae5;
+  color: #000;
+  font-size: 1.2rem;
+}
+
+.enhanced-reading .character-creation-box input,
+.enhanced-reading .character-creation-box select {
+  font-size: 1rem;
+}
+
+.enhanced-reading .avatar-option {
+  font-size: 2.5rem;
+}
+
+.enhanced-reading-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+}

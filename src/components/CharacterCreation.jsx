@@ -10,7 +10,11 @@ function CharacterCreation({ gameState, setGameState }) {
   ];
 
   return (
-    <div className="character-creation-container">
+    <div
+      className={`character-creation-container ${
+        gameState.enhancedReading ? "enhanced-reading" : ""
+      }`}
+    >
       <div className="character-creation-box">
         <h2>Character Creation</h2>
         <input
@@ -64,6 +68,19 @@ function CharacterCreation({ gameState, setGameState }) {
             </span>
           ))}
         </div>
+        <label className="enhanced-reading-toggle">
+          <input
+            type="checkbox"
+            checked={gameState.enhancedReading || false}
+            onChange={(e) =>
+              setGameState({
+                ...gameState,
+                enhancedReading: e.target.checked,
+              })
+            }
+          />
+          Enhanced Reading Mode
+        </label>
         <button onClick={() => setGameState({ ...gameState, characterCreated: true })}>
           Start Game
         </button>
