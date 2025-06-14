@@ -14,3 +14,9 @@ The goal of this project is to combine a simple RPG style narrative with fitness
 4. Open the provided local address (usually `http://localhost:5173`) in your browser to play.
 
 To create a production build, run `npm run build` and serve the resulting `dist` directory with your preferred static server.
+
+## Accessibility
+
+The character creation screen includes an **Enhanced Reading Mode** toggle for
+users with dyslexia or vision impairments. When enabled, the interface uses
+a higher contrast background and larger fonts to improve readability.
