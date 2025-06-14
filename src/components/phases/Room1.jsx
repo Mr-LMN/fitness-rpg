@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import WorkoutLogger from "../WorkoutLogger";
 import ParallaxDust from "../ParallaxDust";
+import { playSound } from "../../utils";
 import "../styles/RoomScene.css";
 
 function Room1({ setGameState, gameState }) {
@@ -13,6 +14,7 @@ function Room1({ setGameState, gameState }) {
     setWorkoutUploaded(true);
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + 10,
       badges: prev.badges.includes("workoutStarter")
         ? prev.badges
         : [...prev.badges, "workoutStarter"],
@@ -25,6 +27,7 @@ function Room1({ setGameState, gameState }) {
         },
       ],
     }));
+    playSound();
   };
 
   const handleScavenge = () => {
@@ -35,6 +38,7 @@ function Room1({ setGameState, gameState }) {
 
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + 10,
       inventory: [...(prev.inventory || []), lootItem],
       annotations: [
         ...prev.annotations,
@@ -46,11 +50,13 @@ function Room1({ setGameState, gameState }) {
       ],
       visibleRooms: [...prev.visibleRooms, "Mrs. John's Room"],
     }));
+    playSound();
   };
 
   const handleRest = () => {
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + 5,
       completedRooms: [...prev.completedRooms, "Mr. Watkins' Room"],
       currentRoom: null,
       introStage: 5,
@@ -64,6 +70,7 @@ function Room1({ setGameState, gameState }) {
         },
       ],
     }));
+    playSound();
   };
 
   return (

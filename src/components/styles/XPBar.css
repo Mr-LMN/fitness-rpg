@@ -1,0 +1,33 @@
+.xpbar-container {
+  display: flex;
+  align-items: center;
+  background: #222;
+  color: #fff;
+  padding: 5px 10px;
+  border-bottom: 2px solid #333;
+}
+
+.xpbar-avatar {
+  font-size: 2rem;
+  margin-right: 10px;
+}
+
+.xpbar-info {
+  flex: 1;
+}
+
+.xpbar-text {
+  margin-bottom: 4px;
+}
+
+.xpbar-progress {
+  height: 10px;
+  background: #555;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.xpbar-fill {
+  height: 100%;
+  background: #4caf50;
+}

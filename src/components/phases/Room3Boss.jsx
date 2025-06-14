@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import WorkoutLogger from "../WorkoutLogger";
 import QuizPhase from "./QuizPhase";
 import ParallaxDust from "../ParallaxDust";
+import { playSound } from "../../utils";
 import "../styles/Room3Boss.css";
 import "../styles/RoomScene.css";
 
@@ -80,26 +81,31 @@ function Room3Boss({ setGameState, gameState }) {
   const handleQuizComplete = (correctAnswers, totalQuestions) => {
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + 20,
       quizScore: correctAnswers,
       badges:
         correctAnswers === totalQuestions && !prev.badges.includes("quizMaster")
           ? [...prev.badges, "quizMaster"]
           : prev.badges,
     }));
+    playSound();
     setBossPhase(1);
   };
 
   const handlePhaseOneComplete = () => {
     setBossPhase(2);
+    playSound();
   };
 
   const handlePhaseTwoComplete = () => {
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + 30,
       completedRooms: [...prev.completedRooms, "Mrs. Roche's Room"],
       visibleRooms: [...prev.visibleRooms, "Fitness Suite"],
       introStage: 5, // Show map next
     }));
+    playSound();
   };
 
   return (

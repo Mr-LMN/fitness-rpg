@@ -14,6 +14,8 @@ import QuizPhase from "./components/phases/QuizPhase";
 import VictoryPhase from "./components/phases/VictoryPhase";
 import RoomNarrativeOverlay from "./components/RoomNarrativeOverlay";
 import FinalBossPhase from "./components/phases/FinalBossPhase";
+import XPBar from "./components/XPBar";
+import { playSound } from "./utils";
 
 function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -34,6 +36,7 @@ function App() {
     bossDefeated: false,
     missedBlazePods: 0,
     lootUnlocked: [],
+    xp: 0,
     badges: [],
     triggeredQuiz: false,
     bossPhase: 0,
@@ -109,7 +112,18 @@ function App() {
     return <div>Something went wrong. No valid phase loaded.</div>;
   };
 
-  return <div>{renderPhase()}</div>;
+  return (
+    <div>
+      {signedIn && gameState.characterCreated && (
+        <XPBar
+          avatar={gameState.avatar}
+          xp={gameState.xp}
+          playerName={gameState.studentName}
+        />
+      )}
+      {renderPhase()}
+    </div>
+  );
 }
 
 export default App;

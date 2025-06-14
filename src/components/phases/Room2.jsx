@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { playSound } from "../../utils";
 import WorkoutLogger from "../WorkoutLogger";
 import SafeQuizEvent from "../events/SafeQuizEvent";
 import ParallaxDust from "../ParallaxDust";
@@ -56,6 +57,7 @@ function Room2({ setGameState, gameState }) {
     setSafeDiscovered(true);
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + 10,
       annotations: [
         ...prev.annotations,
         {
@@ -65,6 +67,7 @@ function Room2({ setGameState, gameState }) {
         },
       ],
     }));
+    playSound();
   };
 
   const handleQuizSuccess = (loot, perfect) => {
@@ -72,6 +75,7 @@ function Room2({ setGameState, gameState }) {
     setLootFound(loot);
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + (perfect ? 20 : 15),
       inventory: [...prev.inventory, loot],
       badges:
         perfect && !prev.badges.includes("quizMaster")
@@ -86,12 +90,14 @@ function Room2({ setGameState, gameState }) {
         },
       ],
     }));
+    playSound();
   };
 
   const handleQuizFailure = () => {
     setQuizCompleted(true);
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + 5,
       annotations: [
         ...prev.annotations,
         {
@@ -101,17 +107,20 @@ function Room2({ setGameState, gameState }) {
         },
       ],
     }));
+    playSound();
   };
 
   const handleReturnToMap = () => {
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + 5,
       completedRooms: [...prev.completedRooms, "Mrs. John's Room"],
       visibleRooms: [...prev.visibleRooms, "Mrs. Roche's Room"],
       currentRoom: null,
       introStage: 5,
       showOverlay: true,
     }));
+    playSound();
   };
 
   return (

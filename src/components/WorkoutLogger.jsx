@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { playSound } from "../utils";
 
 function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   const cardioMode = workoutFocus === "cardio";
@@ -26,6 +27,7 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   const handleFinishWorkout = () => {
     setGameState((prev) => ({
       ...prev,
+      xp: (prev.xp || 0) + 10,
       annotations: [
         ...prev.annotations,
         {
@@ -36,6 +38,7 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
         },
       ],
     }));
+    playSound();
   };
 
   return (
