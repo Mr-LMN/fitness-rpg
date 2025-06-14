@@ -7,7 +7,7 @@ import "../styles/RoomScene.css";
 
 const bossQuizQuestions = [
   {
-    question: "What is the Spanish word for 'yellow'?",
+    q: "What is the Spanish word for 'yellow'?",
     options: [
       { label: "Amarillo", correct: true },
       { label: "Rojo", correct: false },
@@ -16,7 +16,7 @@ const bossQuizQuestions = [
     ],
   },
   {
-    question: "How do you say 'thank you' in Welsh?",
+    q: "How do you say 'thank you' in Welsh?",
     options: [
       { label: "Diolch", correct: true },
       { label: "Croeso", correct: false },
@@ -25,7 +25,7 @@ const bossQuizQuestions = [
     ],
   },
   {
-    question: "Translate 'blue' to Spanish:",
+    q: "Translate 'blue' to Spanish:",
     options: [
       { label: "Azul", correct: true },
       { label: "Negro", correct: false },
@@ -34,7 +34,7 @@ const bossQuizQuestions = [
     ],
   },
   {
-    question: "What does 'nos da' mean in Welsh?",
+    q: "What does 'nos da' mean in Welsh?",
     options: [
       { label: "Good night", correct: true },
       { label: "Good morning", correct: false },
@@ -43,7 +43,7 @@ const bossQuizQuestions = [
     ],
   },
   {
-    question: "How do you say 'dog' in Spanish?",
+    q: "How do you say 'dog' in Spanish?",
     options: [
       { label: "Perro", correct: true },
       { label: "Gato", correct: false },
@@ -52,7 +52,7 @@ const bossQuizQuestions = [
     ],
   },
   {
-    question: "Translate 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch' into English:",
+    q: "Translate 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch' into English:",
     options: [
       { label: "Yes", correct: false },
       { label: "No", correct: false },
