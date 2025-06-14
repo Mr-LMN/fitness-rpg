@@ -13,6 +13,9 @@ function Room1({ setGameState, gameState }) {
     setWorkoutUploaded(true);
     setGameState((prev) => ({
       ...prev,
+      badges: prev.badges.includes("workoutStarter")
+        ? prev.badges
+        : [...prev.badges, "workoutStarter"],
       annotations: [
         ...prev.annotations,
         {

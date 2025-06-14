@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import BadgeCase from "./BadgeCase";
 import "./styles/Map.css";
 
 const allRooms = [
@@ -18,6 +19,7 @@ function Map({ gameState, setGameState }) {
   } = gameState;
 
   const [dynamicRooms, setDynamicRooms] = useState([]);
+  const [showBadges, setShowBadges] = useState(false);
 
   useEffect(() => {
     const updatedRooms = allRooms.map((room) => {
@@ -69,6 +71,10 @@ function Map({ gameState, setGameState }) {
       <p className="map-instructions">
         🔍 Click on any visible room to investigate. Rooms will reveal themselves as you explore!
       </p>
+      <button onClick={() => setShowBadges(true)}>View Badges</button>
+      {showBadges && (
+        <BadgeCase badges={gameState.badges} onClose={() => setShowBadges(false)} />
+      )}
     </div>
   );
 }

@@ -34,6 +34,7 @@ function App() {
     bossDefeated: false,
     missedBlazePods: 0,
     lootUnlocked: [],
+    badges: [],
     triggeredQuiz: false,
     bossPhase: 0,
     victory: false,

@@ -3,9 +3,9 @@
   "image": "mcr.microsoft.com/devcontainers/typescript-node:18",
   "security": {
     "allowedHostnames": [
+      "registry.npmjs.org",
       "github.com",
       "api.github.com",
-      "registry.npmjs.org",
       "npmjs.org",
       "unpkg.com",
       "fonts.googleapis.com",
