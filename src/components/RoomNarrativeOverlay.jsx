@@ -27,11 +27,24 @@ function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
     ],
   };
 
+  const introImages = {
+    "Mr. Watkins' Room": "/Mr_WatkinsDoor.png",
+    "Mrs. John's Room": "/Mrs_JohnsDoor.png",
+    "Mrs. Roche's Room": "/Mrs_RochesDoor.png",
+  };
+
   const lines = introText[roomName] || ["You enter the room…"];
 
   return (
     <div className="overlay-bg">
       <div className="overlay-box">
+        {introImages[roomName] && (
+          <img
+            src={introImages[roomName]}
+            alt={roomName}
+            className="overlay-image"
+          />
+        )}
         {avatar && <div className="overlay-avatar">{avatarIcons[avatar]}</div>}
         {lines.map((line, index) => (
           <p key={index}>{line}</p>
