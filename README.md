@@ -77,3 +77,8 @@ The character creation screen includes an **Enhanced Reading Mode** toggle for
 users with dyslexia or vision impairments. When enabled, the entire game uses
 a higher contrast background and larger fonts to improve readability, including
 all narration and workout cards.
+
+The same screen now also offers a **Text to Speech** toggle. When enabled,
+game narration and instructions are automatically read aloud using your
+browser's built‑in speech synthesis (eSpeak on many systems). This helps
+players who struggle with reading or who are visually impaired.

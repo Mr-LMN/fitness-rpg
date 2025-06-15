@@ -14,3 +14,11 @@ export function playVoice(filePath) {
   audio.volume = 1.0;
   audio.play().catch(() => {});
 }
+
+// Speak the provided text using the browser's speech synthesis API
+export function speakText(text) {
+  if (typeof window === 'undefined' || !window.speechSynthesis) return;
+  const utterance = new SpeechSynthesisUtterance(text);
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}

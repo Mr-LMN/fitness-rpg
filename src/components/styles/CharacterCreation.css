@@ -61,3 +61,10 @@
   gap: 5px;
   justify-content: center;
 }
+
+.tts-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+}
