@@ -16,9 +16,36 @@ export function playVoice(filePath) {
 }
 
 // Speak the provided text using the browser's speech synthesis API
-export function speakText(text) {
-  if (typeof window === 'undefined' || !window.speechSynthesis) return;
-  const utterance = new SpeechSynthesisUtterance(text);
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utterance);
+
+// Speak the provided text using Google Text-to-Speech REST API
+// Requires VITE_GOOGLE_TTS_KEY environment variable containing an API key
+export async function speakText(text) {
+  if (typeof fetch === 'undefined') return;
+  try {
+    const apiKey = import.meta.env.VITE_GOOGLE_TTS_KEY;
+    const response = await fetch(
+      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: { text },
+          voice: {
+            languageCode: 'en-GB',
+            name: 'en-GB-Wavenet-B',
+            ssmlGender: 'MALE',
+          },
+          audioConfig: { audioEncoding: 'MP3', speakingRate: 0.8 },
+        }),
+      }
+    );
+
+    const data = await response.json();
+    if (data.audioContent) {
+      const audio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
+      audio.play().catch(() => {});
+    }
+  } catch (err) {
+    console.error('Failed to speak text with Google TTS', err);
+  }
 }

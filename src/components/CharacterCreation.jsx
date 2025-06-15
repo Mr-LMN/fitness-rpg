@@ -72,12 +72,14 @@ function CharacterCreation({ gameState, setGameState }) {
           <input
             type="checkbox"
             checked={gameState.enhancedReading || false}
-            onChange={(e) =>
+            onChange={(e) => {
+              const checked = e.target.checked;
               setGameState({
                 ...gameState,
-                enhancedReading: e.target.checked,
-              })
-            }
+                enhancedReading: checked,
+                textToSpeech: checked,
+              });
+            }}
           />
           Enhanced Reading Mode
         </label>
