@@ -81,6 +81,8 @@ all narration and workout cards.
 The same screen now also offers a **Text to Speech** toggle. When enabled,
 game narration and instructions are automatically read aloud using Google's
 Text-to-Speech API. Set the `VITE_GOOGLE_TTS_KEY` environment variable with
-your API key when running the app. The voice defaults to a male British
-accent at a slower rate, providing a clear, serious delivery for players who
-struggle with reading or who are visually impaired.
+your API key when running the app. If no key is provided or the request fails,
+the app will fall back to the browser's built-in `speechSynthesis` if
+available. The voice defaults to a male British accent at a slower rate,
+providing a clear, serious delivery for players who struggle with reading or
+who are visually impaired.
