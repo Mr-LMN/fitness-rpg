@@ -1,11 +1,13 @@
 import React from "react";
 import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
+import { playSound } from "../../utils";
 
 function MobilityPhase({ setGameState }) {
   const handleStretchComplete = () => {
     // Transition to escape phase after completing stretches
     setGameState((prev) => ({ ...prev, introStage: 3 })); // Move to escape phase
+    playSound();
   };
 
   return (
