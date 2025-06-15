@@ -1,18 +1,20 @@
+const baseUrl = import.meta.env.BASE_URL || '/';
+
 const SOUND_MAP = {
-  pickup: '/pickup.wav',
-  menuPress: '/SoundEffects/menuPresser.mp3',
-  ambient: '/SoundEffects/dark-horror-ambience-296781.mp3',
-  openingDoor: '/SoundEffects/opening_door.mp3',
-  creakingDoor: '/SoundEffects/creaking-door-41706.mp3',
-  lockedDoor: '/SoundEffects/trying-to-open-a-locked-door-104302.mp3',
-  quizDoor: '/SoundEffects/QuizDoor.mp3',
-  safeOpen: '/SoundEffects/Safe_opening.mp3',
-  correct: '/SoundEffects/CorrectButton.mp3',
-  alarm: '/SoundEffects/alarm-301729.mp3',
-  footsteps: '/SoundEffects/heavy-walking-footsteps-352771.mp3',
-  monsterRoar: '/SoundEffects/low-monster-roar-97413.mp3',
-  rowing: '/SoundEffects/rowingMachine.mp3',
-  xpLevel: '/SoundEffects/XpLevelUp.mp3',
+  pickup: `${baseUrl}pickup.wav`,
+  menuPress: `${baseUrl}SoundEffects/menuPresser.mp3`,
+  ambient: `${baseUrl}SoundEffects/dark-horror-ambience-296781.mp3`,
+  openingDoor: `${baseUrl}SoundEffects/opening_door.mp3`,
+  creakingDoor: `${baseUrl}SoundEffects/creaking-door-41706.mp3`,
+  lockedDoor: `${baseUrl}SoundEffects/trying-to-open-a-locked-door-104302.mp3`,
+  quizDoor: `${baseUrl}SoundEffects/QuizDoor.mp3`,
+  safeOpen: `${baseUrl}SoundEffects/Safe_opening.mp3`,
+  correct: `${baseUrl}SoundEffects/CorrectButton.mp3`,
+  alarm: `${baseUrl}SoundEffects/alarm-301729.mp3`,
+  footsteps: `${baseUrl}SoundEffects/heavy-walking-footsteps-352771.mp3`,
+  monsterRoar: `${baseUrl}SoundEffects/low-monster-roar-97413.mp3`,
+  rowing: `${baseUrl}SoundEffects/rowingMachine.mp3`,
+  xpLevel: `${baseUrl}SoundEffects/XpLevelUp.mp3`,
 };
 
 export function playSound(name = 'pickup', opts = {}) {
