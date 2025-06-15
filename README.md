@@ -33,6 +33,26 @@ This project can play voice over audio generated with [Bark](https://github.com/
 
 3. Place the generated files in `public/voices` and the game will play them during key scenes.
 
+### Alternative lightweight TTS with eSpeak
+
+If you prefer a smaller solution without downloading the large Bark models, you
+can generate voices using [eSpeak](https://espeak.sourceforge.net/).
+
+1. Install eSpeak:
+
+   ```bash
+   sudo apt-get install espeak
+   ```
+
+2. Run the provided `generate_espeak_voice.py` script:
+
+   ```bash
+   python generate_espeak_voice.py "Your text here" public/voices/your-file.wav
+   ```
+
+The generated `.wav` file can be placed in `public/voices` just like Bark audio
+files.
+
 ## Accessibility
 
 The character creation screen includes an **Enhanced Reading Mode** toggle for
