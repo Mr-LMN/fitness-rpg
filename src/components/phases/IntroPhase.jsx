@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
+import { playVoice } from "../../utils";
 
 function IntroPhase({ setGameState }) {
+  useEffect(() => {
+    playVoice('/voices/intro-phase.wav');
+  }, []);
   return (
     <div className="room-container">
       <img src="/locker_Room.png" alt="Locker Room" className="scene-image" />
