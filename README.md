@@ -65,10 +65,11 @@ If you have a GPU available you can generate more natural voices using [Tortoise
 2. Run the provided `generate_tortoise_voice.py` script:
 
    ```bash
-   python generate_tortoise_voice.py "Your text here" public/voices/your-file.wav [voice-name]
+   python generate_tortoise_voice.py "Your text here" public/voices/your-file.wav [voice-name] [preset]
    ```
 
-   The optional `voice-name` argument selects one of the bundled voices (defaults to `random`).
+   `voice-name` selects one of the bundled voices (defaults to `random`).
+   The optional `preset` argument controls quality (`fast`, `standard`, `high_quality`).
 
 ## Accessibility
 
