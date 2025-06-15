@@ -81,6 +81,19 @@ function CharacterCreation({ gameState, setGameState }) {
           />
           Enhanced Reading Mode
         </label>
+        <label className="tts-toggle">
+          <input
+            type="checkbox"
+            checked={gameState.textToSpeech || false}
+            onChange={(e) =>
+              setGameState({
+                ...gameState,
+                textToSpeech: e.target.checked,
+              })
+            }
+          />
+          Text to Speech
+        </label>
         <button onClick={() => setGameState({ ...gameState, characterCreated: true })}>
           Start Game
         </button>

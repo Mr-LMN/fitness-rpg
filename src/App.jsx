@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SignIn from "./components/SignIn";
 import CharacterCreation from "./components/CharacterCreation";
 import IntroPhase from "./components/phases/IntroPhase";
@@ -15,7 +15,7 @@ import VictoryPhase from "./components/phases/VictoryPhase";
 import RoomNarrativeOverlay from "./components/RoomNarrativeOverlay";
 import FinalBossPhase from "./components/phases/FinalBossPhase";
 import XPBar from "./components/XPBar";
-import { playSound } from "./utils";
+import { playSound, speakText } from "./utils";
 
 function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -43,7 +43,15 @@ function App() {
     victory: false,
     showOverlay: true,
     enhancedReading: false,
+    textToSpeech: false,
   });
+
+  useEffect(() => {
+    if (gameState.textToSpeech) {
+      const el = document.querySelector('.rpg-text');
+      if (el) speakText(el.innerText);
+    }
+  }, [gameState.textToSpeech, gameState.introStage, gameState.currentRoom, gameState.showOverlay, signedIn]);
 
   const renderPhase = () => {
     if (!signedIn) return <SignIn onSignIn={() => setSignedIn(true)} />;
