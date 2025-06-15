@@ -15,6 +15,24 @@ The goal of this project is to combine a simple RPG style narrative with fitness
 
 To create a production build, run `npm run build` and serve the resulting `dist` directory with your preferred static server.
 
+### Voice Over Generation (optional)
+
+This project can play voice over audio generated with [Bark](https://github.com/suno-ai/bark). To enable this:
+
+1. Install Bark and its dependencies:
+
+   ```bash
+   pip install git+https://github.com/suno-ai/bark.git
+   ```
+
+2. Use the provided `generate_voice.py` script to create `.wav` files from text:
+
+   ```bash
+   python generate_voice.py "Your text here" public/voices/intro-phase.wav
+   ```
+
+3. Place the generated files in `public/voices` and the game will play them during key scenes.
+
 ## Accessibility
 
 The character creation screen includes an **Enhanced Reading Mode** toggle for
