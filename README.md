@@ -50,8 +50,25 @@ can generate voices using [eSpeak](https://espeak.sourceforge.net/).
    python generate_espeak_voice.py "Your text here" public/voices/your-file.wav
    ```
 
-The generated `.wav` file can be placed in `public/voices` just like Bark audio
-files.
+The generated `.wav` file can be placed in `public/voices` just like Bark audio files.
+
+### High quality TTS with Tortoise
+
+If you have a GPU available you can generate more natural voices using [Tortoise TTS](https://github.com/neonbjb/tortoise-tts).
+
+1. Install Tortoise:
+
+   ```bash
+   pip install tortoise-tts
+   ```
+
+2. Run the provided `generate_tortoise_voice.py` script:
+
+   ```bash
+   python generate_tortoise_voice.py "Your text here" public/voices/your-file.wav [voice-name]
+   ```
+
+   The optional `voice-name` argument selects one of the bundled voices (defaults to `random`).
 
 ## Accessibility
 
