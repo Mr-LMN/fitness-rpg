@@ -21,6 +21,7 @@ function FinalBossPhase({ setGameState }) {
   }, [battleStarted, battleFinished]);
 
   const handleStart = () => {
+    playSound('alarm');
     setBattleStarted(true);
   };
 

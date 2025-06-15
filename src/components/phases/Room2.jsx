@@ -90,7 +90,7 @@ function Room2({ setGameState, gameState }) {
         },
       ],
     }));
-    playSound();
+    playSound('safeOpen');
   };
 
   const handleQuizFailure = () => {
