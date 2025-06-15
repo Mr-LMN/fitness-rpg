@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { playSound } from "../../utils";
 import "../styles/Quiz.css";
 
 function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) {
@@ -157,6 +158,7 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
 
     if (isCorrect) {
       setCorrectAnswers((c) => c + 1);
+      playSound('correct');
     } else if (showImpossibleFinal && isLast) {
       setFinalWrong(true);
       setPenalty("");
@@ -171,6 +173,7 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
       setCurrentQuestion(nextIndex);
     } else {
       setQuizComplete(true);
+      playSound('monsterRoar');
     }
   };
 

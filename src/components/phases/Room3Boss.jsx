@@ -70,6 +70,19 @@ function Room3Boss({ setGameState, gameState }) {
   const [bossPhase, setBossPhase] = useState(0);
 
   useEffect(() => {
+    if (workoutLogged && !alarmTriggered) {
+      playSound('footsteps');
+    }
+  }, [workoutLogged, alarmTriggered]);
+
+  useEffect(() => {
+    if (alarmTriggered && !quizStarted) {
+      playSound('lockedDoor');
+      playSound('quizDoor');
+    }
+  }, [alarmTriggered, quizStarted]);
+
+  useEffect(() => {
     if (workoutLogged) {
       const timer = setTimeout(() => {
         setAlarmTriggered(true);
@@ -88,7 +101,7 @@ function Room3Boss({ setGameState, gameState }) {
           ? [...prev.badges, "quizMaster"]
           : prev.badges,
     }));
-    playSound();
+    playSound('monsterRoar');
     setBossPhase(1);
   };
 

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi";
 import "./styles/Overlay.css";
+import { playSound } from "../utils";
 
 const avatarIcons = {
   pirate: <GiPirateCaptain />,
@@ -9,6 +10,10 @@ const avatarIcons = {
 };
 
 function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
+  useEffect(() => {
+    const audio = playSound('openingDoor');
+    return () => audio && audio.pause();
+  }, []);
   const introText = {
     "Mr. Watkins' Room": [
       "You push open the door to Mr. Watkins' classroom. It's eerily quiet.",
@@ -49,7 +54,14 @@ function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
         {lines.map((line, index) => (
           <p key={index}>{line}</p>
         ))}
-        <button onClick={onContinue}>Continue</button>
+        <button
+          onClick={() => {
+            playSound('creakingDoor');
+            onContinue();
+          }}
+        >
+          Continue
+        </button>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SignIn from "./components/SignIn";
 import CharacterCreation from "./components/CharacterCreation";
 import IntroPhase from "./components/phases/IntroPhase";
@@ -15,7 +15,7 @@ import VictoryPhase from "./components/phases/VictoryPhase";
 import RoomNarrativeOverlay from "./components/RoomNarrativeOverlay";
 import FinalBossPhase from "./components/phases/FinalBossPhase";
 import XPBar from "./components/XPBar";
-import { playSound, speakText } from "./utils";
+import { playSound, speakText, stopSound } from "./utils";
 
 function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -45,6 +45,28 @@ function App() {
     enhancedReading: false,
     textToSpeech: false,
   });
+
+  const ambientRef = useRef(null);
+  const prevXpLevel = useRef(0);
+
+  useEffect(() => {
+    const level = Math.floor(gameState.xp / 100);
+    if (level > prevXpLevel.current) {
+      playSound('xpLevel');
+    }
+    prevXpLevel.current = level;
+  }, [gameState.xp]);
+
+  useEffect(() => {
+    if (!signedIn || gameState.introStage === 0) {
+      if (!ambientRef.current) {
+        ambientRef.current = playSound('ambient', { loop: true, volume: 0.2 });
+      }
+    } else if (ambientRef.current) {
+      stopSound(ambientRef.current);
+      ambientRef.current = null;
+    }
+  }, [signedIn, gameState.introStage]);
 
   useEffect(() => {
     if (gameState.textToSpeech) {
