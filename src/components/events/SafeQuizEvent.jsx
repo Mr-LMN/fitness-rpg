@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/SafeQuizEvent.css";
+import { playSound } from "../../utils";
 
 const baseUrl = import.meta.env.BASE_URL || "/";
 
@@ -18,6 +19,7 @@ const SafeQuizEvent = ({ questionPool, onSuccess, onFailure, roomName }) => {
       if (currentQuestionIndex + 1 < questionPool.length) {
         setCurrentQuestionIndex((prev) => prev + 1);
         setFeedback("Correct! ✅");
+        playSound('correct');
       } else {
         const reward = "✨ Energy Bar (Loot) ✨";
         setLoot(reward);
