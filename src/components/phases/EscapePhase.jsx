@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
+import { playSound } from "../../utils";
 
 function EscapePhase({ setGameState, slamBallGoal = 10, squatJumpGoal = 15 }) {
   const [slamBalls, setSlamBalls] = useState(0);
@@ -16,6 +17,7 @@ function EscapePhase({ setGameState, slamBallGoal = 10, squatJumpGoal = 15 }) {
           ? prev.badges
           : [...prev.badges, "lockerEscapee"],
       }));
+      playSound('openingDoor');
     } else {
       alert("Complete the required exercises to escape!");
     }

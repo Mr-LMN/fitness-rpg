@@ -1,6 +1,7 @@
 import React from "react";
 import ParallaxDust from "./ParallaxDust";
 import "./styles/RoomScene.css";
+import { playSound } from "../utils";
 
 function MapIntroduction({ setGameState }) {
   const handleViewMap = () => {
@@ -14,6 +15,7 @@ function MapIntroduction({ setGameState }) {
       introStage: 5, // Transition to map view stage
       visibleRooms: [...prev.visibleRooms, "Mr. Watkins' Room"], // Safely add "Mr. Watkins' Room"
     }));
+    playSound();
   };
 
   return (

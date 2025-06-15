@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { playSound } from "../../utils";
 
 function VictoryPhase({ gameState }) {
+  useEffect(() => {
+    playSound('xpLevel');
+  }, []);
   return (
     <div style={{ padding: 20 }}>
       <h2>🎉 Victory!</h2>

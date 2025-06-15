@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
-import { playVoice } from "../../utils";
+import { playVoice, playSound } from "../../utils";
 
 function IntroPhase({ setGameState }) {
   useEffect(() => {
@@ -28,7 +28,10 @@ function IntroPhase({ setGameState }) {
           You collapse out onto the changing room floor, freezing cold.
         </p>
         <p>You must get warm fast or risk freezing in the dark...</p>
-        <button onClick={() => setGameState((prev) => ({ ...prev, introStage: 1 }))}>
+        <button onClick={() => {
+          playSound('footsteps');
+          setGameState((prev) => ({ ...prev, introStage: 1 }));
+        }}>
           Get Moving
         </button>
       </div>
