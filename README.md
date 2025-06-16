@@ -86,3 +86,8 @@ the app will fall back to the browser's built-in `speechSynthesis` if
 available. The voice defaults to a male British accent at a slower rate,
 providing a clear, serious delivery for players who struggle with reading or
 who are visually impaired.
+
+## Character Creation
+
+When creating your hero you must choose a workout focus of **cardio** or **strength**. Selecting cardio adjusts the logger to track duration and distance, while strength tracks sets, reps and weight. The default cardio exercise suggestions come from [`src/data/cardioExercises.js`](src/data/cardioExercises.js).
+
