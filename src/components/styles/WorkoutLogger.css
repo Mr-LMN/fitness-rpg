@@ -1,85 +1,82 @@
 .workout-logger {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  padding: 20px;
-  border-radius: 8px;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  background: #111;
+  padding: 30px;
+  border-radius: 10px;
+  font-family: 'Garamond', serif;
+  color: #eee;
+  max-width: 700px;
+  margin: auto;
 }
 
 .workout-logger h3 {
-  margin-top: 0;
-  font-size: 1.2rem;
+  font-size: 26px;
   text-align: center;
+  margin-bottom: 20px;
+  color: #f8f8f8;
 }
 
 .input-row {
-  display: grid;
-  grid-template-columns: 2fr repeat(3, 1fr) auto;
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  align-items: center;
+  margin-bottom: 20px;
 }
 
-.workout-logger input,
-.workout-logger select {
-  padding: 8px;
-  border-radius: 4px;
-  border: none;
-  background: #333;
-  color: #fff;
-}
-
-.log-grid {
-  display: grid;
-  gap: 10px;
-}
-
-.log-card {
-  background: rgba(34, 34, 34, 0.8);
+.exercise-input,
+.input-row input {
+  background: #222;
+  color: #f0f0f0;
+  border: 1px solid #444;
   padding: 10px;
   border-radius: 6px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  font-size: 16px;
+  flex: 1;
+  min-width: 120px;
 }
 
-.log-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.input-row button {
+  background: #1d3557;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
   font-weight: bold;
-  margin-bottom: 4px;
 }
 
-.log-icon {
-  font-size: 1.2rem;
+.input-row button:hover {
+  background: #457b9d;
 }
 
-.log-tags {
-  font-size: 0.8rem;
-  color: #bbb;
+/* Log list */
+.logged-workout {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 30px;
 }
 
-.tag {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
+.logged-exercise {
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #ddd;
+  box-shadow: 0 0 8px #00000055;
 }
 
-.finish-btn {
-  align-self: center;
+.logged-exercise h4 {
+  margin: 0 0 6px;
+  font-size: 18px;
 }
 
-.enhanced-reading .workout-logger {
-  background: #fffae5;
-  color: #000;
+.logged-exercise .meta {
+  font-size: 15px;
+  color: #ccc;
 }
 
-.enhanced-reading .workout-logger input,
-.enhanced-reading .workout-logger select {
-  font-size: 1rem;
+.logged-exercise .tags {
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
 }

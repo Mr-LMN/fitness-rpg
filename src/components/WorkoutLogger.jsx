@@ -2,14 +2,6 @@ import React, { useState } from "react";
 import { playSound } from "../utils";
 import exerciseList from "../data/exerciseList";
 import cardioExercises from "../data/cardioExercises";
-import {
-  GiBiceps,
-  GiLeg,
-  GiChestArmor,
-  GiBackboneShell,
-  GiBodyBalance,
-  GiRunningShoe,
-} from "react-icons/gi";
 import "./styles/WorkoutLogger.css";
 
 function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
@@ -20,18 +12,6 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
       : { name: "", sets: "", reps: "", weight: "" }
   );
   const [workoutLog, setWorkoutLog] = useState([]);
-
-  const categoryIcons = {
-    Arms: <GiBiceps />,
-    "Arms/Back": <GiBiceps />,
-    Shoulders: <GiBiceps />,
-    Back: <GiBackboneShell />,
-    Chest: <GiChestArmor />,
-    Core: <GiBodyBalance />,
-    Legs: <GiLeg />,
-    Functional: <GiRunningShoe />,
-    Cardio: <GiRunningShoe />,
-  };
 
   const handleAddExercise = () => {
     if (cardioMode) {
@@ -132,24 +112,17 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
         </button>
       </div>
 
-      <div className="log-grid">
-        {workoutLog.map((ex, idx) => (
-          <div className="log-card" key={idx}>
-            <div className="log-header">
-              <span className="log-icon">
-                {categoryIcons[ex.category] || <GiRunningShoe />}
-              </span>
-              <span>{ex.name}</span>
-            </div>
-            <div className="log-details">
+      <div className="logged-workout">
+        {workoutLog.map((entry, i) => (
+          <div key={i} className="logged-exercise">
+            <h4>{entry.name}</h4>
+            <div className="meta">
               {cardioMode
-                ? `${ex.duration}min / ${ex.distance}km`
-                : `${ex.sets} x ${ex.reps} @ ${ex.weight} kg`}
+                ? `${entry.duration} min / ${entry.distance} km`
+                : `${entry.sets} sets × ${entry.reps} reps @ ${entry.weight}`}
             </div>
-            <div className="log-tags">
-              <span className="tag">{ex.type || ""}</span>
-              {" | "}
-              <span className="tag">{ex.category || ""}</span>
+            <div className="tags">
+              {entry.type || "—"} | {entry.category || "—"}
             </div>
           </div>
         ))}
