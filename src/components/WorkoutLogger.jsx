@@ -6,6 +6,10 @@ import "./styles/WorkoutLogger.css";
 
 function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   const cardioMode = workoutFocus === "cardio";
+  const allowedCategories = ["Core", "Legs", "Chest", "Back", "Arms", "Functional"];
+  const filteredExerciseList = exerciseList.filter((ex) =>
+    allowedCategories.includes(ex.category)
+  );
   const [exerciseInput, setExerciseInput] = useState(
     cardioMode
       ? { name: "", duration: "", distance: "" }
@@ -61,7 +65,7 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
           }
         />
         <datalist id="exerciseOptions">
-          {(cardioMode ? cardioExercises : exerciseList).map((ex) => (
+          {(cardioMode ? cardioExercises : filteredExerciseList).map((ex) => (
             <option key={ex.name || ex} value={ex.name || ex} />
           ))}
         </datalist>

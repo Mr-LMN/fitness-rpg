@@ -1,13 +1,52 @@
 const cardioExercises = [
-  "Running",
-  "Cycling",
-  "Rowing",
-  "Jump Rope",
-  "Elliptical",
-  "Swimming",
-  "Stair Climber",
-  "High Knees",
-  "Jumping Jacks"
+  {
+    name: "Treadmill Run",
+    category: "Cardio",
+    type: "Cardio",
+    equipment: "Treadmill",
+  },
+  {
+    name: "Treadmill Walk",
+    category: "Cardio",
+    type: "Cardio",
+    equipment: "Treadmill",
+  },
+  {
+    name: "Air Bike",
+    category: "Cardio",
+    type: "Cardio",
+    equipment: "Assault Bike / Air Bike",
+  },
+  {
+    name: "Upright Cycle",
+    category: "Cardio",
+    type: "Cardio",
+    equipment: "Stationary Bike",
+  },
+  {
+    name: "Rowing Machine (500m)",
+    category: "Cardio",
+    type: "Cardio",
+    equipment: "Rower",
+  },
+  {
+    name: "SkiErg (Calories or Distance)",
+    category: "Cardio",
+    type: "Cardio",
+    equipment: "SkiErg",
+  },
+  {
+    name: "Skipping (Single Unders)",
+    category: "Cardio",
+    type: "Cardio",
+    equipment: "Skipping Rope",
+  },
+  {
+    name: "Skipping (Double Unders)",
+    category: "Cardio",
+    type: "Cardio",
+    equipment: "Skipping Rope",
+  },
 ];
 
 export default cardioExercises;
