@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+.session-summary-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.4s ease-in forwards;
+}
+
+.session-summary-box {
+  background: #1b1b1b;
+  border: 2px solid #555;
+  border-radius: 10px;
+  padding: 30px;
+  width: 90%;
+  max-width: 420px;
+  color: #e0e0e0;
+  box-shadow: 0 0 20px #000;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.session-summary-header {
+  font-size: 26px;
+  color: #0f0;
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 0 6px #0f0;
+}
+
+.summary-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.summary-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.summary-list svg {
+  flex-shrink: 0;
+}
+
+.session-summary-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.log-btn,
+.continue-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-family: 'Share Tech Mono', monospace;
+  cursor: pointer;
+}
+
+.log-btn {
+  background: #333;
+  color: #fff;
+}
+
+.log-btn:hover {
+  background: #444;
+}
+
+.continue-btn {
+  background: #0f0;
+  color: #000;
+}
+
+.continue-btn:hover {
+  background: #1aff1a;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
