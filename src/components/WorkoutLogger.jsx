@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { playSound, updateLifetimeSummary, logWorkoutMinutes } from "../utils";
+import { saveWorkoutSession } from "../workoutStorage";
 import SessionSummaryModal from "./SessionSummaryModal";
 import exerciseList from "../data/exerciseList";
 import cardioExercises from "../data/cardioExercises";
 import "./styles/WorkoutLogger.css";
 
-function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
+function WorkoutLogger({ roomNumber, setGameState, workoutFocus, userId }) {
   const cardioMode = workoutFocus === "cardio";
   const allowedCategories = ["Core", "Legs", "Chest", "Back", "Arms", "Functional"];
   const filteredExerciseList = exerciseList.filter((ex) =>
@@ -61,6 +62,15 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
 
     updateLifetimeSummary({ weightLifted: totalWeight, distance, calories });
     logWorkoutMinutes(minutes);
+    if (userId) {
+      saveWorkoutSession(userId, {
+        exercises: workoutLog,
+        totalWeight,
+        distance,
+        calories,
+        minutes,
+      });
+    }
 
     setGameState((prev) => ({
       ...prev,
