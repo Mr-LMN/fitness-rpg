@@ -2,7 +2,7 @@ import React from "react";
 import { IoBarbell, IoWalk, IoFlame, IoBook } from "react-icons/io5";
 import "./styles/SessionSummary.css";
 
-function SessionSummaryModal({ summary, onContinue, onViewLog }) {
+function SessionSummaryModal({ summary, onContinue, onViewLog, continueLabel = "Continue" }) {
   if (!summary) return null;
   const { totalWeight, distance, calories, exerciseCount } = summary;
   return (
@@ -19,7 +19,7 @@ function SessionSummaryModal({ summary, onContinue, onViewLog }) {
           {onViewLog && (
             <button className="log-btn" onClick={onViewLog}>View My Logbook</button>
           )}
-          <button className="continue-btn" onClick={onContinue}>Continue</button>
+          <button className="continue-btn" onClick={onContinue}>{continueLabel}</button>
         </div>
       </div>
     </div>

@@ -138,10 +138,9 @@ function Room2({ setGameState, gameState }) {
             setGameState={setGameState}
             workoutFocus={gameState.workoutFocus}
             userId={gameState.studentName}
+            onComplete={handleUploadWorkout}
+            completeLabel="Upload Your Workout"
           />
-          <button className="primary-btn" onClick={handleUploadWorkout}>
-            Upload Your Workout
-          </button>
         </>
       )}
 

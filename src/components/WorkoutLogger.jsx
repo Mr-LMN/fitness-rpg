@@ -6,7 +6,14 @@ import exerciseList from "../data/exerciseList";
 import cardioExercises from "../data/cardioExercises";
 import "./styles/WorkoutLogger.css";
 
-function WorkoutLogger({ roomNumber, setGameState, workoutFocus, userId }) {
+function WorkoutLogger({
+  roomNumber,
+  setGameState,
+  workoutFocus,
+  userId,
+  onComplete,
+  completeLabel = "Continue",
+}) {
   const cardioMode = workoutFocus === "cardio";
   const allowedCategories = ["Core", "Legs", "Chest", "Back", "Arms", "Functional"];
   const filteredExerciseList = exerciseList.filter((ex) =>
@@ -86,6 +93,13 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus, userId }) {
       ],
     }));
     playSound();
+  };
+
+  const handleSummaryContinue = () => {
+    setShowSummary(false);
+    if (onComplete) {
+      onComplete();
+    }
   };
 
   return (
@@ -175,7 +189,8 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus, userId }) {
       {showSummary && (
         <SessionSummaryModal
           summary={summaryData}
-          onContinue={() => setShowSummary(false)}
+          onContinue={handleSummaryContinue}
+          continueLabel={completeLabel}
         />
       )}
     </div>
