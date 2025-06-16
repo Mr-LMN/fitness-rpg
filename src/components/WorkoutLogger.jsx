@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { playSound } from "../utils";
+import exerciseList from "../data/exerciseList";
 
 function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   const cardioMode = workoutFocus === "cardio";
@@ -45,12 +46,18 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
     <div>
       <h3>Log Your Workout (Room {roomNumber})</h3>
       <input
+        list="exercise-options"
         placeholder="Exercise Name"
         value={exerciseInput.name}
         onChange={(e) =>
           setExerciseInput({ ...exerciseInput, name: e.target.value })
         }
       />
+      <datalist id="exercise-options">
+        {exerciseList.map((ex) => (
+          <option key={ex.name} value={ex.name} />
+        ))}
+      </datalist>
       {cardioMode ? (
         <>
           <input
