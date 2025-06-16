@@ -18,5 +18,5 @@ response = client.synthesize_speech(
     input=input_text, voice=voice, audio_config=audio_config
 )
 
-with open("safe_narration.mp3", "wb") as out:
+with open("public/voices/safe_narration.mp3", "wb") as out:
     out.write(response.audio
