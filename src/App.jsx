@@ -15,40 +15,73 @@ import VictoryPhase from "./components/phases/VictoryPhase";
 import RoomNarrativeOverlay from "./components/RoomNarrativeOverlay";
 import FinalBossPhase from "./components/phases/FinalBossPhase";
 import XPBar from "./components/XPBar";
+import AccountabilityPopup from "./components/AccountabilityPopup";
 import { playSound, speakText, stopSound } from "./utils";
+
+const INITIAL_STATE = {
+  characterCreated: false,
+  studentName: "",
+  yearGroup: "",
+  gender: "",
+  weight: "",
+  workoutFocus: "",
+  avatar: "pirate",
+  introStage: 0,
+  currentRoom: null,
+  completedRooms: [],
+  visibleRooms: ["Mr. Watkins' Room"],
+  annotations: [],
+  inventory: [],
+  bossReady: false,
+  bossDefeated: false,
+  missedBlazePods: 0,
+  lootUnlocked: [],
+  xp: 0,
+  badges: [],
+  triggeredQuiz: false,
+  bossPhase: 0,
+  victory: false,
+  showOverlay: true,
+  enhancedReading: false,
+  textToSpeech: false,
+};
 
 function App() {
   const [signedIn, setSignedIn] = useState(false);
-  const [gameState, setGameState] = useState({
-    characterCreated: false,
-    studentName: "",
-    yearGroup: "",
-    gender: "",
-    weight: "",
-    workoutFocus: "",
-    avatar: "pirate",
-    introStage: 0,
-    currentRoom: null,
-    completedRooms: [],
-    visibleRooms: ["Mr. Watkins' Room"],
-    annotations: [],
-    inventory: [],
-    bossReady: false,
-    bossDefeated: false,
-    missedBlazePods: 0,
-    lootUnlocked: [],
-    xp: 0,
-    badges: [],
-    triggeredQuiz: false,
-    bossPhase: 0,
-    victory: false,
-    showOverlay: true,
-    enhancedReading: false,
-    textToSpeech: false,
-  });
+  const [gameState, setGameState] = useState({ ...INITIAL_STATE });
+  const [popupMessage, setPopupMessage] = useState(null);
 
   const ambientRef = useRef(null);
   const prevXpLevel = useRef(0);
+
+  useEffect(() => {
+    const now = new Date();
+    const lastOpen = localStorage.getItem('lastOpenDate');
+    if (!lastOpen || new Date(lastOpen).toDateString() !== now.toDateString()) {
+      setPopupMessage('Remember to log your workout today!');
+      localStorage.setItem('lastOpenDate', now.toISOString());
+    }
+
+    const week = JSON.parse(localStorage.getItem('weekData') || '{}');
+    if (!week.start) {
+      week.start = now.toISOString();
+      week.minutes = 0;
+    } else {
+      const start = new Date(week.start);
+      if (now - start >= 7 * 24 * 60 * 60 * 1000) {
+        if ((week.minutes || 0) >= 60) {
+          setPopupMessage('Great job! You hit your weekly workout target!');
+        } else {
+          setPopupMessage('You missed the weekly workout target. Starting over.');
+          setGameState({ ...INITIAL_STATE });
+          setSignedIn(false);
+        }
+        week.start = now.toISOString();
+        week.minutes = 0;
+      }
+    }
+    localStorage.setItem('weekData', JSON.stringify(week));
+  }, []);
 
   useEffect(() => {
     const level = Math.floor(gameState.xp / 100);
@@ -154,6 +187,9 @@ function App() {
         />
       )}
       {renderPhase()}
+      {popupMessage && (
+        <AccountabilityPopup message={popupMessage} onClose={() => setPopupMessage(null)} />
+      )}
     </div>
   );
 }

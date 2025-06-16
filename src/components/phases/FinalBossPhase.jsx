@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ParallaxDust from "../ParallaxDust";
 import BlazePods from "../BlazePods";
-import { playSound } from "../../utils";
+import { playSound, updateLifetimeSummary, logWorkoutMinutes } from "../../utils";
 import "../styles/RoomScene.css";
 
 function FinalBossPhase({ setGameState }) {
@@ -48,6 +48,8 @@ function FinalBossPhase({ setGameState }) {
         workout: "Operation Slamstorm",
       },
     }));
+    updateLifetimeSummary({ calories: 0, bossesDefeated: 1 });
+    logWorkoutMinutes(timer / 60);
     playSound();
   };
 

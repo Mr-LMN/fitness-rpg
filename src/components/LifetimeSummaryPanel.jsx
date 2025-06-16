@@ -6,6 +6,7 @@ import {
   IoTrophy,
   IoShirt,
   IoCheckmarkCircle,
+  IoBody,
 } from "react-icons/io5";
 import "./styles/LifetimeSummary.css";
 
@@ -18,6 +19,7 @@ function LifetimeSummaryPanel({ username, summary }) {
     calories,
     bossesDefeated,
     cosmetics,
+    weight,
   } = summary;
 
   return (
@@ -29,6 +31,7 @@ function LifetimeSummaryPanel({ username, summary }) {
         <li><IoBarbell /> <span>Total Weight Lifted:</span> <strong>{weightLifted}</strong></li>
         <li><IoWalk /> <span>Distance Travelled:</span> <strong>{distance}</strong></li>
         <li><IoFlame /> <span>Total Calories Burned:</span> <strong>{calories}</strong></li>
+        <li><IoBody /> <span>Current Weight:</span> <strong>{weight || '-'}</strong></li>
         <li><IoTrophy /> <span>Bosses Defeated:</span> <strong>{bossesDefeated}</strong></li>
         <li><IoShirt /> <span>Cosmetics Unlocked:</span> <strong>{cosmetics}</strong></li>
       </ul>
