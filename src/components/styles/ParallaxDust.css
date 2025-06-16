@@ -7,6 +7,7 @@
   height: 100%;
   overflow: hidden;
   z-index: 1;
+  opacity: 0.6; /* Reduce overall intensity */
 }
 
 .dust {
@@ -15,7 +16,8 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+  /* Lower opacity so the dust doesn't overpower the UI */
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
   background-size: 3px 3px;
   animation: dust-float 50s linear infinite;
 }
