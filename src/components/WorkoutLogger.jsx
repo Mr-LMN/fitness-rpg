@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { playSound } from "../utils";
 import exerciseList from "../data/exerciseList";
+import "./styles/WorkoutLogger.css";
 
 function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   const cardioMode = workoutFocus === "cardio";
@@ -43,21 +44,32 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   };
 
   return (
-    <div>
+    <div className="workout-logger">
       <h3>Log Your Workout (Room {roomNumber})</h3>
-      <input
-        list="exercise-options"
-        placeholder="Exercise Name"
+      <select
+        className="exercise-select"
         value={exerciseInput.name}
         onChange={(e) =>
           setExerciseInput({ ...exerciseInput, name: e.target.value })
         }
-      />
-      <datalist id="exercise-options">
-        {exerciseList.map((ex) => (
-          <option key={ex.name} value={ex.name} />
+      >
+        <option value="">Select Exercise</option>
+        {Array.from(
+          exerciseList.reduce((acc, ex) => {
+            if (!acc.has(ex.category)) acc.set(ex.category, []);
+            acc.get(ex.category).push(ex);
+            return acc;
+          }, new Map())
+        ).map(([category, exList]) => (
+          <optgroup key={category} label={category}>
+            {exList.map((ex) => (
+              <option key={ex.name} value={ex.name}>
+                {ex.name}
+              </option>
+            ))}
+          </optgroup>
         ))}
-      </datalist>
+      </select>
       {cardioMode ? (
         <>
           <input

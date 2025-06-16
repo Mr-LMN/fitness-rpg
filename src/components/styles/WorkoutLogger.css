@@ -1,0 +1,38 @@
+.workout-logger {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 8px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.workout-logger h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.workout-logger select,
+.workout-logger input {
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+}
+
+.enhanced-reading .workout-logger select,
+.enhanced-reading .workout-logger input {
+  font-size: 1rem;
+}
+
+.enhanced-reading .workout-logger {
+  background: #fffae5;
+  color: #000;
+}
+
+.exercise-select optgroup {
+  font-weight: bold;
+}
