@@ -28,7 +28,7 @@ response = client.synthesize_speech(
 )
 
 # Save to file
-with open("safe_narration.mp3", "wb") as out:
+with open("public/voices/safe_narration.mp3", "wb") as out:
     out.write(response.audio_content)
 
-print("✅ Narration generated and saved as safe_narration.mp3")
+print("✅ Narration generated and saved as public/voices/safe_narration.mp3")
