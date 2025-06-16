@@ -133,3 +133,30 @@ export function estimateCalories({
 
   return 0; // Unknown case
 }
+
+export function updateLifetimeSummary({ weightLifted = 0, distance = 0, calories = 0, bossesDefeated = 0 }) {
+  const data = JSON.parse(localStorage.getItem('lifetimeSummary') || '{}');
+  data.workouts = (data.workouts || 0) + 1;
+  data.weightLifted = +(data.weightLifted || 0) + weightLifted;
+  data.distance = +(data.distance || 0) + distance;
+  data.calories = +(data.calories || 0) + calories;
+  data.bossesDefeated = (data.bossesDefeated || 0) + bossesDefeated;
+  localStorage.setItem('lifetimeSummary', JSON.stringify(data));
+}
+
+export function setUserWeight(weight) {
+  const data = JSON.parse(localStorage.getItem('lifetimeSummary') || '{}');
+  data.weight = weight;
+  localStorage.setItem('lifetimeSummary', JSON.stringify(data));
+}
+
+export function logWorkoutMinutes(minutes) {
+  const now = new Date();
+  const week = JSON.parse(localStorage.getItem('weekData') || '{}');
+  if (!week.start) {
+    week.start = now.toISOString();
+    week.minutes = 0;
+  }
+  week.minutes += minutes;
+  localStorage.setItem('weekData', JSON.stringify(week));
+}

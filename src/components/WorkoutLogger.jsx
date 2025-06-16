@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { playSound } from "../utils";
+import { playSound, updateLifetimeSummary, logWorkoutMinutes } from "../utils";
 import SessionSummaryModal from "./SessionSummaryModal";
 import exerciseList from "../data/exerciseList";
 import cardioExercises from "../data/cardioExercises";
@@ -44,6 +44,12 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
     );
     const distance = workoutLog.reduce((sum, w) => sum + (parseFloat(w.distance) || 0), 0);
     const calories = Math.round(distance * 60 + totalWeight * 0.1);
+    const minutes = workoutLog.reduce((sum, w) => {
+      if (cardioMode) return sum + (parseFloat(w.duration) || 0);
+      const sets = parseFloat(w.sets) || 0;
+      const reps = parseFloat(w.reps) || 0;
+      return sum + (sets * reps * 3) / 60;
+    }, 0);
 
     setSummaryData({
       totalWeight: `${totalWeight.toFixed(1)} kg`,
@@ -52,6 +58,9 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
       exerciseCount: workoutLog.length,
     });
     setShowSummary(true);
+
+    updateLifetimeSummary({ weightLifted: totalWeight, distance, calories });
+    logWorkoutMinutes(minutes);
 
     setGameState((prev) => ({
       ...prev,

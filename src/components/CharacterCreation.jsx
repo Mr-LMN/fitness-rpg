@@ -1,4 +1,5 @@
 import React from "react";
+import { setUserWeight } from "../utils";
 import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi";
 import "./styles/CharacterCreation.css";
 
@@ -47,14 +48,16 @@ function CharacterCreation({ gameState, setGameState }) {
           <option value="M">M</option>
           <option value="F">F</option>
         </select>
-        <input
-          type="number"
-          placeholder="Weight (kg) - optional"
-          value={gameState.weight || ""}
-          onChange={(e) =>
-            setGameState({ ...gameState, weight: e.target.value })
-          }
-        />
+        <label>
+          Weight (kg)
+          <input
+            type="number"
+            value={gameState.weight || ""}
+            onChange={(e) =>
+              setGameState({ ...gameState, weight: e.target.value })
+            }
+          />
+        </label>
         <select
           value={gameState.workoutFocus || ""}
           onChange={(e) =>
@@ -105,13 +108,15 @@ function CharacterCreation({ gameState, setGameState }) {
           Text to Speech
         </label>
         <button
-          onClick={() =>
+          onClick={() => {
+            const wt = parseFloat(gameState.weight) || 50;
+            setUserWeight(wt);
             setGameState({
               ...gameState,
-              weight: parseFloat(gameState.weight) || 50,
+              weight: wt,
               characterCreated: true,
-            })
-          }
+            });
+          }}
         >
           Start Game
         </button>
