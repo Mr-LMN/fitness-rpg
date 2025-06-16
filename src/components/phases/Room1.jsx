@@ -87,6 +87,7 @@ function Room1({ setGameState, gameState }) {
               roomNumber={1}
               setGameState={setGameState}
               workoutFocus={gameState.workoutFocus}
+              userId={gameState.studentName}
             />
             <button className="primary-btn" onClick={handleUploadWorkout}>
               Upload Your Workout

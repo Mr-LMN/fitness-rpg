@@ -139,6 +139,7 @@ function Room3Boss({ setGameState, gameState }) {
             roomNumber={3}
             setGameState={setGameState}
             workoutFocus={gameState.workoutFocus}
+            userId={gameState.studentName}
           />
           <button
             className="primary-btn"
