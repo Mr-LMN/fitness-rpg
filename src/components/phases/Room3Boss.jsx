@@ -140,7 +140,12 @@ function Room3Boss({ setGameState, gameState }) {
             setGameState={setGameState}
             workoutFocus={gameState.workoutFocus}
           />
-          <button onClick={() => setWorkoutLogged(true)}>Upload Your Workout</button>
+          <button
+            className="primary-btn"
+            onClick={() => setWorkoutLogged(true)}
+          >
+            Upload Your Workout
+          </button>
         </>
       )}
 

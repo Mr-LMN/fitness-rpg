@@ -138,7 +138,9 @@ function Room2({ setGameState, gameState }) {
             setGameState={setGameState}
             workoutFocus={gameState.workoutFocus}
           />
-          <button onClick={handleUploadWorkout}>Upload Your Workout</button>
+          <button className="primary-btn" onClick={handleUploadWorkout}>
+            Upload Your Workout
+          </button>
         </>
       )}
 

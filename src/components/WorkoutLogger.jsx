@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { playSound } from "../utils";
 import exerciseList from "../data/exerciseList";
+import {
+  GiBiceps,
+  GiLeg,
+  GiChestArmor,
+  GiBackboneShell,
+  GiBodyBalance,
+  GiRunningShoe,
+} from "react-icons/gi";
 import "./styles/WorkoutLogger.css";
 
 function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
@@ -11,6 +19,16 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
       : { name: "", sets: "", reps: "", weight: "" }
   );
   const [workoutLog, setWorkoutLog] = useState([]);
+
+  const categoryIcons = {
+    Arms: <GiBiceps />,
+    "Arms/Back": <GiBiceps />,
+    Back: <GiBackboneShell />,
+    Chest: <GiChestArmor />,
+    Core: <GiBodyBalance />,
+    Legs: <GiLeg />,
+    Functional: <GiRunningShoe />,
+  };
 
   const handleAddExercise = () => {
     if (cardioMode) {
@@ -46,85 +64,94 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   return (
     <div className="workout-logger">
       <h3>Log Your Workout (Room {roomNumber})</h3>
-      <select
-        className="exercise-select"
-        value={exerciseInput.name}
-        onChange={(e) =>
-          setExerciseInput({ ...exerciseInput, name: e.target.value })
-        }
-      >
-        <option value="">Select Exercise</option>
-        {Array.from(
-          exerciseList.reduce((acc, ex) => {
-            if (!acc.has(ex.category)) acc.set(ex.category, []);
-            acc.get(ex.category).push(ex);
-            return acc;
-          }, new Map())
-        ).map(([category, exList]) => (
-          <optgroup key={category} label={category}>
-            {exList.map((ex) => (
-              <option key={ex.name} value={ex.name}>
-                {ex.name}
-              </option>
-            ))}
-          </optgroup>
-        ))}
-      </select>
-      {cardioMode ? (
-        <>
-          <input
-            placeholder="Duration (min)"
-            value={exerciseInput.duration}
-            onChange={(e) =>
-              setExerciseInput({ ...exerciseInput, duration: e.target.value })
-            }
-          />
-          <input
-            placeholder="Distance (km)"
-            value={exerciseInput.distance}
-            onChange={(e) =>
-              setExerciseInput({ ...exerciseInput, distance: e.target.value })
-            }
-          />
-        </>
-      ) : (
-        <>
-          <input
-            placeholder="Sets"
-            value={exerciseInput.sets}
-            onChange={(e) =>
-              setExerciseInput({ ...exerciseInput, sets: e.target.value })
-            }
-          />
-          <input
-            placeholder="Reps"
-            value={exerciseInput.reps}
-            onChange={(e) =>
-              setExerciseInput({ ...exerciseInput, reps: e.target.value })
-            }
-          />
-          <input
-            placeholder="Weight (kg)"
-            value={exerciseInput.weight}
-            onChange={(e) =>
-              setExerciseInput({ ...exerciseInput, weight: e.target.value })
-            }
-          />
-        </>
-      )}
-      <button onClick={handleAddExercise}>Add Exercise</button>
+      <div className="input-row">
+        <input
+          list="exerciseOptions"
+          className="exercise-input"
+          placeholder="Start typing..."
+          value={exerciseInput.name}
+          onChange={(e) =>
+            setExerciseInput({ ...exerciseInput, name: e.target.value })
+          }
+        />
+        <datalist id="exerciseOptions">
+          {exerciseList.map((ex) => (
+            <option key={ex.name} value={ex.name} />
+          ))}
+        </datalist>
+        {cardioMode ? (
+          <>
+            <input
+              placeholder="Duration (min)"
+              value={exerciseInput.duration}
+              onChange={(e) =>
+                setExerciseInput({ ...exerciseInput, duration: e.target.value })
+              }
+            />
+            <input
+              placeholder="Distance (km)"
+              value={exerciseInput.distance}
+              onChange={(e) =>
+                setExerciseInput({ ...exerciseInput, distance: e.target.value })
+              }
+            />
+          </>
+        ) : (
+          <>
+            <input
+              placeholder="Sets"
+              value={exerciseInput.sets}
+              onChange={(e) =>
+                setExerciseInput({ ...exerciseInput, sets: e.target.value })
+              }
+            />
+            <input
+              placeholder="Reps"
+              value={exerciseInput.reps}
+              onChange={(e) =>
+                setExerciseInput({ ...exerciseInput, reps: e.target.value })
+              }
+            />
+            <input
+              placeholder="Weight (kg)"
+              value={exerciseInput.weight}
+              onChange={(e) =>
+                setExerciseInput({ ...exerciseInput, weight: e.target.value })
+              }
+            />
+          </>
+        )}
+        <button className="add-btn" onClick={handleAddExercise}>
+          + Log Exercise
+        </button>
+      </div>
 
-      <ul>
+      <div className="log-grid">
         {workoutLog.map((ex, idx) => (
-          <li key={idx}>
-            {cardioMode
-              ? `${ex.name}: ${ex.duration}min / ${ex.distance}km`
-              : `${ex.name}: ${ex.sets} x ${ex.reps} @ ${ex.weight} kg`}
-          </li>
+          <div className="log-card" key={idx}>
+            <div className="log-header">
+              <span className="log-icon">
+                {categoryIcons[ex.category] || <GiRunningShoe />}
+              </span>
+              <span>{ex.name}</span>
+            </div>
+            <div className="log-details">
+              {cardioMode
+                ? `${ex.duration}min / ${ex.distance}km`
+                : `${ex.sets} x ${ex.reps} @ ${ex.weight} kg`}
+            </div>
+            <div className="log-tags">
+              <span className="tag">{ex.type || ""}</span>
+              {" | "}
+              <span className="tag">{ex.category || ""}</span>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      <button onClick={handleFinishWorkout}>Finish Workout</button>
+      <button className="primary-btn finish-btn" onClick={handleFinishWorkout}>
+        Finish Workout
+      </button>
     </div>
   );
 }
