@@ -1,13 +1,16 @@
 .workout-logger {
   background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
   padding: 20px;
   border-radius: 8px;
   color: #fff;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-width: 400px;
+  gap: 15px;
+  width: 100%;
+  max-width: 600px;
   margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }
 
 .workout-logger h3 {
@@ -16,16 +19,59 @@
   text-align: center;
 }
 
-.workout-logger select,
-.workout-logger input {
+.input-row {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.workout-logger input,
+.workout-logger select {
   padding: 8px;
   border-radius: 4px;
   border: none;
+  background: #333;
+  color: #fff;
 }
 
-.enhanced-reading .workout-logger select,
-.enhanced-reading .workout-logger input {
-  font-size: 1rem;
+.log-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.log-card {
+  background: rgba(34, 34, 34, 0.8);
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+}
+
+.log-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.log-icon {
+  font-size: 1.2rem;
+}
+
+.log-tags {
+  font-size: 0.8rem;
+  color: #bbb;
+}
+
+.tag {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.finish-btn {
+  align-self: center;
 }
 
 .enhanced-reading .workout-logger {
@@ -33,6 +79,7 @@
   color: #000;
 }
 
-.exercise-select optgroup {
-  font-weight: bold;
+.enhanced-reading .workout-logger input,
+.enhanced-reading .workout-logger select {
+  font-size: 1rem;
 }
