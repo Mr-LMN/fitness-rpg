@@ -48,8 +48,8 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   };
 
   return (
-    <div className="workout-logger">
-      <h3>Log Your Workout (Room {roomNumber})</h3>
+    <div className="log-container">
+      <h3 className="log-title">Log Your Workout (Room {roomNumber})</h3>
       <div className="input-row">
         <input
           list="exerciseOptions"
@@ -107,14 +107,14 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
             />
           </>
         )}
-        <button className="add-btn" onClick={handleAddExercise}>
+        <button onClick={handleAddExercise}>
           + Log Exercise
         </button>
       </div>
 
       <div className="logged-workout">
         {workoutLog.map((entry, i) => (
-          <div key={i} className="logged-exercise">
+          <div key={i} className="logged-card">
             <h4>{entry.name}</h4>
             <div className="meta">
               {cardioMode
