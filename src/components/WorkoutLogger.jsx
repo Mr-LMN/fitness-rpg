@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { playSound, updateLifetimeSummary, logWorkoutMinutes } from "../utils";
-import { saveWorkoutSession } from "../workoutStorage";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase";
 import SessionSummaryModal from "./SessionSummaryModal";
 import exerciseList from "../data/exerciseList";
 import cardioExercises from "../data/cardioExercises";
@@ -59,25 +60,28 @@ function WorkoutLogger({
       return sum + (sets * reps * 3) / 60;
     }, 0);
 
-    setSummaryData({
+    const summary = {
       totalWeight: `${totalWeight.toFixed(1)} kg`,
       distance: `${distance.toFixed(1)} km`,
       calories: `${calories} kcal`,
       exerciseCount: workoutLog.length,
-    });
+    };
+
+    setSummaryData(summary);
     setShowSummary(true);
+
+    // Save data to Firestore
+    saveWorkoutToFirestore({
+      totalWeightLifted: totalWeight,
+      distanceTravelled: distance,
+      caloriesBurned: calories,
+      exercisesLogged: workoutLog.length,
+      workoutDetails: workoutLog, // Optional, detailed logs
+      minutesLogged: minutes,
+    });
 
     updateLifetimeSummary({ weightLifted: totalWeight, distance, calories });
     logWorkoutMinutes(minutes);
-    if (userId) {
-      saveWorkoutSession(userId, {
-        exercises: workoutLog,
-        totalWeight,
-        distance,
-        calories,
-        minutes,
-      });
-    }
 
     setGameState((prev) => ({
       ...prev,
@@ -99,6 +103,19 @@ function WorkoutLogger({
     setShowSummary(false);
     if (onComplete) {
       onComplete();
+    }
+  };
+
+  const saveWorkoutToFirestore = async (workoutData) => {
+    const userId = "test-user"; // Replace this with real user ID once authentication is set up
+    try {
+      await addDoc(collection(db, "students", userId, "workouts"), {
+        ...workoutData,
+        createdAt: serverTimestamp(),
+      });
+      console.log("✅ Workout successfully logged in Firestore");
+    } catch (error) {
+      console.error("❌ Error logging workout to Firestore:", error);
     }
   };
 
