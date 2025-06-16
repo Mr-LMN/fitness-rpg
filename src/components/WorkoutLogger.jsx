@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { playSound } from "../utils";
+import SessionSummaryModal from "./SessionSummaryModal";
 import exerciseList from "../data/exerciseList";
 import cardioExercises from "../data/cardioExercises";
 import "./styles/WorkoutLogger.css";
@@ -16,6 +17,8 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
       : { name: "", sets: "", reps: "", weight: "" }
   );
   const [workoutLog, setWorkoutLog] = useState([]);
+  const [showSummary, setShowSummary] = useState(false);
+  const [summaryData, setSummaryData] = useState(null);
 
   const handleAddExercise = () => {
     if (cardioMode) {
@@ -35,6 +38,21 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   };
 
   const handleFinishWorkout = () => {
+    const totalWeight = workoutLog.reduce(
+      (sum, w) => sum + ((parseFloat(w.sets) || 0) * (parseFloat(w.reps) || 0) * (parseFloat(w.weight) || 0)),
+      0
+    );
+    const distance = workoutLog.reduce((sum, w) => sum + (parseFloat(w.distance) || 0), 0);
+    const calories = Math.round(distance * 60 + totalWeight * 0.1);
+
+    setSummaryData({
+      totalWeight: `${totalWeight.toFixed(1)} kg`,
+      distance: `${distance.toFixed(1)} km`,
+      calories: `${calories} kcal`,
+      exerciseCount: workoutLog.length,
+    });
+    setShowSummary(true);
+
     setGameState((prev) => ({
       ...prev,
       xp: (prev.xp || 0) + 10,
@@ -135,6 +153,12 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
       <button className="primary-btn finish-btn" onClick={handleFinishWorkout}>
         Finish Workout
       </button>
+      {showSummary && (
+        <SessionSummaryModal
+          summary={summaryData}
+          onContinue={() => setShowSummary(false)}
+        />
+      )}
     </div>
   );
 }
