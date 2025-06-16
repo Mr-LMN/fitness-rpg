@@ -47,6 +47,14 @@ function CharacterCreation({ gameState, setGameState }) {
           <option value="M">M</option>
           <option value="F">F</option>
         </select>
+        <input
+          type="number"
+          placeholder="Weight (kg) - optional"
+          value={gameState.weight || ""}
+          onChange={(e) =>
+            setGameState({ ...gameState, weight: e.target.value })
+          }
+        />
         <select
           value={gameState.workoutFocus || ""}
           onChange={(e) =>
@@ -96,7 +104,15 @@ function CharacterCreation({ gameState, setGameState }) {
           />
           Text to Speech
         </label>
-        <button onClick={() => setGameState({ ...gameState, characterCreated: true })}>
+        <button
+          onClick={() =>
+            setGameState({
+              ...gameState,
+              weight: parseFloat(gameState.weight) || 50,
+              characterCreated: true,
+            })
+          }
+        >
           Start Game
         </button>
       </div>

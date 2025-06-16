@@ -99,3 +99,37 @@ export async function speakText(text) {
     }
   }
 }
+
+/**
+ * Estimate calories burned using MET, weight, and duration or reps/sets.
+ * @param {Object} exercise - The exercise object (must include `met`)
+ * @param {number} userWeightKg - Student weight in kg (default = 50)
+ * @param {number} durationMin - For cardio or time-based movements
+ * @param {number} sets - For strength exercises
+ * @param {number} reps - For strength exercises
+ * @param {number} weightLiftedPerRep - In kg (for weighted strength moves)
+ * @returns {number} Estimated calories burned
+ */
+export function estimateCalories({
+  exercise,
+  userWeightKg = 50,
+  durationMin = 0,
+  sets = 0,
+  reps = 0,
+  weightLiftedPerRep = 0,
+}) {
+  const met = exercise.met || 0;
+
+  if (durationMin > 0) {
+    // Cardio or timed movement
+    return +(met * userWeightKg * (durationMin / 60)).toFixed(1);
+  }
+
+  if (sets > 0 && reps > 0) {
+    const estimatedTimeMin = (sets * reps * 3) / 60; // Assume ~3 seconds per rep
+    const adjustedMet = met || 4.0;
+    return +(adjustedMet * userWeightKg * (estimatedTimeMin / 60)).toFixed(1);
+  }
+
+  return 0; // Unknown case
+}
