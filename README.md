@@ -89,5 +89,5 @@ who are visually impaired.
 
 ## Character Creation
 
-When creating your hero you must choose a workout focus of **cardio** or **strength**. Selecting cardio adjusts the logger to track duration and distance, while strength tracks sets, reps and weight. The default cardio exercise suggestions come from [`src/data/cardioExercises.js`](src/data/cardioExercises.js).
+When creating your hero you must choose a workout focus of **cardio** or **strength**. Selecting cardio adjusts the logger to track duration and distance, while strength tracks sets, reps and weight. The default cardio exercise suggestions are the machines available in the gym and are defined in [`src/data/cardioExercises.js`](src/data/cardioExercises.js). Strength exercises are organised under the categories **Core**, **Legs**, **Chest**, **Back**, **Arms** and **Functional**.
 
