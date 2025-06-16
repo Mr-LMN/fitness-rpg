@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { playSound } from "../utils";
+import cardioExercises from "../data/cardioExercises";
 
 function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   const cardioMode = workoutFocus === "cardio";
   const [exerciseInput, setExerciseInput] = useState(
     cardioMode
-      ? { name: "", duration: "", distance: "" }
+      ? { name: cardioExercises[0].name, duration: "", distance: "" }
       : { name: "", sets: "", reps: "", weight: "" }
   );
   const [workoutLog, setWorkoutLog] = useState([]);
@@ -14,7 +15,7 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
     if (cardioMode) {
       if (exerciseInput.name && exerciseInput.duration && exerciseInput.distance) {
         setWorkoutLog([...workoutLog, exerciseInput]);
-        setExerciseInput({ name: "", duration: "", distance: "" });
+        setExerciseInput({ name: cardioExercises[0].name, duration: "", distance: "" });
       }
     } else {
       if (exerciseInput.name && exerciseInput.sets && exerciseInput.reps && exerciseInput.weight) {
@@ -44,15 +45,20 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   return (
     <div>
       <h3>Log Your Workout (Room {roomNumber})</h3>
-      <input
-        placeholder="Exercise Name"
-        value={exerciseInput.name}
-        onChange={(e) =>
-          setExerciseInput({ ...exerciseInput, name: e.target.value })
-        }
-      />
       {cardioMode ? (
         <>
+          <select
+            value={exerciseInput.name}
+            onChange={(e) =>
+              setExerciseInput({ ...exerciseInput, name: e.target.value })
+            }
+          >
+            {cardioExercises.map((ex) => (
+              <option key={ex.name} value={ex.name}>
+                {ex.name}
+              </option>
+            ))}
+          </select>
           <input
             placeholder="Duration (min)"
             value={exerciseInput.duration}
@@ -70,6 +76,13 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
         </>
       ) : (
         <>
+          <input
+            placeholder="Exercise Name"
+            value={exerciseInput.name}
+            onChange={(e) =>
+              setExerciseInput({ ...exerciseInput, name: e.target.value })
+            }
+          />
           <input
             placeholder="Sets"
             value={exerciseInput.sets}
