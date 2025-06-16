@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { playSound } from "../utils";
 import exerciseList from "../data/exerciseList";
+import cardioExercises from "../data/cardioExercises";
 import {
   GiBiceps,
   GiLeg,
@@ -23,17 +24,22 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
   const categoryIcons = {
     Arms: <GiBiceps />,
     "Arms/Back": <GiBiceps />,
+    Shoulders: <GiBiceps />,
     Back: <GiBackboneShell />,
     Chest: <GiChestArmor />,
     Core: <GiBodyBalance />,
     Legs: <GiLeg />,
     Functional: <GiRunningShoe />,
+    Cardio: <GiRunningShoe />,
   };
 
   const handleAddExercise = () => {
     if (cardioMode) {
       if (exerciseInput.name && exerciseInput.duration && exerciseInput.distance) {
-        setWorkoutLog([...workoutLog, exerciseInput]);
+        setWorkoutLog([
+          ...workoutLog,
+          { ...exerciseInput, type: "Cardio", category: "Cardio" },
+        ]);
         setExerciseInput({ name: "", duration: "", distance: "" });
       }
     } else {
@@ -75,8 +81,8 @@ function WorkoutLogger({ roomNumber, setGameState, workoutFocus }) {
           }
         />
         <datalist id="exerciseOptions">
-          {exerciseList.map((ex) => (
-            <option key={ex.name} value={ex.name} />
+          {(cardioMode ? cardioExercises : exerciseList).map((ex) => (
+            <option key={ex.name || ex} value={ex.name || ex} />
           ))}
         </datalist>
         {cardioMode ? (
