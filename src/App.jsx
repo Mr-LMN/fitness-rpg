@@ -24,6 +24,7 @@ function App() {
     studentName: "",
     yearGroup: "",
     gender: "",
+    weight: "",
     workoutFocus: "",
     avatar: "pirate",
     introStage: 0,
