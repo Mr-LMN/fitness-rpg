@@ -4,7 +4,13 @@ import { playSound } from "../../utils";
 
 const baseUrl = import.meta.env.BASE_URL || "/";
 
-const SafeQuizEvent = ({ questionPool, onSuccess, onFailure, roomName }) => {
+const SafeQuizEvent = ({
+  questionPool,
+  onSuccess,
+  onFailure,
+  onComplete,
+  roomName,
+}) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [lives, setLives] = useState(3);
   const [quizCompleted, setQuizCompleted] = useState(false);
@@ -47,15 +53,23 @@ const SafeQuizEvent = ({ questionPool, onSuccess, onFailure, roomName }) => {
 
   if (quizCompleted && loot) {
     return (
-      <p>
-        You’ve finished scavenging and discovered{' '}
-        <strong className={`rarity-${loot.rarity}`}>{loot.name}</strong>. It’s been added to your backpack for later use.
-      </p>
+      <div>
+        <p>
+          You’ve finished scavenging and discovered{' '}
+          <strong className={`rarity-${loot.rarity}`}>{loot.name}</strong>. It’s been added to your backpack for later use.
+        </p>
+        <button onClick={onComplete}>Continue</button>
+      </div>
     );
   }
 
   if (quizCompleted) {
-    return <p>{feedback}</p>;
+    return (
+      <div>
+        <p>{feedback}</p>
+        <button onClick={onComplete}>Continue</button>
+      </div>
+    );
   }
 
   return (
