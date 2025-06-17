@@ -3,6 +3,7 @@ import WorkoutLogger from "../WorkoutLogger";
 import ParallaxDust from "../ParallaxDust";
 import { playSound } from "../../utils";
 import "../styles/RoomScene.css";
+import narrationLines from "../../data/narrationLines";
 
 function Room1({ setGameState, gameState }) {
   const [workoutUploaded, setWorkoutUploaded] = useState(false);
@@ -82,7 +83,7 @@ function Room1({ setGameState, gameState }) {
 
         {!workoutUploaded && (
           <>
-            <p>You cautiously enter the abandoned classroom. The stale air and dust hint that no one has been here for a while. It's the perfect moment to focus and log your workout.</p>
+            <p>{narrationLines.room1.intro}</p>
             <WorkoutLogger
               roomNumber={1}
               setGameState={setGameState}
@@ -96,18 +97,18 @@ function Room1({ setGameState, gameState }) {
 
       {workoutUploaded && !scavengeCompleted && (
         <>
-          <p>With your body re-energized, you notice something odd under a pile of worksheets. You kneel to investigate...</p>
+          <p>{narrationLines.room1.scavengeIntro}</p>
           <button onClick={handleScavenge}>See Your Scavenging Results</button>
         </>
       )}
 
       {scavengeCompleted && foundItem && !restReady && (
-        <p>You pocket the <strong>{foundItem}</strong>. It shows another room labeled "Mrs. John's Room" – previously unknown. A breakthrough!</p>
+        <p>{narrationLines.room1.foundItem.replace('{item}', foundItem)}</p>
       )}
 
         {restReady && (
           <>
-            <p>Feeling the fatigue set in, you choose to rest in a safe corner. Tomorrow, you'll explore the newly revealed room.</p>
+            <p>{narrationLines.room1.rest}</p>
             <button onClick={handleRest}>Rest Up for the Night</button>
           </>
         )}

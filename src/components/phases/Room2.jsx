@@ -4,6 +4,7 @@ import WorkoutLogger from "../WorkoutLogger";
 import SafeQuizEvent from "../events/SafeQuizEvent";
 import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
+import narrationLines from "../../data/narrationLines";
 
 const languageQuestions = [
   {
@@ -132,7 +133,7 @@ function Room2({ setGameState, gameState }) {
 
       {!workoutUploaded && (
         <>
-          <p>You arrive in Mrs. John's classroom. It's eerily quiet, but there's space to complete your next workout.</p>
+          <p>{narrationLines.room2.intro}</p>
           <WorkoutLogger
             roomNumber={2}
             setGameState={setGameState}
@@ -146,7 +147,7 @@ function Room2({ setGameState, gameState }) {
 
       {safeDiscovered && !quizActive && !quizCompleted && (
         <>
-          <p>While catching your breath, you notice a flicker under the teacher's desk. It's a dusty digital safe with a keypad!</p>
+          <p>{narrationLines.room2.safeDiscovery}</p>
           <button onClick={() => setQuizActive(true)}>Attempt to Unlock the Safe</button>
         </>
       )}
@@ -164,21 +165,17 @@ function Room2({ setGameState, gameState }) {
         <>
           {lootFound ? (
             <>
-              <p>You found <strong>{lootFound}</strong> inside the safe. Nicely done!</p>
-              <p>Inside the safe, you also find a scribbled note:</p>
-              <blockquote>
-                "If anyone finds this, Roche has barricaded herself in the far room. I heard growling… Stay away unless you're ready."
-              </blockquote>
-              <p>You pocket the bar and steel yourself. It might be time to face what’s in there.</p>
+              <p>{narrationLines.room2.lootFound.replace('{loot}', lootFound)}</p>
+              <p>{narrationLines.room2.noteFound}</p>
+              <blockquote>{narrationLines.room2.noteQuote}</blockquote>
+              <p>{narrationLines.room2.readyMessage}</p>
             </>
           ) : (
             <>
-              <p>You couldn't crack the safe. You'll need to complete 15 ground-to-overheads to brute force it open.</p>
-              <p>After forcing it open, you find a crumpled note:</p>
-              <blockquote>
-                "Roche… far room… something’s wrong… don’t go alone."
-              </blockquote>
-              <p>You swallow hard. Time to prepare.</p>
+              <p>{narrationLines.room2.lootFailure}</p>
+              <p>{narrationLines.room2.failureNote}</p>
+              <blockquote>{narrationLines.room2.noteQuote}</blockquote>
+              <p>{narrationLines.room2.swallowHard}</p>
             </>
           )}
           <button onClick={handleReturnToMap}>Return to the Map</button>

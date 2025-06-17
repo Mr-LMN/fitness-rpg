@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
 import { playSound } from "../../utils";
+import narrationLines from "../../data/narrationLines";
 
 function EscapePhase({ setGameState, slamBallGoal = 10, squatJumpGoal = 15 }) {
   const [slamBalls, setSlamBalls] = useState(0);
@@ -29,21 +30,20 @@ function EscapePhase({ setGameState, slamBallGoal = 10, squatJumpGoal = 15 }) {
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2>🔧 Escape Options</h2>
-        <p>
-          You finally grab the object—it’s a flathead screwdriver. Not much… but it could help.
-        </p>
-        <p>
-          You check the door: locked. But maybe you can loosen it. Or… there's a bench nearby. Could
-          you climb and escape through the ceiling tiles?
-        </p>
-        <p>🧠 Choose your escape route:</p>
+        {narrationLines.escaping.slice(0,3).map((line, idx) => (
+          <p key={idx}>{line}</p>
+        ))}
         <div>
-          <p>💪 Use the screwdriver to jimmy the lock—{slamBallGoal} slam balls</p>
+          <p>
+            {narrationLines.escaping[3].replace('{slamBallGoal}', slamBallGoal)}
+          </p>
           <button onClick={() => setSlamBalls(slamBalls + 1)}>Do Slam Ball</button>
           <p>Progress: {slamBalls}/{slamBallGoal}</p>
         </div>
         <div>
-          <p>⚡ Leap onto the bench and push up into the tiles—{squatJumpGoal} squat jumps</p>
+          <p>
+            {narrationLines.escaping[4].replace('{squatJumpGoal}', squatJumpGoal)}
+          </p>
           <button onClick={() => setJumpSquats(jumpSquats + 1)}>Do Squat Jump</button>
           <p>Progress: {jumpSquats}/{squatJumpGoal}</p>
         </div>
