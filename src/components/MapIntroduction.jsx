@@ -29,7 +29,7 @@ function MapIntroduction({ setGameState }) {
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2>🎒 A New Beginning</h2>
-        {narrationLines.mapIntroduction.map((line, idx) => (
+        {narrationLines.general.mapIntroduction.map((line, idx) => (
           <p key={idx}>{line}</p>
         ))}
         <button onClick={handleViewMap}>View Map and Begin Exploring</button>

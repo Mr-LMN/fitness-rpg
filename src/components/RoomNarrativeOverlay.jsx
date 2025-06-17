@@ -20,7 +20,7 @@ function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
     "Mrs. John's Room": "/Mrs_JohnsDoor.png",
     "Mrs. Roche's Room": "/Mrs_RochesDoor.png",
   };
-  const lines = narrationLines.overlayIntro[roomName] || ["You enter the room…"];
+  const lines = narrationLines.general.overlayIntro[roomName] || ["You enter the room…"];
 
   return (
     <div className="overlay-bg">

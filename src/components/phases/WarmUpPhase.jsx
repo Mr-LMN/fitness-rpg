@@ -17,7 +17,7 @@ function WarmUpPhase({ setGameState }) {
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2>🔥 Warm-Up</h2>
-        {narrationLines.warmupIntro.map((line, idx) => (
+        {narrationLines.general.warmupIntro.map((line, idx) => (
           <p key={idx}>{line}</p>
         ))}
         <button onClick={() => setGameState((prev) => ({ ...prev, introStage: 2 }))}>

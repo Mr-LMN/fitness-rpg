@@ -14,7 +14,7 @@ function IntroPhase({ setGameState }) {
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2>🧊 Locked In</h2>
-        {narrationLines.introPhase.map((line, idx) => (
+        {narrationLines.general.introPhase.map((line, idx) => (
           <p key={idx}>{line}</p>
         ))}
         <button onClick={() => {
