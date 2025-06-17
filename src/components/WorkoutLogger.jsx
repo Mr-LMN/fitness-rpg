@@ -107,7 +107,6 @@ function WorkoutLogger({
   };
 
   const saveWorkoutToFirestore = async (workoutData) => {
-    const userId = "test-user"; // Replace this with real user ID once authentication is set up
     try {
       await addDoc(collection(db, "students", userId, "workouts"), {
         ...workoutData,

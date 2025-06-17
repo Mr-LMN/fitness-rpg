@@ -1,8 +1,9 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
-export const fetchWorkoutSummary = async (userId = "test-user") => {
+export const fetchWorkoutSummary = async (userId) => {
   try {
+    if (!userId) return null;
     const querySnapshot = await getDocs(collection(db, "students", userId, "workouts"));
     const workouts = querySnapshot.docs.map((doc) => doc.data());
 
