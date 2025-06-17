@@ -118,7 +118,12 @@ function App() {
       case 0:
         return <IntroPhase setGameState={setGameState} />;
       case 1:
-        return <WarmUpPhase setGameState={setGameState} />;
+        return (
+          <WarmUpPhase
+            setGameState={setGameState}
+            gameState={gameState}
+          />
+        );
       case 2:
         return <MobilityPhase setGameState={setGameState} />;
       case 3:
