@@ -5,6 +5,7 @@ import WorkoutLogger from './WorkoutLogger';
 import QuizPhase from './phases/QuizPhase';
 import BossFightPhase from './phases/BossFightPhase';
 import WarmupDisplay from './WarmupDisplay';
+import SafeQuizEvent from './events/SafeQuizEvent';
 import { getRandomLoot } from '../data/lootTable';
 
 const roomImages = {
@@ -23,6 +24,8 @@ function RoomTemplate({
   narrationKey,
   workoutFocus,
   quiz,
+  safeQuiz,
+  safeIntroKey,
   boss,
   lootPool,
   mapMarker,
@@ -37,7 +40,10 @@ function RoomTemplate({
   const [loot, setLoot] = useState(null);
   const [warmupDone, setWarmupDone] = useState(!requiresWarmup);
 
-  const lines = Array.isArray(narrationKey) ? narrationKey : getLinesByKey(narrationKey);
+  const lines = Array.isArray(narrationKey)
+    ? narrationKey
+    : getLinesByKey(narrationKey);
+  const safeIntroLines = safeIntroKey ? getLinesByKey(safeIntroKey) : [];
 
   const handleNarrationDone = () => {
     if (requiresWarmup && !warmupDone) setStage('warmup');
@@ -58,7 +64,8 @@ function RoomTemplate({
       ...prev,
       xp: (prev.xp || 0) + 10,
     }));
-    if (hasScavenge) setStage('scavenge');
+    if (safeQuiz) setStage('safeIntro');
+    else if (hasScavenge) setStage('scavenge');
     else if (quiz) setStage('quiz');
     else if (boss) setStage('boss');
     else if (lootPool) setStage('loot');
@@ -105,6 +112,21 @@ function RoomTemplate({
     if (lootPool) setStage('loot');
     else setStage('complete');
   };
+
+  const handleSafeSuccess = (reward) => {
+    setGameState((prev) => ({
+      ...prev,
+      inventory: [...(prev.inventory || []), { ...reward, isNew: true }],
+    }));
+    if (unlocksRoom && !gameState.visibleRooms.includes(unlocksRoom)) {
+      setGameState((prev) => ({
+        ...prev,
+        visibleRooms: [...prev.visibleRooms, unlocksRoom],
+      }));
+    }
+  };
+
+  const handleSafeFailure = () => {};
 
   const handleLoot = () => {
     const found = getRandomLoot(lootPool);
@@ -162,6 +184,31 @@ function RoomTemplate({
           />
         </div>
       </div>
+    );
+  }
+
+  if (stage === 'safeIntro') {
+    return (
+      <NarrationManager
+        lines={safeIntroLines}
+        onComplete={() => setStage('safeQuiz')}
+        backgroundImage={roomImages[mapMarker]}
+      />
+    );
+  }
+
+  if (stage === 'safeQuiz') {
+    return (
+      <SafeQuizEvent
+        questionPool={safeQuiz}
+        onSuccess={handleSafeSuccess}
+        onFailure={handleSafeFailure}
+        onComplete={() => {
+          if (lootPool) setStage('loot');
+          else setStage('complete');
+        }}
+        roomName={mapMarker}
+      />
     );
   }
 
