@@ -4,6 +4,18 @@ import { playSound } from "../../utils";
 
 const baseUrl = import.meta.env.BASE_URL || "/";
 
+const FAILURE_EXERCISES = [
+  "10 burpees",
+  "15 jump squats",
+  "10 slam balls",
+  "15 wall balls",
+  "50 skips",
+  "10 push ups",
+  "30 second plank",
+  "12 box jumps",
+  "10 ground-to-overheads",
+];
+
 const SafeQuizEvent = ({
   questionPool,
   onSuccess,
@@ -44,9 +56,10 @@ const SafeQuizEvent = ({
       setFeedback("Incorrect ❌");
 
       if (lives - 1 === 0) {
+        const exercise = FAILURE_EXERCISES[Math.floor(Math.random() * FAILURE_EXERCISES.length)];
         setQuizCompleted(true);
-        setFeedback("Access Denied. You must now complete a physical challenge.");
-        onFailure();
+        setFeedback(`Access Denied. You must now complete ${exercise} to break it open.`);
+        onFailure(exercise);
       }
     }
   };

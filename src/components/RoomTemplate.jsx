@@ -39,6 +39,7 @@ function RoomTemplate({
   const [stage, setStage] = useState('narration');
   const [loot, setLoot] = useState(null);
   const [warmupDone, setWarmupDone] = useState(!requiresWarmup);
+  const [warmupFocus, setWarmupFocus] = useState(gameState.workoutFocus || 'legs');
 
   const lines = Array.isArray(narrationKey)
     ? narrationKey
@@ -46,7 +47,7 @@ function RoomTemplate({
   const safeIntroLines = safeIntroKey ? getLinesByKey(safeIntroKey) : [];
 
   const handleNarrationDone = () => {
-    if (requiresWarmup && !warmupDone) setStage('warmup');
+    if (requiresWarmup && !warmupDone) setStage('warmupPrompt');
     else if (hasWorkout) setStage('workout');
     else if (hasScavenge) setStage('scavenge');
     else setStage('complete');
@@ -57,6 +58,16 @@ function RoomTemplate({
     if (hasWorkout) setStage('workout');
     else if (hasScavenge) setStage('scavenge');
     else setStage('complete');
+  };
+
+  const handleWarmupDecision = (wantWarmup) => {
+    if (wantWarmup) setStage('warmupSelect');
+    else handleWarmupComplete();
+  };
+
+  const handleFocusSelect = (focus) => {
+    setWarmupFocus(focus);
+    setStage('warmup');
   };
 
   const handleWorkoutComplete = () => {
@@ -83,11 +94,16 @@ function RoomTemplate({
   };
 
   const handleBossComplete = () => {
-    setGameState((prev) => ({
-      ...prev,
-      xp: (prev.xp || 0) + 20,
-      completedRooms: [...(prev.completedRooms || []), mapMarker],
-    }));
+    setGameState((prev) => {
+      const updates = {
+        xp: (prev.xp || 0) + 20,
+        completedRooms: [...(prev.completedRooms || []), mapMarker],
+      };
+      if (unlocksRoom && !prev.visibleRooms.includes(unlocksRoom)) {
+        updates.visibleRooms = [...prev.visibleRooms, unlocksRoom];
+      }
+      return { ...prev, ...updates };
+    });
     if (lootPool) setStage('loot');
     else setStage('complete');
   };
@@ -159,10 +175,31 @@ function RoomTemplate({
     );
   }
 
+  if (stage === 'warmupPrompt') {
+    return (
+      <div className="rpg-text room-content">
+        <p>Log your workout. Would you like a pre-built warm up before starting?</p>
+        <button onClick={() => handleWarmupDecision(true)}>Yes</button>
+        <button onClick={() => handleWarmupDecision(false)}>No</button>
+      </div>
+    );
+  }
+
+  if (stage === 'warmupSelect') {
+    return (
+      <div className="rpg-text room-content">
+        <p>What are you training? Legs, Upper Body or Both?</p>
+        <button onClick={() => handleFocusSelect('legs')}>Legs</button>
+        <button onClick={() => handleFocusSelect('upperBody')}>Upper Body</button>
+        <button onClick={() => handleFocusSelect('full')}>Both</button>
+      </div>
+    );
+  }
+
   if (stage === 'warmup') {
     return (
       <WarmupDisplay
-        focus={workoutFocus || gameState.workoutFocus}
+        focus={warmupFocus}
         onComplete={handleWarmupComplete}
       />
     );

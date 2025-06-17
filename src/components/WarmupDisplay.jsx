@@ -2,8 +2,8 @@ import React from "react";
 import warmups from "../data/warmups";
 import "./styles/WarmupDisplay.css";
 
-function WarmupDisplay({ focus = "legs", onComplete }) {
-  const warmup = warmups[focus] || warmups.legs;
+function WarmupDisplay({ focus = "full", onComplete }) {
+  const warmup = warmups[focus] || warmups.full;
 
   return (
     <div className="warmup-display">
