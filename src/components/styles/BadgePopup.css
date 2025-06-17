@@ -1,7 +1,12 @@
 .badge-earned {
   text-align: center;
+  padding: 20px;
 }
 .badge-earned .badge-img {
-  width: 80px;
+  width: 150px;
   margin-bottom: 10px;
+  filter: drop-shadow(0 0 6px #fff);
+}
+.badge-unlock-bg {
+  background: rgba(0, 0, 0, 0.95);
 }

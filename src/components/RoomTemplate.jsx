@@ -38,6 +38,7 @@ function RoomTemplate({
 }) {
   const [stage, setStage] = useState('narration');
   const [loot, setLoot] = useState(null);
+  const [failureExercise, setFailureExercise] = useState(null);
   const [warmupDone, setWarmupDone] = useState(!requiresWarmup);
   const [warmupFocus, setWarmupFocus] = useState(gameState.workoutFocus || 'legs');
 
@@ -142,7 +143,29 @@ function RoomTemplate({
     }
   };
 
-  const handleSafeFailure = () => {};
+  const handleSafeFailure = (exercise) => {
+    setFailureExercise(exercise);
+  };
+
+  const handleSafeComplete = () => {
+    if (failureExercise) {
+      setStage('safePenalty');
+    } else if (lootPool) setStage('loot');
+    else setStage('complete');
+  };
+
+  const handlePenaltyDone = () => {
+    const reward = {
+      id: 'safe_energy_bar',
+      name: 'Energy Bar',
+      rarity: 'uncommon',
+      description: 'Restores stamina when used.',
+    };
+    handleSafeSuccess(reward);
+    setFailureExercise(null);
+    if (lootPool) setStage('loot');
+    else setStage('complete');
+  };
 
   const handleLoot = () => {
     const found = getRandomLoot(lootPool);
@@ -240,10 +263,7 @@ function RoomTemplate({
         questionPool={safeQuiz}
         onSuccess={handleSafeSuccess}
         onFailure={handleSafeFailure}
-        onComplete={() => {
-          if (lootPool) setStage('loot');
-          else setStage('complete');
-        }}
+        onComplete={handleSafeComplete}
         roomName={mapMarker}
       />
     );
@@ -251,6 +271,15 @@ function RoomTemplate({
 
   if (stage === 'quiz') {
     return <QuizPhase questions={quiz} onComplete={handleQuizComplete} />;
+  }
+
+  if (stage === 'safePenalty') {
+    return (
+      <div className="rpg-text room-content">
+        <p>To force the safe open, complete {failureExercise}.</p>
+        <button onClick={handlePenaltyDone}>I've done it</button>
+      </div>
+    );
   }
 
   if (stage === 'boss') {
