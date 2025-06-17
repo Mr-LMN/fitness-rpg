@@ -7,7 +7,7 @@ function BadgeUnlockedModal({ badgeId, onClose }) {
   if (!badgeId) return null;
   const badge = badgeDefinitions[badgeId] || {};
   return (
-    <div className="overlay-bg">
+    <div className="overlay-bg badge-unlock-bg">
       <div className="overlay-box badge-earned">
         {badge.image ? (
           <img src={badge.image} alt={badge.label} className="badge-img" />
