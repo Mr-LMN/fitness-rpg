@@ -30,19 +30,19 @@ function EscapePhase({ setGameState, slamBallGoal = 10, squatJumpGoal = 15 }) {
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2>🔧 Escape Options</h2>
-        {narrationLines.escaping.slice(0,3).map((line, idx) => (
+        {narrationLines.general.escaping.slice(0,3).map((line, idx) => (
           <p key={idx}>{line}</p>
         ))}
         <div>
           <p>
-            {narrationLines.escaping[3].replace('{slamBallGoal}', slamBallGoal)}
+            {narrationLines.general.escaping[3].replace('{slamBallGoal}', slamBallGoal)}
           </p>
           <button onClick={() => setSlamBalls(slamBalls + 1)}>Do Slam Ball</button>
           <p>Progress: {slamBalls}/{slamBallGoal}</p>
         </div>
         <div>
           <p>
-            {narrationLines.escaping[4].replace('{squatJumpGoal}', squatJumpGoal)}
+            {narrationLines.general.escaping[4].replace('{squatJumpGoal}', squatJumpGoal)}
           </p>
           <button onClick={() => setJumpSquats(jumpSquats + 1)}>Do Squat Jump</button>
           <p>Progress: {jumpSquats}/{squatJumpGoal}</p>
