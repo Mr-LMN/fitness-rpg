@@ -5,6 +5,7 @@ import WorkoutLogger from './WorkoutLogger';
 import QuizPhase from './phases/QuizPhase';
 import BossFightPhase from './phases/BossFightPhase';
 import WarmupDisplay from './WarmupDisplay';
+import { getRandomLoot } from '../data/lootTable';
 
 const roomImages = {
   "Mr. Watkins' Room": '/Mr_WatkinsRoom.png',
@@ -17,10 +18,6 @@ function getLinesByKey(key) {
   return key.split('.').reduce((obj, part) => (obj ? obj[part] : null), narrationLines) || [];
 }
 
-const getRandomLoot = (pool = []) => {
-  if (!Array.isArray(pool) || pool.length === 0) return null;
-  return pool[Math.floor(Math.random() * pool.length)];
-};
 
 function RoomTemplate({
   narrationKey,
@@ -89,10 +86,15 @@ function RoomTemplate({
   };
 
   const handleScavengeComplete = () => {
-    const item = 'mysterious keycard';
+    const item = {
+      id: 'scavenge_keycard',
+      name: 'Mysterious Keycard',
+      rarity: 'rare',
+      description: 'Looks like it could open something important.',
+    };
     setGameState((prev) => {
       const updates = {
-        inventory: [...(prev.inventory || []), { item }],
+        inventory: [...(prev.inventory || []), { ...item, isNew: true }],
       };
       if (unlocksRoom && !prev.visibleRooms.includes(unlocksRoom)) {
         updates.visibleRooms = [...prev.visibleRooms, unlocksRoom];
@@ -109,11 +111,11 @@ function RoomTemplate({
     if (found) {
       setGameState((prev) => {
         const updates = {
-          inventory: [...(prev.inventory || []), found],
+          inventory: [...(prev.inventory || []), { ...found, isNew: true }],
         };
         if (
           mapMarker === "Mr. Watkins' Room" &&
-          found.includes('Map Piece') &&
+          found.name.includes('Map Piece') &&
           !prev.visibleRooms.includes("Mrs. John's Room")
         ) {
           updates.visibleRooms = [...prev.visibleRooms, "Mrs. John's Room"];
@@ -195,19 +197,23 @@ function RoomTemplate({
   if (stage === 'complete') {
     return (
       <div className="rpg-text room-content">
+        {loot && (
+          <p>
+            You have finished scavenging for supplies and found{' '}
+            <span className={`rarity-${loot.rarity} loot-new`}>{loot.name}</span>! This has
+            been added to your backpack for later use.
+          </p>
+        )}
         {loot &&
-          (loot.includes('Map Piece') && mapMarker === "Mr. Watkins' Room"
-            ? (
-                <p>
-                  {narrationLines.languages.room1.foundItem.replace(
-                    '{item}',
-                    loot
-                  )}
-                </p>
-              )
-            : (
-                <p>You found {loot}!</p>
-              ))}
+          loot.name.includes('Map Piece') &&
+          mapMarker === "Mr. Watkins' Room" && (
+            <p>
+              {narrationLines.languages.room1.foundItem.replace(
+                '{item}',
+                loot.name
+              )}
+            </p>
+          )}
         {mapMarker === "Mr. Watkins' Room" && (
           <p>{narrationLines.languages.room1.rest}</p>
         )}

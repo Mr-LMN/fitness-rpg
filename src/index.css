@@ -38,6 +38,33 @@ button:disabled {
   font-size: 1.2rem;
 }
 
+.rarity-common {
+  color: #b0b0b0;
+}
+
+.rarity-uncommon {
+  color: #2ecc71;
+}
+
+.rarity-rare {
+  color: #3498db;
+}
+
+.rarity-legendary {
+  color: #e67e22;
+  font-weight: bold;
+}
+
+.loot-new {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
 /* Themed button styles used across workout logging components */
 .primary-btn {
   background-color: #a4c639;

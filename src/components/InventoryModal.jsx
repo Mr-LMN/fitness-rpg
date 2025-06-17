@@ -10,7 +10,10 @@ function InventoryModal({ items = [], onUse, onClose }) {
         {items.length === 0 && <p>No items found.</p>}
         <ul>
           {items.map((item) => (
-            <li key={item.id} className="inventory-item">
+            <li
+              key={item.id}
+              className={`inventory-item rarity-${item.rarity} ${item.isNew ? 'new' : ''}`}
+            >
               <div className="item-info">
                 <span className="item-name">{item.name}</span>
                 {item.type && (

@@ -21,10 +21,15 @@ const SafeQuizEvent = ({ questionPool, onSuccess, onFailure, roomName }) => {
         setFeedback("Correct! ✅");
         playSound('correct');
       } else {
-        const reward = "✨ Energy Bar (Loot) ✨";
+        const reward = {
+          id: 'safe_energy_bar',
+          name: 'Energy Bar',
+          rarity: 'uncommon',
+          description: 'Restores stamina when used.',
+        };
         setLoot(reward);
         setQuizCompleted(true);
-        setFeedback("Safe unlocked!");
+        setFeedback('Safe unlocked!');
         onSuccess(reward, mistakes === 0);
       }
     } else {
@@ -41,7 +46,12 @@ const SafeQuizEvent = ({ questionPool, onSuccess, onFailure, roomName }) => {
   };
 
   if (quizCompleted && loot) {
-    return <p>{feedback} You found: <strong>{loot}</strong></p>;
+    return (
+      <p>
+        You’ve finished scavenging and discovered{' '}
+        <strong className={`rarity-${loot.rarity}`}>{loot.name}</strong>. It’s been added to your backpack for later use.
+      </p>
+    );
   }
 
   if (quizCompleted) {

@@ -16,6 +16,7 @@ import RoomNarrativeOverlay from "./components/RoomNarrativeOverlay";
 import FinalBossPhase from "./components/phases/FinalBossPhase";
 import XPBar from "./components/XPBar";
 import AccountabilityPopup from "./components/AccountabilityPopup";
+import BadgeUnlockedModal from "./components/BadgeUnlockedModal";
 import { playSound, speakText, stopSound } from "./utils";
 
 const INITIAL_STATE = {
@@ -50,9 +51,11 @@ function App() {
   const [signedIn, setSignedIn] = useState(false);
   const [gameState, setGameState] = useState({ ...INITIAL_STATE });
   const [popupMessage, setPopupMessage] = useState(null);
-
+  const [recentBadge, setRecentBadge] = useState(null);
+  
   const ambientRef = useRef(null);
   const prevXpLevel = useRef(0);
+  const prevBadgesRef = useRef([]);
 
   useEffect(() => {
     const now = new Date();
@@ -90,6 +93,16 @@ function App() {
     }
     prevXpLevel.current = level;
   }, [gameState.xp]);
+
+  useEffect(() => {
+    const newBadges = gameState.badges.filter(
+      (b) => !prevBadgesRef.current.includes(b)
+    );
+    if (newBadges.length > 0) {
+      setRecentBadge(newBadges[newBadges.length - 1]);
+    }
+    prevBadgesRef.current = gameState.badges;
+  }, [gameState.badges]);
 
   useEffect(() => {
     if (!signedIn || gameState.introStage === 0) {
@@ -192,6 +205,12 @@ function App() {
         />
       )}
       {renderPhase()}
+      {recentBadge && (
+        <BadgeUnlockedModal
+          badgeId={recentBadge}
+          onClose={() => setRecentBadge(null)}
+        />
+      )}
       {popupMessage && (
         <AccountabilityPopup message={popupMessage} onClose={() => setPopupMessage(null)} />
       )}
