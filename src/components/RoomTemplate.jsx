@@ -4,6 +4,7 @@ import NarrationManager from './NarrationManager';
 import WorkoutLogger from './WorkoutLogger';
 import QuizPhase from './phases/QuizPhase';
 import BossFightPhase from './phases/BossFightPhase';
+import WarmupDisplay from './WarmupDisplay';
 
 function getLinesByKey(key) {
   return key.split('.').reduce((obj, part) => (obj ? obj[part] : null), narrationLines) || [];
@@ -23,13 +24,23 @@ function RoomTemplate({
   mapMarker,
   gameState,
   setGameState,
+  requiresWarmup,
 }) {
   const [stage, setStage] = useState('narration');
   const [loot, setLoot] = useState(null);
+  const [warmupDone, setWarmupDone] = useState(!requiresWarmup);
 
   const lines = Array.isArray(narrationKey) ? narrationKey : getLinesByKey(narrationKey);
 
-  const handleNarrationDone = () => setStage('workout');
+  const handleNarrationDone = () => {
+    if (requiresWarmup && !warmupDone) setStage('warmup');
+    else setStage('workout');
+  };
+
+  const handleWarmupComplete = () => {
+    setWarmupDone(true);
+    setStage('workout');
+  };
 
   const handleWorkoutComplete = () => {
     setGameState((prev) => ({
@@ -76,6 +87,15 @@ function RoomTemplate({
 
   if (stage === 'narration') {
     return <NarrationManager lines={lines} onComplete={handleNarrationDone} />;
+  }
+
+  if (stage === 'warmup') {
+    return (
+      <WarmupDisplay
+        focus={workoutFocus || gameState.workoutFocus}
+        onComplete={handleWarmupComplete}
+      />
+    );
   }
 
   if (stage === 'workout') {

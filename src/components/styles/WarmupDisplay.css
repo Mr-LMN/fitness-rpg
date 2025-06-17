@@ -1,0 +1,67 @@
+.warmup-display {
+  background: #121212;
+  color: #f1f1f1;
+  padding: 24px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  margin: 0 auto;
+  font-family: 'Garamond', serif;
+  box-shadow: 0 0 12px #00000088;
+}
+
+.warmup-title {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.warmup-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.warmup-step {
+  margin-bottom: 10px;
+}
+
+.warmup-step strong {
+  display: inline-block;
+  width: 110px;
+}
+
+.warmup-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.warmup-actions button {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'Garamond', serif;
+}
+
+.complete-btn {
+  background: #2ecc71;
+  color: #000;
+}
+
+.complete-btn:hover {
+  background: #38d879;
+}
+
+.tips-btn {
+  background: #333;
+  color: #fff;
+}
+
+.tips-btn:hover {
+  background: #444;
+}
