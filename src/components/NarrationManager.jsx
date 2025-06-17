@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-function NarrationManager({ lines = [], onComplete }) {
+function NarrationManager({ lines = [], onComplete, backgroundImage }) {
   const [index, setIndex] = useState(0);
 
   const advance = useCallback(() => {
@@ -21,8 +21,12 @@ function NarrationManager({ lines = [], onComplete }) {
     return () => window.removeEventListener('keydown', handler);
   }, [advance]);
 
+  const style = backgroundImage
+    ? { backgroundImage: `url(${backgroundImage})` }
+    : {};
+
   return (
-    <div className="narration-manager" onClick={advance}>
+    <div className="narration-manager" onClick={advance} style={style}>
       <p>{lines[index]}</p>
       {lines.length > 1 && <p className="continue-hint">(click or press space)</p>}
     </div>

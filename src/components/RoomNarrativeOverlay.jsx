@@ -20,10 +20,23 @@ function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
     "Mrs. John's Room": "/Mrs_JohnsDoor.png",
     "Mrs. Roche's Room": "/Mrs_RochesDoor.png",
   };
+  const roomBackgrounds = {
+    "Mr. Watkins' Room": "/Mr_WatkinsRoom.png",
+    "Mrs. John's Room": "/Mrs_JohnsRoom.png",
+    "Mrs. Roche's Room": "/Mrs_RochesRoom.png",
+  };
   const lines = narrationLines.general.overlayIntro[roomName] || ["You enter the room…"];
 
   return (
-    <div className="overlay-bg">
+    <div
+      className="overlay-bg"
+      style={{
+        backgroundImage: `url(${roomBackgrounds[roomName] || ''})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundBlendMode: 'multiply',
+      }}
+    >
       <div className="overlay-box">
         {introImages[roomName] && (
           <img

@@ -61,3 +61,25 @@ button:disabled {
   background-color: #666;
 }
 
+/* Overlay used for narration sequences */
+.narration-manager {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: multiply;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+}
+
+.continue-hint {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+

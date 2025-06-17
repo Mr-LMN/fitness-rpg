@@ -6,6 +6,13 @@ import QuizPhase from './phases/QuizPhase';
 import BossFightPhase from './phases/BossFightPhase';
 import WarmupDisplay from './WarmupDisplay';
 
+const roomImages = {
+  "Mr. Watkins' Room": '/Mr_WatkinsRoom.png',
+  "Mrs. John's Room": '/Mrs_JohnsRoom.png',
+  "Mrs. Roche's Room": '/Mrs_RochesRoom.png',
+  'Fitness Suite': '/FitnessSuite.png',
+};
+
 function getLinesByKey(key) {
   return key.split('.').reduce((obj, part) => (obj ? obj[part] : null), narrationLines) || [];
 }
@@ -76,17 +83,32 @@ function RoomTemplate({
   const handleLoot = () => {
     const found = getRandomLoot(lootPool);
     if (found) {
-      setGameState((prev) => ({
-        ...prev,
-        inventory: [...(prev.inventory || []), found],
-      }));
+      setGameState((prev) => {
+        const updates = {
+          inventory: [...(prev.inventory || []), found],
+        };
+        if (
+          mapMarker === "Mr. Watkins' Room" &&
+          found.includes('Map Piece') &&
+          !prev.visibleRooms.includes("Mrs. John's Room")
+        ) {
+          updates.visibleRooms = [...prev.visibleRooms, "Mrs. John's Room"];
+        }
+        return { ...prev, ...updates };
+      });
       setLoot(found);
     }
     setStage('complete');
   };
 
   if (stage === 'narration') {
-    return <NarrationManager lines={lines} onComplete={handleNarrationDone} />;
+    return (
+      <NarrationManager
+        lines={lines}
+        onComplete={handleNarrationDone}
+        backgroundImage={roomImages[mapMarker]}
+      />
+    );
   }
 
   if (stage === 'warmup') {
@@ -99,15 +121,21 @@ function RoomTemplate({
   }
 
   if (stage === 'workout') {
+    const img = roomImages[mapMarker];
     return (
-      <WorkoutLogger
-        roomNumber={mapMarker}
-        setGameState={setGameState}
-        workoutFocus={workoutFocus || gameState.workoutFocus}
-        userId={gameState.studentName}
-        onComplete={handleWorkoutComplete}
-        completeLabel="Upload Your Workout"
-      />
+      <div className="room-container">
+        {img && <img src={img} alt={mapMarker} className="scene-image" />}
+        <div className="room-content">
+          <WorkoutLogger
+            roomNumber={mapMarker}
+            setGameState={setGameState}
+            workoutFocus={workoutFocus || gameState.workoutFocus}
+            userId={gameState.studentName}
+            onComplete={handleWorkoutComplete}
+            completeLabel="Upload Your Workout"
+          />
+        </div>
+      </div>
     );
   }
 
@@ -131,7 +159,19 @@ function RoomTemplate({
   if (stage === 'complete') {
     return (
       <div className="rpg-text room-content">
-        {loot && <p>You found {loot}!</p>}
+        {loot &&
+          (loot.includes('Map Piece') && mapMarker === "Mr. Watkins' Room"
+            ? (
+                <p>
+                  {narrationLines.languages.room1.foundItem.replace(
+                    '{item}',
+                    loot
+                  )}
+                </p>
+              )
+            : (
+                <p>You found {loot}!</p>
+              ))}
         <button
           onClick={() =>
             setGameState((prev) => ({
