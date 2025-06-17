@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import SignIn from "./components/SignIn";
+import LoginForm from "./components/LoginForm";
 import CharacterCreation from "./components/CharacterCreation";
 import IntroPhase from "./components/phases/IntroPhase";
 import WarmUpPhase from "./components/phases/WarmUpPhase";
@@ -48,7 +48,7 @@ const INITIAL_STATE = {
 };
 
 function App() {
-  const [signedIn, setSignedIn] = useState(false);
+  const [user, setUser] = useState(null);
   const [gameState, setGameState] = useState({ ...INITIAL_STATE });
   const [popupMessage, setPopupMessage] = useState(null);
   const [recentBadge, setRecentBadge] = useState(null);
@@ -77,7 +77,7 @@ function App() {
         } else {
           setPopupMessage('You missed the weekly workout target. Starting over.');
           setGameState({ ...INITIAL_STATE });
-          setSignedIn(false);
+          setUser(null);
         }
         week.start = now.toISOString();
         week.minutes = 0;
@@ -105,7 +105,7 @@ function App() {
   }, [gameState.badges]);
 
   useEffect(() => {
-    if (!signedIn || gameState.introStage === 0) {
+    if (!user || gameState.introStage === 0) {
       if (!ambientRef.current) {
         ambientRef.current = playSound('ambient', { loop: true, volume: 0.2 });
       }
@@ -113,17 +113,17 @@ function App() {
       stopSound(ambientRef.current);
       ambientRef.current = null;
     }
-  }, [signedIn, gameState.introStage]);
+  }, [user, gameState.introStage]);
 
   useEffect(() => {
     if (gameState.textToSpeech) {
       const el = document.querySelector('.rpg-text');
       if (el) speakText(el.innerText);
     }
-  }, [gameState.textToSpeech, gameState.introStage, gameState.currentRoom, gameState.showOverlay, signedIn]);
+  }, [gameState.textToSpeech, gameState.introStage, gameState.currentRoom, gameState.showOverlay, user]);
 
   const renderPhase = () => {
-    if (!signedIn) return <SignIn onSignIn={() => setSignedIn(true)} />;
+    if (!user) return <LoginForm onLogin={(u) => setUser(u)} />;
     if (!gameState.characterCreated)
       return <CharacterCreation gameState={gameState} setGameState={setGameState} />;
 
@@ -165,6 +165,7 @@ function App() {
             <Room1
               setGameState={setGameState}
               gameState={gameState}
+              userId={user?.uid}
             />
           );
         }
@@ -173,14 +174,19 @@ function App() {
             <Room2
               setGameState={setGameState}
               gameState={gameState}
+              userId={user?.uid}
             />
           );
         }
         if (gameState.currentRoom === "Mrs. Roche's Room") {
-          return <Room3Boss setGameState={setGameState} gameState={gameState} />;
+          return (
+            <Room3Boss setGameState={setGameState} gameState={gameState} userId={user?.uid} />
+          );
         }
         if (gameState.currentRoom === "Fitness Suite") {
-          return <FinalBossPhase setGameState={setGameState} gameState={gameState} />;
+          return (
+            <FinalBossPhase setGameState={setGameState} gameState={gameState} userId={user?.uid} />
+          );
         }
         break;
       case 7:
@@ -197,7 +203,7 @@ function App() {
 
   return (
     <div className={gameState.enhancedReading ? "enhanced-reading" : ""}>
-      {signedIn && gameState.characterCreated && (
+      {user && gameState.characterCreated && (
         <XPBar
           avatar={gameState.avatar}
           xp={gameState.xp}

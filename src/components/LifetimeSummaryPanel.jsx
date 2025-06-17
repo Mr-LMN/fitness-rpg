@@ -12,7 +12,7 @@ import "./styles/LifetimeSummary.css";
 
 import { fetchWorkoutSummary } from "../helpers/fetchWorkoutSummary";
 
-function LifetimeSummaryPanel({ userId = "test-user", username }) {
+function LifetimeSummaryPanel({ userId, username }) {
   const [summary, setSummary] = useState({
     totalWorkouts: 0,
     totalWeight: 0,

@@ -31,6 +31,7 @@ function RoomTemplate({
   mapMarker,
   gameState,
   setGameState,
+  userId,
   requiresWarmup = false,
   hasWorkout = false,
   hasScavenge = false,
@@ -238,7 +239,7 @@ function RoomTemplate({
             roomNumber={mapMarker}
             setGameState={setGameState}
             workoutFocus={workoutFocus || gameState.workoutFocus}
-            userId={gameState.studentName}
+            userId={userId}
             onComplete={handleWorkoutComplete}
             completeLabel="Upload Your Workout"
           />

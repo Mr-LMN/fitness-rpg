@@ -19,7 +19,7 @@ function SignIn({ onSignIn }) {
         <input placeholder="Password" type="password" />
         <button onClick={() => onSignIn(username)}>Sign In</button>
       </div>
-      <LifetimeSummaryPanel userId={username || "test-user"} username={username || "Player"} />
+      <LifetimeSummaryPanel userId={username} username={username || "Player"} />
       <Leaderboard />
     </div>
   );
