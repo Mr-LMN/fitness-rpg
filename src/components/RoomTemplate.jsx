@@ -31,7 +31,10 @@ function RoomTemplate({
   mapMarker,
   gameState,
   setGameState,
-  requiresWarmup,
+  requiresWarmup = false,
+  hasWorkout = false,
+  hasScavenge = false,
+  unlocksRoom = null,
 }) {
   const [stage, setStage] = useState('narration');
   const [loot, setLoot] = useState(null);
@@ -41,12 +44,16 @@ function RoomTemplate({
 
   const handleNarrationDone = () => {
     if (requiresWarmup && !warmupDone) setStage('warmup');
-    else setStage('workout');
+    else if (hasWorkout) setStage('workout');
+    else if (hasScavenge) setStage('scavenge');
+    else setStage('complete');
   };
 
   const handleWarmupComplete = () => {
     setWarmupDone(true);
-    setStage('workout');
+    if (hasWorkout) setStage('workout');
+    else if (hasScavenge) setStage('scavenge');
+    else setStage('complete');
   };
 
   const handleWorkoutComplete = () => {
@@ -54,7 +61,8 @@ function RoomTemplate({
       ...prev,
       xp: (prev.xp || 0) + 10,
     }));
-    if (quiz) setStage('quiz');
+    if (hasScavenge) setStage('scavenge');
+    else if (quiz) setStage('quiz');
     else if (boss) setStage('boss');
     else if (lootPool) setStage('loot');
     else setStage('complete');
@@ -76,6 +84,22 @@ function RoomTemplate({
       xp: (prev.xp || 0) + 20,
       completedRooms: [...(prev.completedRooms || []), mapMarker],
     }));
+    if (lootPool) setStage('loot');
+    else setStage('complete');
+  };
+
+  const handleScavengeComplete = () => {
+    const item = 'mysterious keycard';
+    setGameState((prev) => {
+      const updates = {
+        inventory: [...(prev.inventory || []), { item }],
+      };
+      if (unlocksRoom && !prev.visibleRooms.includes(unlocksRoom)) {
+        updates.visibleRooms = [...prev.visibleRooms, unlocksRoom];
+      }
+      return { ...prev, ...updates };
+    });
+    setLoot(item);
     if (lootPool) setStage('loot');
     else setStage('complete');
   };
@@ -156,6 +180,18 @@ function RoomTemplate({
     );
   }
 
+  if (stage === 'scavenge') {
+    const scavengeLines = narrationLines.languages.room1.scavenge || [];
+    return (
+      <div className="rpg-text room-content">
+        {scavengeLines.map((line, i) => (
+          <p key={i}>{line}</p>
+        ))}
+        <button onClick={handleScavengeComplete}>Investigate</button>
+      </div>
+    );
+  }
+
   if (stage === 'complete') {
     return (
       <div className="rpg-text room-content">
@@ -172,6 +208,9 @@ function RoomTemplate({
             : (
                 <p>You found {loot}!</p>
               ))}
+        {mapMarker === "Mr. Watkins' Room" && (
+          <p>{narrationLines.languages.room1.rest}</p>
+        )}
         <button
           onClick={() =>
             setGameState((prev) => ({

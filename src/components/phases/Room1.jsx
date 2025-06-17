@@ -1,14 +1,18 @@
 import React from "react";
 import RoomTemplate from "../RoomTemplate";
-import lootTable from "../../data/lootTable";
+import roomData from "../../data/roomData";
 
 function Room1(props) {
+  const config = roomData.mrWatkins;
   return (
     <RoomTemplate
       {...props}
       narrationKey="languages.room1.intro"
-      lootPool={lootTable.languages.room1}
-      mapMarker="Mr. Watkins' Room"
+      mapMarker={config.id}
+      requiresWarmup={config.requiresWarmup}
+      hasWorkout={config.hasWorkout}
+      hasScavenge={config.hasScavenge}
+      unlocksRoom={config.unlocksRoom}
     />
   );
 }
