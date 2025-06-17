@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
 import { playSound } from "../../utils";
+import narrationLines from "../../data/narrationLines";
 
 function WarmUpPhase({ setGameState }) {
   useEffect(() => {
@@ -16,11 +17,9 @@ function WarmUpPhase({ setGameState }) {
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2>🔥 Warm-Up</h2>
-        <p>
-          Your muscles ache. You shuffle across the room, rubbing your arms. You spot a dusty
-          rowing machine still plugged in.
-        </p>
-        <p>🏃 To raise your heart rate, complete a 500m row.</p>
+        {narrationLines.warmupIntro.map((line, idx) => (
+          <p key={idx}>{line}</p>
+        ))}
         <button onClick={() => setGameState((prev) => ({ ...prev, introStage: 2 }))}>
           Row Complete
         </button>
