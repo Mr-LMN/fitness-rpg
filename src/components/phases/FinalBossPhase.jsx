@@ -34,6 +34,16 @@ function FinalBossPhase({ setGameState }) {
       xp: (prev.xp || 0) + 50,
       bossDefeated: true,
       victory: true,
+      inventory: [
+        ...(prev.inventory || []),
+        {
+          id: 'map_piece_2',
+          name: 'Map Piece #2 (Maths Department)',
+          rarity: 'rare',
+          description: 'A scrap leading to the Maths Department.',
+          isNew: true,
+        },
+      ],
       badges: [
         ...prev.badges,
         ...(prev.badges.includes("bossVanquisher") ? [] : ["bossVanquisher"]),
@@ -91,12 +101,18 @@ function FinalBossPhase({ setGameState }) {
       )}
 
         {battleFinished && (
-          <div className="victory-summary">
-            <h3>🎉 Victory Achieved!</h3>
-          <p>Mutated Mrs. Roche collapses in defeat, the air clearing as silence returns.</p>
-          <p>You completed <strong>Operation Slamstorm</strong> in <strong>{timer} seconds</strong>.</p>
-          <p>Your heroic effort has been immortalized on the school leaderboard.</p>
-          </div>
+          <>
+            <div className="victory-summary">
+              <h3>🎉 Victory Achieved!</h3>
+            <p>Mutated Mrs. Roche collapses in defeat, the air clearing as silence returns.</p>
+            <p>You completed <strong>Operation Slamstorm</strong> in <strong>{timer} seconds</strong>.</p>
+            <p>Your heroic effort has been immortalized on the school leaderboard.</p>
+            </div>
+            <p>
+              You’ve finished scavenging and discovered{' '}
+              <span className="rarity-rare loot-new">Map Piece #2 (Maths Department)</span>. It’s been added to your backpack for later use.
+            </p>
+          </>
         )}
         </div>
       </div>

@@ -4,7 +4,7 @@ import "./styles/BadgeCase.css";
 
 const baseUrl = import.meta.env.BASE_URL || "/";
 
-const badgeDefinitions = {
+export const badgeDefinitions = {
   workoutStarter: {
     icon: <GiBookmarklet />,
     image: `${baseUrl}Badges/FirstWorkout_Badge.png`,

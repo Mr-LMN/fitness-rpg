@@ -22,6 +22,10 @@
 
 .inventory-item {
   margin-bottom: 12px;
+  padding: 8px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  position: relative;
 }
 
 .item-name {
@@ -37,4 +41,47 @@
 .item-desc {
   font-size: 0.9em;
   margin: 2px 0 4px;
+}
+
+.rarity-common {
+  color: #b0b0b0;
+  border-color: #777;
+}
+
+.rarity-uncommon {
+  color: #2ecc71;
+  border-color: #2ecc71;
+}
+
+.rarity-rare {
+  color: #3498db;
+  border-color: #3498db;
+}
+
+.rarity-legendary {
+  color: #e67e22;
+  font-weight: bold;
+  border-color: #e67e22;
+}
+
+.inventory-item.new::after {
+  content: 'NEW';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #e67e22;
+  color: #fff;
+  font-size: 0.7em;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.loot-new {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }

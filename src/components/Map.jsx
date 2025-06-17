@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BadgeCase from "./BadgeCase";
+import { GiBackpack } from "react-icons/gi";
+import InventoryModal from "./InventoryModal";
 import "./styles/Map.css";
 
 const allRooms = [
@@ -20,6 +22,7 @@ function Map({ gameState, setGameState }) {
 
   const [dynamicRooms, setDynamicRooms] = useState([]);
   const [showBadges, setShowBadges] = useState(false);
+  const [showInventory, setShowInventory] = useState(false);
 
   useEffect(() => {
     const updatedRooms = allRooms.map((room) => {
@@ -41,6 +44,23 @@ function Map({ gameState, setGameState }) {
         showOverlay: true,
       }));
     }
+  };
+
+  const handleUseItem = (id) => {
+    setGameState((prev) => ({
+      ...prev,
+      inventory: prev.inventory.map((it) =>
+        it.id === id ? { ...it, used: true } : it
+      ),
+    }));
+  };
+
+  const handleCloseInventory = () => {
+    setShowInventory(false);
+    setGameState((prev) => ({
+      ...prev,
+      inventory: prev.inventory.map((it) => ({ ...it, isNew: false })),
+    }));
   };
 
   return (
@@ -74,8 +94,22 @@ function Map({ gameState, setGameState }) {
       <button className="badge-button" onClick={() => setShowBadges(true)}>
         View Badges
       </button>
+      <button
+        className="inventory-button"
+        aria-label="Open Inventory"
+        onClick={() => setShowInventory(true)}
+      >
+        <GiBackpack />
+      </button>
       {showBadges && (
         <BadgeCase badges={gameState.badges} onClose={() => setShowBadges(false)} />
+      )}
+      {showInventory && (
+        <InventoryModal
+          items={gameState.inventory}
+          onUse={handleUseItem}
+          onClose={handleCloseInventory}
+        />
       )}
     </div>
   );
