@@ -13,6 +13,13 @@ export const roomData = {
     hasScavenge: false,
     unlocksRoom: "Mrs. Roche's Room",
   },
+  mrsRoche: {
+    id: "Mrs. Roche's Room",
+    requiresWarmup: true,
+    hasWorkout: true,
+    hasScavenge: false,
+    unlocksRoom: "Fitness Suite",
+  },
 };
 
 export default roomData;
