@@ -8,6 +8,8 @@ import WarmupDisplay from './WarmupDisplay';
 import SafeQuizEvent from './events/SafeQuizEvent';
 import { getRandomLoot } from '../data/lootTable';
 import FitnessSuite from './phases/FitnessSuite';
+import ParallaxDust from './ParallaxDust';
+import './styles/RoomScene.css';
 
 const roomImages = {
   "Mr. Watkins' Room": '/Mr_WatkinsRoom.png',
@@ -44,6 +46,7 @@ function getLinesByKey(key) {
   const [failureExercise, setFailureExercise] = useState(null);
   const [warmupDone, setWarmupDone] = useState(!requiresWarmup);
   const [warmupFocus, setWarmupFocus] = useState(gameState.workoutFocus || 'legs');
+  const img = roomImages[mapMarker];
 
   const lines = Array.isArray(narrationKey)
     ? narrationKey
@@ -218,36 +221,47 @@ function getLinesByKey(key) {
 
   if (stage === 'warmupPrompt') {
     return (
-      <div className="rpg-text room-content">
-        <p>Log your workout. Would you like a pre-built warm up before starting?</p>
-        <button onClick={() => handleWarmupDecision(true)}>Yes</button>
-        <button onClick={() => handleWarmupDecision(false)}>No</button>
+      <div className="room-container">
+        {img && <img src={img} alt={mapMarker} className="scene-image" />}
+        <ParallaxDust />
+        <div className="room-content rpg-text">
+          <p>Log your workout. Would you like a pre-built warm up before starting?</p>
+          <button onClick={() => handleWarmupDecision(true)}>Yes</button>
+          <button onClick={() => handleWarmupDecision(false)}>No</button>
+        </div>
       </div>
     );
   }
 
   if (stage === 'warmupSelect') {
     return (
-      <div className="rpg-text room-content">
-        <p>What are you training? Legs, Upper Body or Both?</p>
-        <button onClick={() => handleFocusSelect('legs')}>Legs</button>
-        <button onClick={() => handleFocusSelect('upperBody')}>Upper Body</button>
-        <button onClick={() => handleFocusSelect('full')}>Both</button>
+      <div className="room-container">
+        {img && <img src={img} alt={mapMarker} className="scene-image" />}
+        <ParallaxDust />
+        <div className="room-content rpg-text">
+          <p>What are you training? Legs, Upper Body or Both?</p>
+          <button onClick={() => handleFocusSelect('legs')}>Legs</button>
+          <button onClick={() => handleFocusSelect('upperBody')}>Upper Body</button>
+          <button onClick={() => handleFocusSelect('full')}>Both</button>
+        </div>
       </div>
     );
   }
 
   if (stage === 'warmup') {
     return (
-      <WarmupDisplay
-        focus={warmupFocus}
-        onComplete={handleWarmupComplete}
-      />
+      <div className="room-container">
+        {img && <img src={img} alt={mapMarker} className="scene-image" />}
+        <ParallaxDust />
+        <WarmupDisplay
+          focus={warmupFocus}
+          onComplete={handleWarmupComplete}
+        />
+      </div>
     );
   }
 
   if (stage === 'workout') {
-    const img = roomImages[mapMarker];
     return (
       <div className="room-container">
         {img && <img src={img} alt={mapMarker} className="scene-image" />}
@@ -313,9 +327,13 @@ function getLinesByKey(key) {
 
   if (stage === 'safePenalty') {
     return (
-      <div className="rpg-text room-content">
-        <p>To force the safe open, complete {failureExercise}.</p>
-        <button onClick={handlePenaltyDone}>I've done it</button>
+      <div className="room-container">
+        {img && <img src={img} alt={mapMarker} className="scene-image" />}
+        <ParallaxDust />
+        <div className="room-content rpg-text">
+          <p>To force the safe open, complete {failureExercise}.</p>
+          <button onClick={handlePenaltyDone}>I've done it</button>
+        </div>
       </div>
     );
   }
@@ -326,9 +344,13 @@ function getLinesByKey(key) {
 
   if (stage === 'loot') {
     return (
-      <div className="rpg-text room-content">
-        <p>You search the room...</p>
-        <button onClick={handleLoot}>See what you find</button>
+      <div className="room-container">
+        {img && <img src={img} alt={mapMarker} className="scene-image" />}
+        <ParallaxDust />
+        <div className="room-content rpg-text">
+          <p>You search the room...</p>
+          <button onClick={handleLoot}>See what you find</button>
+        </div>
       </div>
     );
   }
@@ -336,50 +358,58 @@ function getLinesByKey(key) {
   if (stage === 'scavenge') {
     const scavengeLines = narrationLines.languages.room1.scavenge || [];
     return (
-      <div className="rpg-text room-content">
-        {scavengeLines.map((line, i) => (
-          <p key={i}>{line}</p>
-        ))}
-        <button onClick={handleScavengeComplete}>Investigate</button>
+      <div className="room-container">
+        {img && <img src={img} alt={mapMarker} className="scene-image" />}
+        <ParallaxDust />
+        <div className="room-content rpg-text">
+          {scavengeLines.map((line, i) => (
+            <p key={i}>{line}</p>
+          ))}
+          <button onClick={handleScavengeComplete}>Investigate</button>
+        </div>
       </div>
     );
   }
 
   if (stage === 'complete') {
     return (
-      <div className="rpg-text room-content">
-        {loot && (
-          <p>
-            You have finished scavenging for supplies and found{' '}
-            <span className={`rarity-${loot.rarity} loot-new`}>{loot.name}</span>! This has
-            been added to your backpack for later use.
-          </p>
-        )}
-        {loot &&
-          loot.name.includes('Map Piece') &&
-          mapMarker === "Mr. Watkins' Room" && (
+      <div className="room-container">
+        {img && <img src={img} alt={mapMarker} className="scene-image" />}
+        <ParallaxDust />
+        <div className="room-content rpg-text">
+          {loot && (
             <p>
-              {narrationLines.languages.room1.foundItem.replace(
-                '{item}',
-                loot.name
-              )}
+              You have finished scavenging for supplies and found{' '}
+              <span className={`rarity-${loot.rarity} loot-new`}>{loot.name}</span>! This has
+              been added to your backpack for later use.
             </p>
           )}
-        {mapMarker === "Mr. Watkins' Room" && (
-          <p>{narrationLines.languages.room1.rest}</p>
-        )}
-        <button
-          onClick={() =>
-            setGameState((prev) => ({
-              ...prev,
-              currentRoom: null,
-              introStage: 5,
-              showOverlay: true,
-            }))
-          }
-        >
-          Return to Map
-        </button>
+          {loot &&
+            loot.name.includes('Map Piece') &&
+            mapMarker === "Mr. Watkins' Room" && (
+              <p>
+                {narrationLines.languages.room1.foundItem.replace(
+                  '{item}',
+                  loot.name
+                )}
+              </p>
+            )}
+          {mapMarker === "Mr. Watkins' Room" && (
+            <p>{narrationLines.languages.room1.rest}</p>
+          )}
+          <button
+            onClick={() =>
+              setGameState((prev) => ({
+                ...prev,
+                currentRoom: null,
+                introStage: 5,
+                showOverlay: true,
+              }))
+            }
+          >
+            Return to Map
+          </button>
+        </div>
       </div>
     );
   }
