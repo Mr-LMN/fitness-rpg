@@ -15,6 +15,30 @@ The goal of this project is to combine a simple RPG style narrative with fitness
 
 To create a production build, run `npm run build` and serve the resulting `dist` directory with your preferred static server.
 
+### Deploying to Firebase Hosting
+
+1. Install the [Firebase CLI](https://firebase.google.com/docs/cli) globally and log in:
+
+   ```bash
+   npm install -g firebase-tools
+   firebase login
+   ```
+
+2. Initialize Firebase in the project directory:
+
+   ```bash
+   firebase init
+   ```
+
+   When prompted for the hosting setup, **set `dist` as the public directory** and enable single-page app rewriting.
+
+3. Build the project and deploy:
+
+   ```bash
+   npm run build
+   firebase deploy
+   ```
+
 ### Voice Over Generation (optional)
 
 This project can play voice over audio generated with [Bark](https://github.com/suno-ai/bark). To enable this:
