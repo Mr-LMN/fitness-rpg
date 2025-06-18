@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "fitness-rpg-pencoedtre"
-  }
+  },
+  "targets": {
+    "fitness-rpg-pencoedtre": {
+      "hosting": {
+        "projectphs": [
+          "fitness-rpg-pencoedtre"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
