@@ -19,6 +19,7 @@ function WorkoutLogger({
   setGameState,
   workoutFocus,
   userId,
+  yearGroup,
   onComplete,
   completeLabel = "Continue",
 }) {
@@ -125,9 +126,11 @@ function WorkoutLogger({
   const saveWorkoutToFirestore = async (workoutData) => {
     try {
       console.log("Saving workout for:", userId, workoutData);
-      await addDoc(collection(db, "students", userId, "workouts"), {
+      await addDoc(collection(db, "workouts"), {
+        userId,
+        yearGroup,
         ...workoutData,
-        createdAt: serverTimestamp(),
+        timestamp: serverTimestamp(),
       });
       console.log("✅ Workout successfully logged in Firestore");
     } catch (error) {

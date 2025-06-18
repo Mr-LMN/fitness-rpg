@@ -110,3 +110,19 @@ button:disabled {
   opacity: 0.75;
 }
 
+/* Small speaker button used in narration lines */
+.tts-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tts-play {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1em;
+  padding: 0 2px;
+}
+
