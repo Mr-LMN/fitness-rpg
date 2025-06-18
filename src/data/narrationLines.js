@@ -67,6 +67,11 @@ const narrationLines = {
     },
     rocheBoss: {
       leadIn: ["Everything seems normal. You take a breath and prepare to log your workout."],
+      quizIntro: [
+        "A shadowy figure rises from behind the desk and shambles toward you.",
+        "You sprint for the exit, but the door slams shut—six heavy locks click into place.",
+        "Answer every question to release the locks!",
+      ],
       battleStart: "⚠️ An alarm blares. The door slams shut. Six glowing locks appear. You're trapped.",
     },
   },

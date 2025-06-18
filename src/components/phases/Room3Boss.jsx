@@ -10,6 +10,7 @@ function Room3Boss(props) {
     <RoomTemplate
       {...props}
       narrationKey="languages.rocheBoss.leadIn"
+      quizIntroKey="languages.rocheBoss.quizIntro"
       quiz={quizPool.languages.rocheBoss}
       boss={bossData.languages.roche}
       mapMarker={config.id}
