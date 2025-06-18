@@ -124,6 +124,7 @@ function WorkoutLogger({
 
   const saveWorkoutToFirestore = async (workoutData) => {
     try {
+      console.log("Saving workout for:", userId, workoutData);
       await addDoc(collection(db, "students", userId, "workouts"), {
         ...workoutData,
         createdAt: serverTimestamp(),
