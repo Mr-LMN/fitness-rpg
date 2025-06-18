@@ -3,12 +3,14 @@ import styles from './ScrollingNarrationBox.module.css';
 
 function ScrollingNarrationBox({ lines = [], enhancedMode = false, onComplete }) {
   const [index, setIndex] = useState(0);
+  const [finished, setFinished] = useState(false);
 
   const nextLine = useCallback(() => {
     setIndex((prev) => {
       const newIndex = prev + 1;
       if (newIndex >= lines.length) {
         if (onComplete) onComplete();
+        setFinished(true);
         return prev; // stay on last line
       }
       return newIndex;
@@ -17,20 +19,32 @@ function ScrollingNarrationBox({ lines = [], enhancedMode = false, onComplete })
 
   useEffect(() => {
     const handler = (e) => {
-      if (e.code === 'Space' || e.code === 'Enter') {
+      if ((e.code === 'Space' || e.code === 'Enter') && !finished) {
         e.preventDefault();
         nextLine();
       }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [nextLine]);
+  }, [nextLine, finished]);
 
-  const speak = () => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      const utter = new SpeechSynthesisUtterance(lines[index]);
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utter);
+  const speak = async () => {
+    try {
+      const resp = await fetch('/speak', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: lines[index] }),
+      });
+      const blob = await resp.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.play();
+    } catch (err) {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        const utter = new SpeechSynthesisUtterance(lines[index]);
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utter);
+      }
     }
   };
 
@@ -40,7 +54,7 @@ function ScrollingNarrationBox({ lines = [], enhancedMode = false, onComplete })
       role="dialog"
     >
       <div className={styles.lineContainer}>
-        <p className={styles.line} aria-live="polite">
+        <p key={index} className={styles.line} aria-live="polite">
           {lines[index]}
         </p>
         {enhancedMode && (
@@ -55,10 +69,11 @@ function ScrollingNarrationBox({ lines = [], enhancedMode = false, onComplete })
       </div>
       <button
         onClick={nextLine}
+        disabled={finished}
         className={styles.continueButton}
         aria-label="Continue"
       >
-        Continue
+        {finished ? 'Done' : 'Continue'}
       </button>
     </div>
   );
