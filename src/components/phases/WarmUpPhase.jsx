@@ -27,20 +27,8 @@ function WarmUpPhase({ setGameState }) {
           {narrationLines.general.warmupIntro.map((line, idx) => (
             <p key={idx}>{line}</p>
           ))}
-          <button onClick={() => setStage('prompt')}>Continue</button>
+          <button onClick={() => setStage('select')}>Continue</button>
         </div>
-      </div>
-    );
-  }
-
-  if (stage === 'prompt') {
-    return (
-      <div className="rpg-text room-content">
-        <p>Would you like a guided RAMP warm up?</p>
-        <button onClick={() => setStage('select')}>Yes</button>
-        <button onClick={() => setGameState((prev) => ({ ...prev, introStage: 2 }))}>
-          Skip
-        </button>
       </div>
     );
   }
