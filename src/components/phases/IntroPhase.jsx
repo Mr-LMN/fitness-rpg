@@ -3,7 +3,7 @@ import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
 import { playVoice, playSound } from "../../utils";
 import narrationLines from "../../data/narrationLines";
-import TTSLine from "../TTSLine";
+import ScrollingNarrationBox from "../ScrollingNarrationBox";
 
 function IntroPhase({ setGameState }) {
   useEffect(() => {
@@ -15,15 +15,13 @@ function IntroPhase({ setGameState }) {
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2>🧊 Locked In</h2>
-        {narrationLines.general.introPhase.map((line, idx) => (
-          <TTSLine key={idx} text={line} />
-        ))}
-        <button onClick={() => {
-          playSound('footsteps');
-          setGameState((prev) => ({ ...prev, introStage: 1 }));
-        }}>
-          Get Moving
-        </button>
+        <ScrollingNarrationBox
+          lines={narrationLines.general.introPhase}
+          onComplete={() => {
+            playSound("footsteps");
+            setGameState((prev) => ({ ...prev, introStage: 1 }));
+          }}
+        />
       </div>
     </div>
   );

@@ -61,6 +61,7 @@ export async function speakText(text) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, voice: 'en-GB-Wavenet-D' }),
     });
+    if (!response.ok) throw new Error('TTS request failed');
 
     // Try handling both raw blobs and JSON { audioContent }
     const contentType = response.headers.get('Content-Type') || '';

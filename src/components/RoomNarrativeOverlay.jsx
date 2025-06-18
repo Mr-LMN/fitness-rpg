@@ -3,7 +3,7 @@ import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi"
 import "./styles/Overlay.css";
 import { playSound } from "../utils";
 import narrationLines from "../data/narrationLines";
-import TTSLine from "./TTSLine";
+import ScrollingNarrationBox from "./ScrollingNarrationBox";
 
 const avatarIcons = {
   pirate: <GiPirateCaptain />,
@@ -47,17 +47,13 @@ function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
           />
         )}
         {avatar && <div className="overlay-avatar">{avatarIcons[avatar]}</div>}
-        {lines.map((line, index) => (
-          <TTSLine key={index} text={line} />
-        ))}
-        <button
-          onClick={() => {
+        <ScrollingNarrationBox
+          lines={lines}
+          onComplete={() => {
             playSound('creakingDoor');
             onContinue();
           }}
-        >
-          Continue
-        </button>
+        />
       </div>
     </div>
   );
