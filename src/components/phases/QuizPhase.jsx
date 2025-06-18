@@ -183,7 +183,12 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
       <div className="quiz-container">
         <h2>🎉 Quiz Complete</h2>
         <p>You answered {correctAnswers} out of {totalQuestions} correctly.</p>
-        <p>The monster suddenly barges the door. You notice the bolt loosen slightly.</p>
+        {finalWrong && (
+          <p>
+            A mutated figure charges at you! You dive aside as it smashes the
+            door open.
+          </p>
+        )}
         <button onClick={() => onComplete(correctAnswers, totalQuestions)}>Continue</button>
       </div>
     );
