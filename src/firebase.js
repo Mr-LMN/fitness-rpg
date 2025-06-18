@@ -4,12 +4,12 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBI5P4HiwnMBZhQh5V2KOn-0_21-qRkDdc",
-  authDomain: "fitness-rpg-pencoedtre.firebaseapp.com",
-  projectId: "fitness-rpg-pencoedtre",
-  storageBucket: "fitness-rpg-pencoedtre.firebasestorage.app",
-  messagingSenderId: "255197443274",
-  appId: "1:255197443274:web:212a893767d6f55f25f033",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
