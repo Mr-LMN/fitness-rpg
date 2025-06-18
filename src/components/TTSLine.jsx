@@ -9,10 +9,14 @@ function TTSLine({ text, autoRead }) {
   }, [text, autoRead]);
 
   return (
-    <p>
-      {text}{' '}
-      <button onClick={() => speakText(text)} aria-label="Play voice">
-        🔊 Play Voice
+    <p className="tts-line">
+      {text}
+      <button
+        onClick={() => speakText(text)}
+        aria-label="Play narration"
+        className="tts-play"
+      >
+        🔊
       </button>
     </p>
   );
