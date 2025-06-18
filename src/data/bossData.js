@@ -4,16 +4,16 @@ export const bossData = {
       name: 'Mutated Mrs Roche',
       phases: [
         {
-          title: 'Ruler Slash',
-          description: 'Dive aside from the sweeping blow.',
-          reps: 12,
-          exercise: 'Burpees',
+          title: 'Ground Stomp',
+          description: 'Jump onto the desk to avoid the shockwave.',
+          reps: 15,
+          exercise: 'Burpee Box Jumps',
         },
         {
-          title: 'Frantic Swipes',
-          description: 'Hop quickly to avoid the flurry.',
+          title: 'Whipping Spiral',
+          description: 'Leap laterally to dodge the tail.',
           reps: 20,
-          exercise: 'Side Bunny Hops',
+          exercise: 'Lateral Bunny Hops',
         },
       ],
     },
