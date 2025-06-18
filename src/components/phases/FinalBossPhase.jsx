@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ParallaxDust from "../ParallaxDust";
 import BlazePods from "../BlazePods";
 import { playSound, updateLifetimeSummary, logWorkoutMinutes } from "../../utils";
+import TTSLine from "../TTSLine";
 import "../styles/RoomScene.css";
 
 function FinalBossPhase({ setGameState }) {
@@ -79,12 +80,8 @@ function FinalBossPhase({ setGameState }) {
 
       {!battleStarted && (
         <>
-          <p>
-            You've successfully avoided Mrs. Roche's monstrous attacks. She stumbles, exhausted, her mutated form steaming in the cold air.
-          </p>
-          <p>
-            Now's your chance. Finish her with one final powerful Slam Ball to end the nightmare. Begin your final workout now!
-          </p>
+          <TTSLine text="You've successfully avoided Mrs. Roche's monstrous attacks. She stumbles, exhausted, her mutated form steaming in the cold air." />
+          <TTSLine text="Now's your chance. Finish her with one final powerful Slam Ball to end the nightmare. Begin your final workout now!" />
           <button onClick={handleStart} className="start-btn">
             Start Boss Battle
           </button>
@@ -93,7 +90,7 @@ function FinalBossPhase({ setGameState }) {
 
       {battleStarted && !battleFinished && (
         <>
-          <p>⏱️ Time Elapsed: <strong>{timer}s</strong></p>
+          <TTSLine text={`⏱️ Time Elapsed: ${timer}s`} />
           <button onClick={handleFinish} className="finish-btn">
             Finish Workout
           </button>
@@ -104,14 +101,11 @@ function FinalBossPhase({ setGameState }) {
           <>
             <div className="victory-summary">
               <h3>🎉 Victory Achieved!</h3>
-            <p>Mutated Mrs. Roche collapses in defeat, the air clearing as silence returns.</p>
-            <p>You completed <strong>Operation Slamstorm</strong> in <strong>{timer} seconds</strong>.</p>
-            <p>Your heroic effort has been immortalized on the school leaderboard.</p>
+            <TTSLine text="Mutated Mrs. Roche collapses in defeat, the air clearing as silence returns." />
+            <TTSLine text={`You completed Operation Slamstorm in ${timer} seconds.`} />
+            <TTSLine text="Your heroic effort has been immortalized on the school leaderboard." />
             </div>
-            <p>
-              You’ve finished scavenging and discovered{' '}
-              <span className="rarity-rare loot-new">Map Piece #2 (Maths Department)</span>. It’s been added to your backpack for later use.
-            </p>
+            <TTSLine text="You’ve finished scavenging and discovered Map Piece #2 (Maths Department). It’s been added to your backpack for later use." />
           </>
         )}
         </div>

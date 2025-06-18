@@ -3,6 +3,7 @@ import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi"
 import "./styles/Overlay.css";
 import { playSound } from "../utils";
 import narrationLines from "../data/narrationLines";
+import TTSLine from "./TTSLine";
 
 const avatarIcons = {
   pirate: <GiPirateCaptain />,
@@ -47,7 +48,7 @@ function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
         )}
         {avatar && <div className="overlay-avatar">{avatarIcons[avatar]}</div>}
         {lines.map((line, index) => (
-          <p key={index}>{line}</p>
+          <TTSLine key={index} text={line} />
         ))}
         <button
           onClick={() => {

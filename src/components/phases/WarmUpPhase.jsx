@@ -3,6 +3,7 @@ import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
 import { playSound } from "../../utils";
 import narrationLines from "../../data/narrationLines";
+import TTSLine from "../TTSLine";
 
 function WarmUpPhase({ setGameState }) {
   useEffect(() => {
@@ -19,7 +20,7 @@ function WarmUpPhase({ setGameState }) {
       <div className="room-content rpg-text">
         <h2>🔥 Warm-Up</h2>
         {narrationLines.general.warmupIntro.map((line, idx) => (
-          <p key={idx}>{line}</p>
+          <TTSLine key={idx} text={line} />
         ))}
         <button onClick={() => setGameState((prev) => ({ ...prev, introStage: 2 }))}>
           I've rowed 500m

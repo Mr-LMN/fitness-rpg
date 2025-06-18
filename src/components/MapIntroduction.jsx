@@ -3,6 +3,7 @@ import ParallaxDust from "./ParallaxDust";
 import "./styles/RoomScene.css";
 import { playSound } from "../utils";
 import narrationLines from "../data/narrationLines";
+import TTSLine from "./TTSLine";
 
 function MapIntroduction({ setGameState }) {
   const handleViewMap = () => {
@@ -30,7 +31,7 @@ function MapIntroduction({ setGameState }) {
       <div className="room-content rpg-text">
         <h2>🎒 A New Beginning</h2>
         {narrationLines.general.mapIntroduction.map((line, idx) => (
-          <p key={idx}>{line}</p>
+          <TTSLine key={idx} text={line} />
         ))}
         <button onClick={handleViewMap}>View Map and Begin Exploring</button>
       </div>
