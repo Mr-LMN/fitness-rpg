@@ -111,6 +111,20 @@ available. The voice defaults to a male British accent at a slower rate,
 providing a clear, serious delivery for players who struggle with reading or
 who are visually impaired.
 
+### Firebase Configuration
+
+Create a `.env` file (or copy `.env.example`) with the following variables set
+to your Firebase project details:
+
+```bash
+VITE_FIREBASE_API_KEY=<your-api-key>
+VITE_FIREBASE_AUTH_DOMAIN=<your-auth-domain>
+VITE_FIREBASE_PROJECT_ID=<your-project-id>
+VITE_FIREBASE_STORAGE_BUCKET=<your-storage-bucket>
+VITE_FIREBASE_MESSAGING_SENDER_ID=<your-sender-id>
+VITE_FIREBASE_APP_ID=<your-app-id>
+```
+
 ## Character Creation
 
 When creating your hero you must choose a workout focus of **cardio** or **strength**. Selecting cardio adjusts the logger to track duration and distance, while strength tracks sets, reps and weight. The default cardio exercise suggestions are the machines available in the gym and are defined in [`src/data/cardioExercises.js`](src/data/cardioExercises.js). Strength exercises are organised under the categories **Core**, **Legs**, **Chest**, **Back**, **Arms** and **Functional**.
