@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { playSound, updateLifetimeSummary, logWorkoutMinutes } from "../utils";
+import {
+  playSound,
+  updateLifetimeSummary,
+  logWorkoutMinutes,
+  getUserWeight,
+  parseWeightInput,
+  formatWeightDisplay,
+} from "../utils";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import SessionSummaryModal from "./SessionSummaryModal";
@@ -28,29 +35,38 @@ function WorkoutLogger({
   const [workoutLog, setWorkoutLog] = useState([]);
   const [showSummary, setShowSummary] = useState(false);
   const [summaryData, setSummaryData] = useState(null);
+  const userWeight = getUserWeight();
 
   const handleAddExercise = () => {
     if (cardioMode) {
       if (exerciseInput.name && exerciseInput.duration && exerciseInput.distance) {
         setWorkoutLog([
           ...workoutLog,
-          { ...exerciseInput, type: "Cardio", category: "Cardio" },
+          { ...exerciseInput, type: "Cardio", category: "Cardio", numericWeight: 0 },
         ]);
         setExerciseInput({ name: "", duration: "", distance: "" });
       }
     } else {
       if (exerciseInput.name && exerciseInput.sets && exerciseInput.reps && exerciseInput.weight) {
-        setWorkoutLog([...workoutLog, exerciseInput]);
+        const numericWeight = parseWeightInput(exerciseInput.weight, userWeight);
+        const displayWeight = formatWeightDisplay(exerciseInput.weight);
+        setWorkoutLog([
+          ...workoutLog,
+          { ...exerciseInput, weight: displayWeight, numericWeight },
+        ]);
         setExerciseInput({ name: "", sets: "", reps: "", weight: "" });
       }
     }
   };
 
   const handleFinishWorkout = () => {
-    const totalWeight = workoutLog.reduce(
-      (sum, w) => sum + ((parseFloat(w.sets) || 0) * (parseFloat(w.reps) || 0) * (parseFloat(w.weight) || 0)),
-      0
-    );
+    const totalWeight = workoutLog.reduce((sum, w) => {
+      const weight =
+        w.numericWeight !== undefined
+          ? w.numericWeight
+          : parseWeightInput(w.weight, userWeight);
+      return sum + (parseFloat(w.sets) || 0) * (parseFloat(w.reps) || 0) * weight;
+    }, 0);
     const distance = workoutLog.reduce((sum, w) => sum + (parseFloat(w.distance) || 0), 0);
     const calories = Math.round(distance * 60 + totalWeight * 0.1);
     const minutes = workoutLog.reduce((sum, w) => {
