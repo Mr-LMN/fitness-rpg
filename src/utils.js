@@ -150,6 +150,30 @@ export function setUserWeight(weight) {
   localStorage.setItem('lifetimeSummary', JSON.stringify(data));
 }
 
+export function getUserWeight() {
+  const data = JSON.parse(localStorage.getItem('lifetimeSummary') || '{}');
+  return +(data.weight || 50);
+}
+
+export function parseWeightInput(input, userWeight) {
+  if (!input && input !== 0) return 0;
+  const str = String(input).trim();
+  if (/^bw$/i.test(str) || str === '0') return userWeight;
+  const bwMatch = str.match(/^bw\s*\+\s*([0-9]+(?:\.[0-9]+)?)$/i);
+  if (bwMatch) return userWeight + parseFloat(bwMatch[1]);
+  const n = parseFloat(str);
+  return isNaN(n) ? 0 : n;
+}
+
+export function formatWeightDisplay(input) {
+  if (input === null || input === undefined) return '';
+  const str = String(input).trim();
+  if (/^bw$/i.test(str) || str === '0') return 'Bodyweight';
+  const bwMatch = str.match(/^bw\s*\+\s*([0-9]+(?:\.[0-9]+)?)$/i);
+  if (bwMatch) return `Bodyweight + ${bwMatch[1]}kg`;
+  return /kg$/i.test(str) ? str : `${str}kg`;
+}
+
 export function logWorkoutMinutes(minutes) {
   const now = new Date();
   const week = JSON.parse(localStorage.getItem('weekData') || '{}');
