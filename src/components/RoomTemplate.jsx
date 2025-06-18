@@ -272,6 +272,7 @@ function getLinesByKey(key) {
             setGameState={setGameState}
             workoutFocus={workoutFocus || gameState.workoutFocus}
             userId={userId}
+            yearGroup={gameState.yearGroup}
             onComplete={handleWorkoutComplete}
             completeLabel="Upload Your Workout"
           />
