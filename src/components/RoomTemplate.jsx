@@ -7,6 +7,7 @@ import BossFightPhase from './phases/BossFightPhase';
 import WarmupDisplay from './WarmupDisplay';
 import SafeQuizEvent from './events/SafeQuizEvent';
 import { getRandomLoot } from '../data/lootTable';
+import FitnessSuite from './phases/FitnessSuite';
 
 const roomImages = {
   "Mr. Watkins' Room": '/Mr_WatkinsRoom.png',
@@ -100,7 +101,9 @@ function getLinesByKey(key) {
       ...prev,
       xp: (prev.xp || 0) + correct * 5,
     }));
-    if (boss) setStage('boss');
+    if (mapMarker === "Mrs. Roche's Room") {
+      setStage('fitnessPrep');
+    } else if (boss) setStage('boss');
     else if (lootPool) setStage('loot');
     else setStage('complete');
   };
@@ -302,6 +305,10 @@ function getLinesByKey(key) {
         showImpossibleFinal={mapMarker === "Mrs. Roche's Room"}
       />
     );
+  }
+
+  if (stage === 'fitnessPrep') {
+    return <FitnessSuite setGameState={setGameState} />;
   }
 
   if (stage === 'safePenalty') {
