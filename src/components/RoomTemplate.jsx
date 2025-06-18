@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import narrationLines from '../data/narrationLines';
 import NarrationManager from './NarrationManager';
 import WorkoutLogger from './WorkoutLogger';
@@ -20,13 +20,14 @@ function getLinesByKey(key) {
 }
 
 
-function RoomTemplate({
+  function RoomTemplate({
   narrationKey,
   workoutFocus,
   quiz,
   safeQuiz,
   safeIntroKey,
-  boss,
+    boss,
+    quizIntroKey,
   lootPool,
   mapMarker,
   gameState,
@@ -47,6 +48,14 @@ function RoomTemplate({
     ? narrationKey
     : getLinesByKey(narrationKey);
   const safeIntroLines = safeIntroKey ? getLinesByKey(safeIntroKey) : [];
+  const quizIntroLines = quizIntroKey ? getLinesByKey(quizIntroKey) : [];
+
+  useEffect(() => {
+    if (stage === 'quizIntro') {
+      const timer = setTimeout(() => setStage('quiz'), 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [stage]);
 
   const handleNarrationDone = () => {
     if (requiresWarmup && !warmupDone) setStage('warmupPrompt');
@@ -79,6 +88,7 @@ function RoomTemplate({
     }));
     if (safeQuiz) setStage('safeIntro');
     else if (hasScavenge) setStage('scavenge');
+    else if (quizIntroKey) setStage('quizIntro');
     else if (quiz) setStage('quiz');
     else if (boss) setStage('boss');
     else if (lootPool) setStage('loot');
@@ -103,6 +113,10 @@ function RoomTemplate({
       };
       if (unlocksRoom && !prev.visibleRooms.includes(unlocksRoom)) {
         updates.visibleRooms = [...prev.visibleRooms, unlocksRoom];
+      }
+      if (mapMarker === "Mrs. Roche's Room") {
+        updates.currentRoom = 'Fitness Suite';
+        updates.showOverlay = true;
       }
       return { ...prev, ...updates };
     });
@@ -270,8 +284,24 @@ function RoomTemplate({
     );
   }
 
+  if (stage === 'quizIntro') {
+    return (
+      <NarrationManager
+        lines={quizIntroLines}
+        onComplete={() => setStage('quiz')}
+        backgroundImage="/quiz_door.png"
+      />
+    );
+  }
+
   if (stage === 'quiz') {
-    return <QuizPhase questions={quiz} onComplete={handleQuizComplete} />;
+    return (
+      <QuizPhase
+        questions={quiz}
+        onComplete={handleQuizComplete}
+        showImpossibleFinal={mapMarker === "Mrs. Roche's Room"}
+      />
+    );
   }
 
   if (stage === 'safePenalty') {

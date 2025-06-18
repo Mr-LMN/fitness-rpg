@@ -1,6 +1,6 @@
 const warmups = {
   legs: {
-    name: "Legs – Dynamic RAMP",
+    name: "Legs – Dynamic Warm Up",
     steps: [
       { phase: "Raise", action: "Row 250m or use Assault Bike for 1 min" },
       { phase: "Activate", action: "15 alternating forward lunges" },
@@ -9,7 +9,7 @@ const warmups = {
     ],
   },
   upperBody: {
-    name: "Upper Body – Dynamic RAMP",
+    name: "Upper Body – Dynamic Warm Up",
     steps: [
       { phase: "Raise", action: "Ski Erg for 1 min or row 200m" },
       { phase: "Activate", action: "10 arm circles (forward and backward)" },
@@ -18,7 +18,7 @@ const warmups = {
     ],
   },
   full: {
-    name: "Full Body – Dynamic RAMP",
+    name: "Full Body – Dynamic Warm Up",
     steps: [
       { phase: "Raise", action: "Row 250m or use Assault Bike for 1 min" },
       { phase: "Activate", action: "10 arm circles and 10 lunges" },
