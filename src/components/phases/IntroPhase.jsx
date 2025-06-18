@@ -3,6 +3,7 @@ import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
 import { playVoice, playSound } from "../../utils";
 import narrationLines from "../../data/narrationLines";
+import TTSLine from "../TTSLine";
 
 function IntroPhase({ setGameState }) {
   useEffect(() => {
@@ -15,7 +16,7 @@ function IntroPhase({ setGameState }) {
       <div className="room-content rpg-text">
         <h2>🧊 Locked In</h2>
         {narrationLines.general.introPhase.map((line, idx) => (
-          <p key={idx}>{line}</p>
+          <TTSLine key={idx} text={line} />
         ))}
         <button onClick={() => {
           playSound('footsteps');

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { playSound } from "../../utils";
+import TTSLine from "../TTSLine";
 
 function VictoryPhase({ gameState }) {
   useEffect(() => {
@@ -8,7 +9,7 @@ function VictoryPhase({ gameState }) {
   return (
     <div style={{ padding: 20 }}>
       <h2>🎉 Victory!</h2>
-      <p>You earn:</p>
+      <TTSLine text="You earn:" />
       <ul>
         {gameState.lootUnlocked.map((item, i) => (
           <li key={i}>{item}</li>

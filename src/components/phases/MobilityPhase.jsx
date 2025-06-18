@@ -2,6 +2,7 @@ import React from "react";
 import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
 import { playSound } from "../../utils";
+import TTSLine from "../TTSLine";
 
 function MobilityPhase({ setGameState }) {
   const handleGrabObject = () => {
@@ -16,11 +17,8 @@ function MobilityPhase({ setGameState }) {
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2>🔎 Hidden Object</h2>
-        <p>
-          As you explore the changing room, you spot a locker tipped on its side—
-          underneath, something shiny glints in the flickering light.
-        </p>
-        <p>You reach carefully under the locker and feel a cold metal tool.</p>
+        <TTSLine text="As you explore the changing room, you spot a locker tipped on its side— underneath, something shiny glints in the flickering light." />
+        <TTSLine text="You reach carefully under the locker and feel a cold metal tool." />
         <button onClick={handleGrabObject}>Take the object</button>
       </div>
     </div>

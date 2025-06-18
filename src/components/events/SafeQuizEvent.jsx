@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/SafeQuizEvent.css";
 import { playSound } from "../../utils";
+import TTSLine from "../TTSLine";
 
 const baseUrl = import.meta.env.BASE_URL || "/";
 
@@ -67,10 +68,9 @@ const SafeQuizEvent = ({
   if (quizCompleted && loot) {
     return (
       <div>
-        <p>
-          You’ve finished scavenging and discovered{' '}
-          <strong className={`rarity-${loot.rarity}`}>{loot.name}</strong>. It’s been added to your backpack for later use.
-        </p>
+        <TTSLine
+          text={`You’ve finished scavenging and discovered ${loot.name}. It’s been added to your backpack for later use.`}
+        />
         <button onClick={onComplete}>Continue</button>
       </div>
     );
@@ -79,7 +79,7 @@ const SafeQuizEvent = ({
   if (quizCompleted) {
     return (
       <div>
-        <p>{feedback}</p>
+        <TTSLine text={feedback} />
         <button onClick={onComplete}>Continue</button>
       </div>
     );
@@ -89,14 +89,14 @@ const SafeQuizEvent = ({
     <div className="safe-event">
       <img src={`${baseUrl}safe.png`} alt="Digital Safe" className="safe-image" />
       <h2>🔐 Digital Safe - {roomName}</h2>
-      <p><strong>Lives:</strong> {"❤️".repeat(lives)} {"🤍".repeat(3 - lives)}</p>
-      <p>{currentQuestion?.question}</p>
+      <TTSLine text={`Lives: ${'❤️'.repeat(lives)} ${'🤍'.repeat(3 - lives)}`} />
+      <TTSLine text={currentQuestion?.question} />
       {currentQuestion?.options.map((option, index) => (
         <button key={index} onClick={() => handleAnswer(option.correct)}>
           {option.label}
         </button>
       ))}
-      {feedback && <p>{feedback}</p>}
+      {feedback && <TTSLine text={feedback} />}
     </div>
   );
 };

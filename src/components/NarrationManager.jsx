@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import TTSLine from './TTSLine';
 
 function NarrationManager({ lines = [], onComplete, backgroundImage }) {
   const [index, setIndex] = useState(0);
@@ -27,7 +28,7 @@ function NarrationManager({ lines = [], onComplete, backgroundImage }) {
 
   return (
     <div className="narration-manager" onClick={advance} style={style}>
-      <p>{lines[index]}</p>
+      <TTSLine text={lines[index]} />
       {lines.length > 1 && <p className="continue-hint">(click or press space)</p>}
     </div>
   );

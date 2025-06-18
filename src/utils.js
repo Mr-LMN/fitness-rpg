@@ -51,46 +51,42 @@ export function playVoice(filePath) {
   audio.play().catch(() => {});
 }
 
-// Speak the provided text using Google Text-to-Speech REST API
-// Requires VITE_GOOGLE_TTS_KEY environment variable containing an API key
+// Speak text using the backend /speak endpoint which proxies Google TTS
 export async function speakText(text) {
   if (typeof fetch === 'undefined') return;
-  const apiKey = import.meta.env.VITE_GOOGLE_TTS_KEY;
-  if (!apiKey) {
-    if ('speechSynthesis' in window) {
+
+  try {
+    const response = await fetch('/speak', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, voice: 'en-GB-Wavenet-D' }),
+    });
+
+    // Try handling both raw blobs and JSON { audioContent }
+    const contentType = response.headers.get('Content-Type') || '';
+    let audioUrl = null;
+
+    if (contentType.includes('application/json')) {
+      const data = await response.json();
+      if (data.audioContent) {
+        audioUrl = `data:audio/mp3;base64,${data.audioContent}`;
+      }
+    } else {
+      const blob = await response.blob();
+      audioUrl = URL.createObjectURL(blob);
+    }
+
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      audio.play().catch(() => {});
+    } else if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-GB';
       utterance.rate = 0.8;
       window.speechSynthesis.speak(utterance);
     }
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          input: { text },
-          voice: {
-            languageCode: 'en-GB',
-            name: 'en-GB-Wavenet-B',
-            ssmlGender: 'MALE',
-          },
-          audioConfig: { audioEncoding: 'MP3', speakingRate: 0.8 },
-        }),
-      }
-    );
-
-    const data = await response.json();
-    if (data.audioContent) {
-      const audio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
-      audio.play().catch(() => {});
-    }
   } catch (err) {
-    console.error('Failed to speak text with Google TTS', err);
+    console.error('Failed to speak text via backend', err);
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-GB';

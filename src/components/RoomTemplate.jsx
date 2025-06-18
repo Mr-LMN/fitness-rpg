@@ -10,6 +10,7 @@ import { getRandomLoot } from '../data/lootTable';
 import FitnessSuite from './phases/FitnessSuite';
 import ParallaxDust from './ParallaxDust';
 import './styles/RoomScene.css';
+import TTSLine from './TTSLine';
 
 const roomImages = {
   "Mr. Watkins' Room": '/Mr_WatkinsRoom.png',
@@ -225,7 +226,7 @@ function getLinesByKey(key) {
         {img && <img src={img} alt={mapMarker} className="scene-image" />}
         <ParallaxDust />
         <div className="room-content rpg-text">
-          <p>Log your workout. Would you like a pre-built warm up before starting?</p>
+          <TTSLine text="Log your workout. Would you like a pre-built warm up before starting?" />
           <button onClick={() => handleWarmupDecision(true)}>Yes</button>
           <button onClick={() => handleWarmupDecision(false)}>No</button>
         </div>
@@ -239,7 +240,7 @@ function getLinesByKey(key) {
         {img && <img src={img} alt={mapMarker} className="scene-image" />}
         <ParallaxDust />
         <div className="room-content rpg-text">
-          <p>What are you training? Legs, Upper Body or Both?</p>
+          <TTSLine text="What are you training? Legs, Upper Body or Both?" />
           <button onClick={() => handleFocusSelect('legs')}>Legs</button>
           <button onClick={() => handleFocusSelect('upperBody')}>Upper Body</button>
           <button onClick={() => handleFocusSelect('full')}>Both</button>
@@ -331,7 +332,7 @@ function getLinesByKey(key) {
         {img && <img src={img} alt={mapMarker} className="scene-image" />}
         <ParallaxDust />
         <div className="room-content rpg-text">
-          <p>To force the safe open, complete {failureExercise}.</p>
+          <TTSLine text={`To force the safe open, complete ${failureExercise}.`} />
           <button onClick={handlePenaltyDone}>I've done it</button>
         </div>
       </div>
@@ -348,7 +349,7 @@ function getLinesByKey(key) {
         {img && <img src={img} alt={mapMarker} className="scene-image" />}
         <ParallaxDust />
         <div className="room-content rpg-text">
-          <p>You search the room...</p>
+          <TTSLine text="You search the room..." />
           <button onClick={handleLoot}>See what you find</button>
         </div>
       </div>
@@ -363,7 +364,7 @@ function getLinesByKey(key) {
         <ParallaxDust />
         <div className="room-content rpg-text">
           {scavengeLines.map((line, i) => (
-            <p key={i}>{line}</p>
+            <TTSLine key={i} text={line} />
           ))}
           <button onClick={handleScavengeComplete}>Investigate</button>
         </div>
@@ -378,24 +379,22 @@ function getLinesByKey(key) {
         <ParallaxDust />
         <div className="room-content rpg-text">
           {loot && (
-            <p>
-              You have finished scavenging for supplies and found{' '}
-              <span className={`rarity-${loot.rarity} loot-new`}>{loot.name}</span>! This has
-              been added to your backpack for later use.
-            </p>
+            <TTSLine
+              text={`You have finished scavenging for supplies and found ${loot.name}! This has been added to your backpack for later use.`}
+            />
           )}
           {loot &&
             loot.name.includes('Map Piece') &&
             mapMarker === "Mr. Watkins' Room" && (
-              <p>
-                {narrationLines.languages.room1.foundItem.replace(
+              <TTSLine
+                text={narrationLines.languages.room1.foundItem.replace(
                   '{item}',
                   loot.name
                 )}
-              </p>
+              />
             )}
           {mapMarker === "Mr. Watkins' Room" && (
-            <p>{narrationLines.languages.room1.rest}</p>
+            <TTSLine text={narrationLines.languages.room1.rest} />
           )}
           <button
             onClick={() =>
