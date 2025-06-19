@@ -1,0 +1,38 @@
+.home-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: url('/global-bg.png') center/cover no-repeat fixed;
+  text-align: center;
+  color: #fff;
+}
+
+.school-logo {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.home-page h1 {
+  font-size: 3rem;
+  margin: 0 0 10px;
+}
+
+.home-page p {
+  margin: 0 0 30px;
+}
+
+.start-btn {
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  background-color: #2e8b57;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.start-btn:hover {
+  background-color: #256b46;
+}

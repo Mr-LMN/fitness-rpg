@@ -167,9 +167,10 @@ export function getUserWeight() {
 export function parseWeightInput(input, userWeight) {
   if (!input && input !== 0) return 0;
   const str = String(input).trim();
-  if (/^bw$/i.test(str) || str === '0') return userWeight;
+  // Treat bodyweight or 0 as no additional weight for calorie calculations
+  if (/^bw$/i.test(str) || str === '0') return 0;
   const bwMatch = str.match(/^bw\s*\+\s*([0-9]+(?:\.[0-9]+)?)$/i);
-  if (bwMatch) return userWeight + parseFloat(bwMatch[1]);
+  if (bwMatch) return parseFloat(bwMatch[1]);
   const n = parseFloat(str);
   return isNaN(n) ? 0 : n;
 }
