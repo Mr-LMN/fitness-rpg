@@ -113,8 +113,8 @@ who are visually impaired.
 
 ### Firebase Configuration
 
-Create a `.env` file (or copy `.env.example`) with the following variables set
-to your Firebase project details:
+Copy `.env.example` to `.env` and replace the placeholders with your
+own Firebase project details:
 
 ```bash
 VITE_FIREBASE_API_KEY=<your-api-key>
