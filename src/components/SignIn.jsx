@@ -11,14 +11,14 @@ function SignIn({ onSignIn }) {
   return (
     <div className="signin-container">
       <div className="signin-box">
-        <h2>Student Sign In</h2>
+        <h2>Pencoedtre High School<br/>Survivor Sign-In</h2>
         <input
-          placeholder="Username"
+          placeholder="Survivor Name"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <input placeholder="Password" type="password" />
-        <select value={yearGroup} onChange={(e) => setYearGroup(e.target.value)}>
+        <input placeholder="Secret Passcode" type="password" />
+        <select value={yearGroup} onChange={(e) => setYearGroup(e.target.value)} className="year-select">
           <option value="Year 7">Year 7</option>
           <option value="Year 8">Year 8</option>
           <option value="Year 9">Year 9</option>
