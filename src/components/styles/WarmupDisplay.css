@@ -1,3 +1,14 @@
+.warmup-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  z-index: 1000;
+}
+
 .warmup-display {
   background: #121212;
   color: #f1f1f1;
@@ -5,9 +16,9 @@
   border-radius: 10px;
   width: 90%;
   max-width: 500px;
-  margin: 0 auto;
   font-family: 'Garamond', serif;
   box-shadow: 0 0 12px #00000088;
+  opacity: 0.95;
 }
 
 .warmup-title {
