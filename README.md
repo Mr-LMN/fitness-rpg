@@ -8,7 +8,7 @@ The goal of this project is to combine a simple RPG style narrative with fitness
 
 ## Setup
 
-1. Install [Node.js](https://nodejs.org/) (version 16 or higher is recommended).
+1. Install [Node.js](https://nodejs.org/) (version 18 or higher is required).
 2. Run `npm install` from the project root to install dependencies.
 3. Start the development server with `npm run dev`.
 4. Open the provided local address (usually `http://localhost:5173`) in your browser to play.
