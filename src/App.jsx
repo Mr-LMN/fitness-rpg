@@ -17,7 +17,8 @@ import FinalBossPhase from "./components/phases/FinalBossPhase";
 import XPBar from "./components/XPBar";
 import AccountabilityPopup from "./components/AccountabilityPopup";
 import BadgeUnlockedModal from "./components/BadgeUnlockedModal";
-import { playSound, speakText, stopSound } from "./utils";
+import { playSound, stopSound, setMuted } from "./utils";
+import GlobalAudioControls from "./components/GlobalAudioControls";
 
 const INITIAL_STATE = {
   characterCreated: false,
@@ -52,10 +53,15 @@ function App() {
   const [gameState, setGameState] = useState({ ...INITIAL_STATE });
   const [popupMessage, setPopupMessage] = useState(null);
   const [recentBadge, setRecentBadge] = useState(null);
+  const [muted, setMutedState] = useState(false);
   
   const ambientRef = useRef(null);
   const prevXpLevel = useRef(0);
   const prevBadgesRef = useRef([]);
+
+  useEffect(() => {
+    setMuted(muted);
+  }, [muted]);
 
   useEffect(() => {
     const now = new Date();
@@ -115,12 +121,6 @@ function App() {
     }
   }, [user, gameState.introStage]);
 
-  useEffect(() => {
-    if (gameState.textToSpeech) {
-      const el = document.querySelector('.rpg-text');
-      if (el) speakText(el.innerText);
-    }
-  }, [gameState.textToSpeech, gameState.introStage, gameState.currentRoom, gameState.showOverlay, user]);
 
   const renderPhase = () => {
     if (!user) return <LoginForm onLogin={(u) => setUser(u)} />;
@@ -129,7 +129,13 @@ function App() {
 
     switch (gameState.introStage) {
       case 0:
-        return <IntroPhase setGameState={setGameState} />;
+        return (
+          <IntroPhase
+            setGameState={setGameState}
+            textToSpeech={gameState.textToSpeech}
+            enhancedReading={gameState.enhancedReading}
+          />
+        );
       case 1:
         return (
           <WarmUpPhase
@@ -142,7 +148,13 @@ function App() {
       case 3:
         return <EscapePhase setGameState={setGameState} />;
       case 4:
-        return <MapIntroduction setGameState={setGameState} />;
+        return (
+          <MapIntroduction
+            setGameState={setGameState}
+            textToSpeech={gameState.textToSpeech}
+            enhancedReading={gameState.enhancedReading}
+          />
+        );
       case 5:
         return <Map gameState={gameState} setGameState={setGameState} />;
       case 6:
@@ -151,6 +163,8 @@ function App() {
             <RoomNarrativeOverlay
               roomName={gameState.currentRoom}
               avatar={gameState.avatar}
+              textToSpeech={gameState.textToSpeech}
+              enhancedReading={gameState.enhancedReading}
               onContinue={() =>
                 setGameState((prev) => ({
                   ...prev,
@@ -220,6 +234,17 @@ function App() {
       {popupMessage && (
         <AccountabilityPopup message={popupMessage} onClose={() => setPopupMessage(null)} />
       )}
+      <GlobalAudioControls
+        muted={muted}
+        toggleMute={() => setMutedState((m) => !m)}
+        tts={gameState.textToSpeech}
+        toggleTts={() =>
+          setGameState((prev) => ({
+            ...prev,
+            textToSpeech: !prev.textToSpeech,
+          }))
+        }
+      />
     </div>
   );
 }
