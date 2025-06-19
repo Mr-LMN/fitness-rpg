@@ -49,6 +49,8 @@ const INITIAL_STATE = {
   textToSpeech: false,
 };
 
+const CHECKPOINT_PREFIX = 'checkpoint_';
+
 function App() {
   const [user, setUser] = useState(null);
   const [gameState, setGameState] = useState({ ...INITIAL_STATE });
@@ -60,6 +62,31 @@ function App() {
   const ambientRef = useRef(null);
   const prevXpLevel = useRef(0);
   const prevBadgesRef = useRef([]);
+
+  // Load checkpoint when a user logs in
+  useEffect(() => {
+    if (user) {
+      const saved = localStorage.getItem(`${CHECKPOINT_PREFIX}${user.uid}`);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setGameState({ ...INITIAL_STATE, ...parsed });
+        } catch (err) {
+          console.error('Failed to parse checkpoint', err);
+        }
+      }
+    }
+  }, [user]);
+
+  // Save progress on every state change
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem(
+        `${CHECKPOINT_PREFIX}${user.uid}`,
+        JSON.stringify(gameState)
+      );
+    }
+  }, [gameState, user]);
 
   useEffect(() => {
     setMuted(muted);

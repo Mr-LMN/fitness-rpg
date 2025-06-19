@@ -68,3 +68,8 @@
   gap: 5px;
   justify-content: center;
 }
+
+.error-message {
+  color: #ff8080;
+  font-size: 0.9rem;
+}
