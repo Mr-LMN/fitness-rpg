@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from './ScrollingNarrationBox.module.css';
+import TTSLine from './TTSLine';
 
-function ScrollingNarrationBox({ lines = [], enhancedMode = false, onComplete }) {
+function ScrollingNarrationBox({
+  lines = [],
+  enhancedMode = false,
+  autoRead = false,
+  onComplete,
+}) {
   const [index, setIndex] = useState(0);
   const [finished, setFinished] = useState(false);
 
@@ -28,44 +34,18 @@ function ScrollingNarrationBox({ lines = [], enhancedMode = false, onComplete })
     return () => window.removeEventListener('keydown', handler);
   }, [nextLine, finished]);
 
-  const speak = async () => {
-    try {
-      const resp = await fetch('/speak', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: lines[index] }),
-      });
-      const blob = await resp.blob();
-      const url = URL.createObjectURL(blob);
-      const audio = new Audio(url);
-      audio.play();
-    } catch (err) {
-      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-        const utter = new SpeechSynthesisUtterance(lines[index]);
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utter);
-      }
-    }
-  };
-
   return (
     <div
       className={`${styles.box} ${enhancedMode ? styles.enhanced : ''}`}
       role="dialog"
     >
       <div className={styles.lineContainer}>
-        <p key={index} className={styles.line} aria-live="polite">
-          {lines[index]}
-        </p>
-        {enhancedMode && (
-          <button
-            onClick={speak}
-            className={styles.ttsButton}
-            aria-label="Read line aloud"
-          >
-            🔊
-          </button>
-        )}
+        <TTSLine
+          key={index}
+          text={lines[index]}
+          autoRead={autoRead}
+          className={styles.line}
+        />
       </div>
       <button
         onClick={nextLine}

@@ -11,7 +11,13 @@ const avatarIcons = {
   ninja: <GiNinjaHead />,
 };
 
-function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
+function RoomNarrativeOverlay({
+  roomName,
+  avatar,
+  onContinue,
+  textToSpeech = false,
+  enhancedReading = false,
+}) {
   useEffect(() => {
     const audio = playSound('openingDoor');
     return () => audio && audio.pause();
@@ -49,6 +55,8 @@ function RoomNarrativeOverlay({ roomName, avatar, onContinue }) {
         {avatar && <div className="overlay-avatar">{avatarIcons[avatar]}</div>}
         <ScrollingNarrationBox
           lines={lines}
+          autoRead={textToSpeech}
+          enhancedMode={enhancedReading}
           onComplete={() => {
             playSound('creakingDoor');
             onContinue();

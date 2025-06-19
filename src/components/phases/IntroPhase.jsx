@@ -5,7 +5,7 @@ import { playVoice, playSound } from "../../utils";
 import narrationLines from "../../data/narrationLines";
 import ScrollingNarrationBox from "../ScrollingNarrationBox";
 
-function IntroPhase({ setGameState }) {
+function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = false }) {
   useEffect(() => {
     playVoice('/voices/intro-phase.wav');
   }, []);
@@ -17,6 +17,8 @@ function IntroPhase({ setGameState }) {
         <h2>🧊 Locked In</h2>
         <ScrollingNarrationBox
           lines={narrationLines.general.introPhase}
+          autoRead={textToSpeech}
+          enhancedMode={enhancedReading}
           onComplete={() => {
             playSound("footsteps");
             setGameState((prev) => ({ ...prev, introStage: 1 }));
