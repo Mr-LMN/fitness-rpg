@@ -10,6 +10,13 @@ function CharacterCreation({ gameState, setGameState }) {
     { id: "ninja", icon: <GiNinjaHead /> },
   ];
 
+  const allFilled =
+    gameState.studentName &&
+    gameState.yearGroup &&
+    gameState.gender &&
+    gameState.weight &&
+    gameState.workoutFocus;
+
   return (
     <div
       className={`character-creation-container ${
@@ -107,6 +114,9 @@ function CharacterCreation({ gameState, setGameState }) {
           />
           Text to Speech
         </label>
+        {!allFilled && (
+          <p className="error-message">Please fill out all fields</p>
+        )}
         <button
           onClick={() => {
             const wt = parseFloat(gameState.weight) || 50;
@@ -117,6 +127,7 @@ function CharacterCreation({ gameState, setGameState }) {
               characterCreated: true,
             });
           }}
+          disabled={!allFilled}
         >
           Start Game
         </button>

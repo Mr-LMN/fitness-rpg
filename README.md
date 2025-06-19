@@ -129,3 +129,8 @@ VITE_FIREBASE_APP_ID=<your-app-id>
 
 When creating your hero you must choose a workout focus of **cardio** or **strength**. Selecting cardio adjusts the logger to track duration and distance, while strength tracks sets, reps and weight. The default cardio exercise suggestions are the machines available in the gym and are defined in [`src/data/cardioExercises.js`](src/data/cardioExercises.js). Strength exercises are organised under the categories **Core**, **Legs**, **Chest**, **Back**, **Arms** and **Functional**.
 
+All character creation fields are required. The **Start Game** button remains disabled until you enter a name, year group, gender, weight and workout focus.
+
+## Checkpoints
+
+Progress is automatically saved to your browser after major events. Leaving the locker room and logging each workout will record a checkpoint so you can continue later. The final boss battle outcome is also stored.
