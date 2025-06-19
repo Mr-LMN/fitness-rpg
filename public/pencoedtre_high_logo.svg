@@ -1,0 +1,5 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>
+  <rect width='200' height='200' fill='#004078'/>
+  <circle cx='100' cy='100' r='80' fill='#fff'/>
+  <text x='100' y='115' font-size='45' text-anchor='middle' fill='#004078' font-family='Arial, Helvetica, sans-serif' font-weight='bold'>PH</text>
+</svg>

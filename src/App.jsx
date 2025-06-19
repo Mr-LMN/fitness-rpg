@@ -19,6 +19,7 @@ import AccountabilityPopup from "./components/AccountabilityPopup";
 import BadgeUnlockedModal from "./components/BadgeUnlockedModal";
 import { playSound, stopSound, setMuted } from "./utils";
 import GlobalAudioControls from "./components/GlobalAudioControls";
+import HomePage from "./components/HomePage";
 
 const INITIAL_STATE = {
   characterCreated: false,
@@ -54,6 +55,7 @@ function App() {
   const [popupMessage, setPopupMessage] = useState(null);
   const [recentBadge, setRecentBadge] = useState(null);
   const [muted, setMutedState] = useState(false);
+  const [showHome, setShowHome] = useState(true);
   
   const ambientRef = useRef(null);
   const prevXpLevel = useRef(0);
@@ -123,7 +125,12 @@ function App() {
 
 
   const renderPhase = () => {
-    if (!user) return <LoginForm onLogin={(u) => setUser(u)} />;
+    if (!user) {
+      if (showHome) {
+        return <HomePage onStart={() => setShowHome(false)} />;
+      }
+      return <LoginForm onLogin={(u) => setUser(u)} />;
+    }
     if (!gameState.characterCreated)
       return <CharacterCreation gameState={gameState} setGameState={setGameState} />;
 
