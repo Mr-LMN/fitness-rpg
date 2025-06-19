@@ -10,7 +10,7 @@ function HomePage({ onStart }) {
         <h1 className="game-title">Fitness RPG</h1>
         <p className="game-description">Begin your adventure to fitness glory.</p>
       </div>
-      <button onClick={onStart} className="start-btn">Start</button>
+      <button onClick={onStart} className="start-btn" aria-label="Start Game">Start</button>
     </div>
   );
 }
