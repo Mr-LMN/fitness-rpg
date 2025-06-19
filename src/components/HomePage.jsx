@@ -5,9 +5,11 @@ import logo from "/pencoedtre_high_logo.svg";
 function HomePage({ onStart }) {
   return (
     <div className="home-page">
-      <img src={logo} alt="Pencoedtre High Logo" className="school-logo" />
-      <h1>Fitness RPG</h1>
-      <p>Begin your adventure to fitness glory.</p>
+      <div className="homepage-content">
+        <img src={logo} alt="Pencoedtre High Logo" className="school-logo" />
+        <h1 className="game-title">Fitness RPG</h1>
+        <p className="game-description">Begin your adventure to fitness glory.</p>
+      </div>
       <button onClick={onStart} className="start-btn">Start</button>
     </div>
   );
