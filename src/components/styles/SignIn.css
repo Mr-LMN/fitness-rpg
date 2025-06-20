@@ -1,10 +1,10 @@
 .signin-container {
   /* Darker, textured background for post-apocalyptic feel */
- background-image: url('/public/global-bg.png'), url('/public/grunge-texture.png'); /* Assuming you have a grunge texture image */
+ background-image: url('/public/abandoned_school_hallway_ivy.jpg'); /* Assuming you have an image of an abandoned school hallway with ivy */
   background-size: cover;
   background-position: center;
-  background-blend-mode: multiply; /* Blend the background image with a color for darkness */
-  background-color: #333; /* Dark base color */
+  background-blend-mode: multiply; /* Blend the background image with a dark color for atmosphere */
+  background-color: #202020; /* Even darker base color */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@
   align-items: center;
   padding-bottom: 40px;
   font-family: 'Courier New', Courier, monospace; /* Gritty font */
-  color: #eee; /* Slightly lighter text color for readability */
+  color: #cccccc; /* Slightly lighter text color for readability */
 }
 
 .signin-box {
@@ -20,7 +20,7 @@
   background: rgba(20, 20, 20, 0.8);
   padding: 40px;
   border-radius: 8px;
-  text-align: center;
+  text-align: left;
   color: #eee;
   border: 2px solid #a03333; /* Reddish-brown distressed border */
   box-shadow: 0 0 15px rgba(160, 51, 51, 0.5); /* Reddish glow */
@@ -34,6 +34,7 @@
   padding: 8px;
   border-radius: 4px;
   border: none;
+  width: 100%;
   background-color: rgba(50, 50, 50, 0.7);
   color: #eee;
   font-family: 'Courier New', Courier, monospace;
