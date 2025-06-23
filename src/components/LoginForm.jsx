@@ -5,21 +5,28 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import "./styles/LoginForm.css";
 
 export default function LoginForm({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isNewUser, setIsNewUser] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrorMessage("");
     try {
-      const methods = await fetchSignInMethodsForEmail(auth, email);
       let cred;
-      if (methods.length === 0) {
+      if (isNewUser) {
+        const methods = await fetchSignInMethodsForEmail(auth, email);
+        if (methods.length > 0) {
+          setErrorMessage("Account already exists. Please log in.");
+          setLoading(false);
+          return;
+        }
         cred = await createUserWithEmailAndPassword(auth, email, password);
       } else {
         cred = await signInWithEmailAndPassword(auth, email, password);
@@ -41,8 +48,24 @@ export default function LoginForm({ onLogin }) {
   };
 
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} className="login-form">
       <h2>Student Login</h2>
+      <div className="mode-toggle">
+        <button
+          type="button"
+          className={!isNewUser ? "active" : ""}
+          onClick={() => setIsNewUser(false)}
+        >
+          Current User
+        </button>
+        <button
+          type="button"
+          className={isNewUser ? "active" : ""}
+          onClick={() => setIsNewUser(true)}
+        >
+          New User
+        </button>
+      </div>
       <input
         type="email"
         placeholder="Your school email"
@@ -58,7 +81,7 @@ export default function LoginForm({ onLogin }) {
         required
       />
       <button type="submit" disabled={loading}>
-        {loading ? "Loading..." : "Log In"}
+        {loading ? "Loading..." : isNewUser ? "Create Account" : "Log In"}
       </button>
       {errorMessage && <p className="error">{errorMessage}</p>}
     </form>
