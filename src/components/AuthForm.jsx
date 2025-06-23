@@ -17,13 +17,19 @@ export default function AuthForm({ onAuth }) {
     setLoading(true);
     setErrorMessage("");
     try {
-      const methods = await fetchSignInMethodsForEmail(auth, email);
-      const isExistingUser = methods.length > 0;
       let cred;
-      if (isExistingUser) {
+      try {
+        // Attempt to sign in the user first
         cred = await signInWithEmailAndPassword(auth, email, password);
-      } else {
+      } catch (signInError) {
+        if (signInError.code === "auth/user-not-found") {
+          // If user not found, try creating a new user
+
+
         cred = await createUserWithEmailAndPassword(auth, email, password);
+        } else {
+          throw signInError; // Re-throw other sign-in errors
+        }
       }
       onAuth && onAuth(cred.user);
     } catch (error) {
