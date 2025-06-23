@@ -1,9 +1,29 @@
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: url('/global-bg.png') center/cover no-repeat fixed;
+  text-align: center;
+  padding: 20px;
+}
+
+.login-logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-width: 300px;
-  margin: 0 auto;
+  gap: 12px;
+  max-width: 320px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .mode-toggle {
@@ -16,4 +36,24 @@
 .mode-toggle button.active {
   background-color: #b6d73a;
   font-weight: bold;
+}
+
+.login-form input,
+.login-form select {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+}
+
+.login-form button {
+  background-color: #388e3c;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-form button:hover:not(:disabled) {
+  background-color: #2e7030;
 }
