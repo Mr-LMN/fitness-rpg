@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "./StartScreen.module.css";
-import logo from "/pencoedtre_high_logo.svg";
+import logo from "/Pencoedtre_Logo.png";
 
 export default function StartScreen({ onStart }) {
   useEffect(() => {

@@ -6,6 +6,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import "./styles/LoginForm.css";
+import logo from "/Pencoedtre_Logo.png";
 
 export default function LoginForm({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -48,8 +49,10 @@ export default function LoginForm({ onLogin }) {
   };
 
   return (
-    <form onSubmit={handleLogin} className="login-form">
-      <h2>Student Login</h2>
+    <div className="login-screen">
+      <img src={logo} alt="Pencoedtre High" className="login-logo" />
+      <form onSubmit={handleLogin} className="login-form">
+        <h2>Student Login</h2>
       <div className="mode-toggle">
         <button
           type="button"
@@ -84,6 +87,7 @@ export default function LoginForm({ onLogin }) {
         {loading ? "Loading..." : isNewUser ? "Create Account" : "Log In"}
       </button>
       {errorMessage && <p className="error">{errorMessage}</p>}
-    </form>
+      </form>
+    </div>
   );
 }
