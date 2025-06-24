@@ -8,7 +8,7 @@ The goal of this project is to combine a simple RPG style narrative with fitness
 
 ## Setup
 
-1. Install [Node.js](https://nodejs.org/) (version 16 or higher is recommended).
+1. Install [Node.js](https://nodejs.org/) (version 18 or higher is required).
 2. Run `npm install` from the project root to install dependencies.
 3. Start the development server with `npm run dev`.
 4. Open the provided local address (usually `http://localhost:5173`) in your browser to play.
@@ -113,8 +113,8 @@ who are visually impaired.
 
 ### Firebase Configuration
 
-Create a `.env` file (or copy `.env.example`) with the following variables set
-to your Firebase project details:
+Copy `.env.example` to `.env` and replace the placeholders with your
+own Firebase project details:
 
 ```bash
 VITE_FIREBASE_API_KEY=<your-api-key>

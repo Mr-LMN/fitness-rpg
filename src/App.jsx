@@ -19,7 +19,7 @@ import AccountabilityPopup from "./components/AccountabilityPopup";
 import BadgeUnlockedModal from "./components/BadgeUnlockedModal";
 import { playSound, stopSound, setMuted } from "./utils";
 import GlobalAudioControls from "./components/GlobalAudioControls";
-import HomePage from "./components/HomePage";
+import StartScreen from "./components/StartScreen";
 
 const INITIAL_STATE = {
   characterCreated: false,
@@ -96,7 +96,6 @@ function App() {
     const now = new Date();
     const lastOpen = localStorage.getItem('lastOpenDate');
     if (!lastOpen || new Date(lastOpen).toDateString() !== now.toDateString()) {
-      setPopupMessage('Remember to log your workout today!');
       localStorage.setItem('lastOpenDate', now.toISOString());
     }
 
@@ -154,7 +153,7 @@ function App() {
   const renderPhase = () => {
     if (!user) {
       if (showHome) {
-        return <HomePage onStart={() => setShowHome(false)} />;
+        return <StartScreen onStart={() => setShowHome(false)} />;
       }
       return <LoginForm onLogin={(u) => setUser(u)} />;
     }

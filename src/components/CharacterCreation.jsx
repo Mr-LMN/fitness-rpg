@@ -1,13 +1,14 @@
 import React from "react";
 import { setUserWeight } from "../utils";
-import { FaUserGraduate, FaSchool, FaChild } from "react-icons/fa"; // Using school-themed icons
+import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi";
+import { FaBrain, FaVolumeUp } from "react-icons/fa";
 import "./styles/CharacterCreation.css";
 
 function CharacterCreation({ gameState, setGameState }) {
   const avatars = [
-    { id: "student", icon: <FaUserGraduate /> }, // Student icon
-    { id: "teacher", icon: <FaSchool /> }, // School icon
-    { id: "child", icon: <FaChild /> }, // Child icon
+    { id: "pirate", icon: <GiPirateCaptain />, label: "Pirate" },
+    { id: "knight", icon: <GiBlackKnightHelm />, label: "Knight" },
+    { id: "ninja", icon: <GiNinjaHead />, label: "Ninja" },
   ];
 
   const allFilled =
@@ -25,6 +26,7 @@ function CharacterCreation({ gameState, setGameState }) {
     >
       <div className="character-creation-box">
         <h2>Character Creation</h2>
+        <p className="subtitle">Reclaim your identity. The school is waiting.</p>
         <input
           placeholder="Name"
           value={gameState.studentName || ""}
@@ -76,9 +78,10 @@ function CharacterCreation({ gameState, setGameState }) {
           <option value="strength">Strength</option>
         </select>
         <div className="avatar-selection">
-          {avatars.map(({ id, icon }) => (
+          {avatars.map(({ id, icon, label }) => (
             <span
               key={id}
+              title={label}
               className={`avatar-option ${gameState.avatar === id ? "selected" : ""}`}
               onClick={() => setGameState({ ...gameState, avatar: id })}
             >
@@ -86,7 +89,7 @@ function CharacterCreation({ gameState, setGameState }) {
             </span>
           ))}
         </div>
-        <label className="enhanced-reading-toggle">
+        <label className="toggle">
           <input
             type="checkbox"
             checked={gameState.enhancedReading || false}
@@ -99,9 +102,9 @@ function CharacterCreation({ gameState, setGameState }) {
               });
             }}
           />
-          Enhanced Reading Mode
+          <FaBrain /> Enhanced Reading
         </label>
-        <label className="tts-toggle">
+        <label className="toggle">
           <input
             type="checkbox"
             checked={gameState.textToSpeech || false}
@@ -112,12 +115,13 @@ function CharacterCreation({ gameState, setGameState }) {
               })
             }
           />
-          Text to Speech
+          <FaVolumeUp /> TTS
         </label>
         {!allFilled && (
-          <p className="error-message">Please fill out all fields</p>
+          <p className="error-message">❗ Please fill out all fields</p>
         )}
         <button
+          className={allFilled ? "start-btn ready" : "start-btn"}
           onClick={() => {
             const wt = parseFloat(gameState.weight) || 50;
             setUserWeight(wt);
