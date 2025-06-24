@@ -17,6 +17,23 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Map image and container */
+.map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.map-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 0;
+}
+
 /* Title Styling */
 .map-title {
   font-size: 22px;
@@ -32,6 +49,7 @@
 /* Individual Room Styling */
 .room {
   position: absolute;
+  z-index: 1;
   padding: 10px;
   cursor: pointer;
   border-radius: 5px;
@@ -90,6 +108,7 @@
 /* Annotation Styling */
 .annotation {
   position: absolute;
+  z-index: 1;
   background-color: rgba(0, 0, 0, 0.8);
   padding: 6px;
   border-radius: 3px;
