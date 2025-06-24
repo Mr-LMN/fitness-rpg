@@ -1,13 +1,13 @@
 import React from "react";
 import { setUserWeight } from "../utils";
-import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi";
+import { FaUserGraduate, FaSchool, FaChild } from "react-icons/fa"; // Using school-themed icons
 import "./styles/CharacterCreation.css";
 
 function CharacterCreation({ gameState, setGameState }) {
   const avatars = [
-    { id: "pirate", icon: <GiPirateCaptain /> },
-    { id: "knight", icon: <GiBlackKnightHelm /> },
-    { id: "ninja", icon: <GiNinjaHead /> },
+    { id: "student", icon: <FaUserGraduate /> }, // Student icon
+    { id: "teacher", icon: <FaSchool /> }, // School icon
+    { id: "child", icon: <FaChild /> }, // Child icon
   ];
 
   const allFilled =

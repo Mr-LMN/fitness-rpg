@@ -1,20 +1,24 @@
 .box {
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  padding: 1rem;
-  margin: 1rem auto;
-  border-radius: 12px;
-  max-width: 640px;
-  font-family: Arial, sans-serif;
-  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+  color: #fff; /* White text for standard mode */
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 10px; /* Rounded corners */
+  max-width: 80%; /* Adjust max-width as needed */
+  text-align: left; /* Align text left for readability */
+  font-size: 18px;
+  line-height: 1.5;
 }
 
 .enhanced {
-  font-size: 24px;
+  background-color: #fffae5; /* Light background for enhanced mode */
+  color: #000; /* Black text for enhanced mode */
+  font-size: 24px; /* Larger font size */
+  line-height: 1.8; /* Increased line spacing */
   font-family: 'OpenDyslexic', Arial, sans-serif;
 }
 
-.lineContainer {
+.textContainer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,11 +29,13 @@
   animation: fadeIn 0.6s forwards;
 }
 
-.continueButton {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
+.buttonContainer {
+  text-align: center; /* Center the button */
+  margin-top: 20px;
+}
+
+.continueButton, .ttsButton {
   border: none;
-  border-radius: 8px;
   background: #5a5a5a;
   color: #fff;
   cursor: pointer;

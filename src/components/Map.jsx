@@ -67,6 +67,7 @@ function Map({ gameState, setGameState }) {
     <div className="map-container">
       <h2 className="map-title">🗺️ School Map</h2>
       <div className="map">
+        <img src="/PamphletMap.png" alt="School Map Pamphlet" className="map-background" />
         {dynamicRooms.map((room, index) => (
           <div
             key={index}
