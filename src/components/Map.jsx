@@ -5,11 +5,10 @@ import InventoryModal from "./InventoryModal";
 import "./styles/Map.css";
 
 const allRooms = [
-  { name: "Locker Room", x: 50, y: 200 },
-  { name: "Mr. Watkins' Room", x: 150, y: 100 },
-  { name: "Mrs. John's Room", x: 300, y: 200 },
-  { name: "Mrs. Roche's Room", x: 450, y: 100 },
-  { name: "Fitness Suite", x: 600, y: 200 },
+  { name: "Mr. Watkins' Room", x: 536, y: 379 },
+  { name: "Mrs. John's Room", x: 734, y: 355 },
+  { name: "Mrs. Roche's Room", x: 739, y: 469 },
+  { name: "Fitness Suite", x: 735, y: 547 },
 ];
 
 function Map({ gameState, setGameState }) {

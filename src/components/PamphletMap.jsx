@@ -19,11 +19,10 @@ useEffect(() => {
 
 
 const allRooms = [
-  { name: "Locker Room",       x: 85,  y: 360 },
-  { name: "Mr. Watkins' Room", x: 120, y: 95  },
-  { name: "Mrs. John's Room",  x: 290, y: 190 },
-  { name: "Mrs. Roche's Room", x: 480, y: 95  },
-  { name: "Fitness Suite",     x: 670, y: 195 },
+  { name: "Mr. Watkins' Room", x: 536, y: 379 },
+  { name: "Mrs. John's Room",  x: 734, y: 355 },
+  { name: "Mrs. Roche's Room", x: 739, y: 469 },
+  { name: "Fitness Suite",     x: 735, y: 547 },
 ];
 
 const mockInventory = [
