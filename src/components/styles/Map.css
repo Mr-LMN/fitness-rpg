@@ -1,21 +1,21 @@
-/* General Map Container Styling */
 .map-container {
-  background-color: #1b1b1b;
-  background-image: url('/global-bg.png');
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: multiply;
-  border: 4px solid #333;
-  border-radius: 8px;
-  padding: 20px;
+  position: relative;
   width: 800px;
   height: 500px;
   margin: 0 auto;
-  position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  background-color: #1b1b1b;
+  background-image: url('/PamphletMap.png');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: multiply;
+  border: 4px solid #222;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+  padding: 20px;     /* if you need inner padding */
   color: #ddd;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
 }
+
 
 /* Map image and container */
 .map {
