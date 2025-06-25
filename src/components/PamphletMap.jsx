@@ -5,12 +5,13 @@ import { GiBackpack } from "react-icons/gi";
 import InventoryModal from "./InventoryModal";
 
 const allRooms = [
-  { name: "Locker Room", x: 50, y: 200 },
-  { name: "Mr. Watkins' Room", x: 150, y: 100 },
-  { name: "Mrs. John's Room", x: 300, y: 200 },
-  { name: "Mrs. Roche's Room", x: 450, y: 100 },
-  { name: "Fitness Suite", x: 600, y: 200 },
+  { name: "Locker Room",       x: 85,  y: 360 },
+  { name: "Mr. Watkins' Room", x: 120, y: 95  },
+  { name: "Mrs. John's Room",  x: 290, y: 190 },
+  { name: "Mrs. Roche's Room", x: 480, y: 95  },
+  { name: "Fitness Suite",     x: 670, y: 195 },
 ];
+
 const mockInventory = [
   { id: "milkshake", name: "Chocolate Milkshake", description: "Use before your next workout to boost total weight lifted by 10%", type: "boost", effect: { workoutBoost: 0.1 }, used: false },
   { id: "skipper", name: "Puzzle Skipper", description: "Skips one quiz event", type: "skip", effect: { skipQuiz: true }, used: true }
