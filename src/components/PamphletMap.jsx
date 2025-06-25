@@ -3,6 +3,20 @@ import BadgeCase from "./BadgeCase";
 import "./styles/Map.css";
 import { GiBackpack } from "react-icons/gi";
 import InventoryModal from "./InventoryModal";
+// inside your component, before return():
+useEffect(() => {
+  const container = document.querySelector('.map-container');
+  if (!container) return;
+  const onClick = e => {
+    const rect = container.getBoundingClientRect();
+    const x = Math.round(e.clientX - rect.left);
+    const y = Math.round(e.clientY - rect.top);
+    console.log(`📍 clicked at: { x: ${x}, y: ${y} }`);
+  };
+  container.addEventListener('click', onClick);
+  return () => container.removeEventListener('click', onClick);
+}, []);
+
 
 const allRooms = [
   { name: "Locker Room",       x: 85,  y: 360 },
