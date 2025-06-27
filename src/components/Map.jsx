@@ -6,17 +6,10 @@ import "./styles/Map.css";
 
 const allRooms = [
   // Coordinates are relative to the map container (offset corrected)
-<<<<<<< am6mkz-codex/update-room-coordinates-with-offsets
   { name: "Mr. Watkins' Room", x: 196, y: 139 },
   { name: "Mrs. John's Room", x: 394, y: 115 },
   { name: "Mrs. Roche's Room", x: 399, y: 229 },
   { name: "Fitness Suite", x: 395, y: 307 },
-=======
-  { name: "Mr. Watkins' Room", x: 136, y: 109 },
-  { name: "Mrs. John's Room", x: 334, y: 85 },
-  { name: "Mrs. Roche's Room", x: 339, y: 199 },
-  { name: "Fitness Suite", x: 335, y: 277 },
->>>>>>> main
 ];
 
 function Map({ gameState, setGameState }) {
