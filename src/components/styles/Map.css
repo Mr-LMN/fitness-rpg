@@ -105,6 +105,20 @@
   border: 2px solid #555;
 }
 
+.room.quest-target {
+  border-color: #ffd166;
+  box-shadow: 0 0 12px rgba(255, 209, 102, 0.85);
+}
+
+.quest-icon {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #ffd166;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
 /* Annotation Styling */
 .annotation {
   position: absolute;

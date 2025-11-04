@@ -1,5 +1,6 @@
 import React from "react";
 import { GiLaurelsTrophy, GiLightningTrio, GiBookmarklet } from "react-icons/gi";
+import { FaMedal, FaFeatherAlt, FaChessKnight } from "react-icons/fa";
 import "./styles/BadgeCase.css";
 
 const baseUrl = import.meta.env.BASE_URL || "/";
@@ -40,6 +41,26 @@ export const badgeDefinitions = {
     image: `${baseUrl}Badges/QuizMaster.png`,
     label: "Quiz Master",
     description: "Answered every quiz question correctly!",
+  },
+  warmupChampion: {
+    icon: <FaChessKnight />,
+    label: "Warm-Up Vanguard",
+    description: "Completed the Spark Gauntlet tabletop quest.",
+  },
+  strengthCaptain: {
+    icon: <FaMedal />,
+    label: "Squad Captain Pennant",
+    description: "Logged a strength workout for your crew.",
+  },
+  ks3Polyglot: {
+    icon: <FaFeatherAlt />,
+    label: "KS3 Polyglot Pin",
+    description: "Aced the KS3 knowledge challenge in Mrs. Roche's room.",
+  },
+  arenaChampion: {
+    icon: <GiLaurelsTrophy />,
+    label: "Championship Pennant",
+    description: "Triumphed in the Arena Finale tabletop encounter.",
   },
 };
 

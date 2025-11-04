@@ -5,7 +5,7 @@ import { playSound, updateLifetimeSummary, logWorkoutMinutes } from "../../utils
 import TTSLine from "../TTSLine";
 import "../styles/RoomScene.css";
 
-function FinalBossPhase({ setGameState }) {
+function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
   const [timer, setTimer] = useState(0);
   const [battleStarted, setBattleStarted] = useState(false);
   const [battleFinished, setBattleFinished] = useState(false);
@@ -62,6 +62,7 @@ function FinalBossPhase({ setGameState }) {
     updateLifetimeSummary({ calories: 0, bossesDefeated: 1 });
     logWorkoutMinutes(timer / 60);
     playSound();
+    onQuestEvent('bossDefeated', { room: 'Fitness Suite', timer });
   };
 
   return (

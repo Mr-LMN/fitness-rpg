@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import LoginForm from "./components/LoginForm";
 import CharacterCreation from "./components/CharacterCreation";
 import IntroPhase from "./components/phases/IntroPhase";
@@ -20,6 +20,8 @@ import BadgeUnlockedModal from "./components/BadgeUnlockedModal";
 import { playSound, stopSound, setMuted } from "./utils";
 import GlobalAudioControls from "./components/GlobalAudioControls";
 import StartScreen from "./components/StartScreen";
+import QuestTracker from "./components/QuestTracker";
+import questDeck from "./data/questDeck";
 
 const INITIAL_STATE = {
   characterCreated: false,
@@ -47,9 +49,32 @@ const INITIAL_STATE = {
   showOverlay: true,
   enhancedReading: false,
   textToSpeech: false,
+  activeQuests: [],
+  completedQuests: [],
+  questProgress: {},
+  questInitialised: false,
 };
 
 const CHECKPOINT_PREFIX = 'checkpoint_';
+
+const matchesQuestCriteria = (quest, payload) => {
+  const criteria = quest.criteria || {};
+  switch (quest.event) {
+    case "warmupComplete":
+      return !criteria.room || criteria.room === payload.room;
+    case "workoutLogged":
+      if (criteria.room && criteria.room !== payload.room) return false;
+      if (criteria.focus && criteria.focus !== payload.focus) return false;
+      return true;
+    case "quizComplete":
+      if (criteria.room && criteria.room !== payload.room) return false;
+      return (payload.correct || 0) >= (criteria.minCorrect || quest.goal || 1);
+    case "bossDefeated":
+      return !criteria.room || criteria.room === payload.room;
+    default:
+      return false;
+  }
+};
 
 function App() {
   const [user, setUser] = useState(null);
@@ -149,6 +174,104 @@ function App() {
     }
   }, [user, gameState.introStage]);
 
+  const handleQuestEvent = useCallback(
+    (eventType, payload = {}) => {
+      setGameState((prev) => {
+        if (!prev.characterCreated) {
+          return prev;
+        }
+
+        const isInit = eventType === "init";
+        const activeSet = new Set(prev.activeQuests || []);
+        const completedSet = new Set(prev.completedQuests || []);
+        const questProgress = { ...(prev.questProgress || {}) };
+        const badgeSet = new Set(prev.badges || []);
+        let xpBonus = 0;
+        let changed = false;
+
+        if (isInit) {
+          questDeck.forEach((quest) => {
+            if (
+              quest.autoUnlock &&
+              !activeSet.has(quest.id) &&
+              !completedSet.has(quest.id)
+            ) {
+              activeSet.add(quest.id);
+              changed = true;
+            }
+          });
+        }
+
+        if (!isInit) {
+          questDeck.forEach((quest) => {
+            if (!activeSet.has(quest.id)) return;
+            if (quest.event !== eventType) return;
+            if (!matchesQuestCriteria(quest, payload)) return;
+
+            const goal = quest.goal || 1;
+            const increment = quest.increment || 1;
+            const newProgress = Math.min(
+              goal,
+              (questProgress[quest.id] || 0) + increment
+            );
+            questProgress[quest.id] = newProgress;
+            changed = true;
+
+            if (newProgress >= goal) {
+              activeSet.delete(quest.id);
+              completedSet.add(quest.id);
+              xpBonus += quest.reward?.xp || 0;
+              if (quest.reward?.badge && !badgeSet.has(quest.reward.badge)) {
+                badgeSet.add(quest.reward.badge);
+              }
+              delete questProgress[quest.id];
+            }
+          });
+        }
+
+        questDeck.forEach((quest) => {
+          if (activeSet.has(quest.id) || completedSet.has(quest.id)) {
+            return;
+          }
+          const prerequisites = quest.prerequisites || [];
+          const prerequisitesMet = prerequisites.every((id) =>
+            completedSet.has(id)
+          );
+          if (
+            (isInit && quest.autoUnlock) ||
+            (!isInit && prerequisitesMet)
+          ) {
+            if (quest.autoUnlock || prerequisitesMet) {
+              activeSet.add(quest.id);
+              changed = true;
+            }
+          }
+        });
+
+        if (!changed) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          xp: prev.xp + xpBonus,
+          badges: Array.from(badgeSet),
+          activeQuests: Array.from(activeSet),
+          completedQuests: Array.from(completedSet),
+          questProgress,
+        };
+      });
+    },
+    [setGameState]
+  );
+
+  useEffect(() => {
+    if (gameState.characterCreated && !gameState.questInitialised) {
+      handleQuestEvent("init");
+      setGameState((prev) => ({ ...prev, questInitialised: true }));
+    }
+  }, [gameState.characterCreated, gameState.questInitialised, handleQuestEvent]);
+
 
   const renderPhase = () => {
     if (!user) {
@@ -189,7 +312,12 @@ function App() {
           />
         );
       case 5:
-        return <Map gameState={gameState} setGameState={setGameState} />;
+        return (
+          <Map
+            gameState={gameState}
+            setGameState={setGameState}
+          />
+        );
       case 6:
         if (gameState.showOverlay) {
           return (
@@ -213,6 +341,7 @@ function App() {
               setGameState={setGameState}
               gameState={gameState}
               userId={user?.uid}
+              onQuestEvent={handleQuestEvent}
             />
           );
         }
@@ -222,17 +351,28 @@ function App() {
               setGameState={setGameState}
               gameState={gameState}
               userId={user?.uid}
+              onQuestEvent={handleQuestEvent}
             />
           );
         }
         if (gameState.currentRoom === "Mrs. Roche's Room") {
           return (
-            <Room3Boss setGameState={setGameState} gameState={gameState} userId={user?.uid} />
+            <Room3Boss
+              setGameState={setGameState}
+              gameState={gameState}
+              userId={user?.uid}
+              onQuestEvent={handleQuestEvent}
+            />
           );
         }
         if (gameState.currentRoom === "Fitness Suite") {
           return (
-            <FinalBossPhase setGameState={setGameState} gameState={gameState} userId={user?.uid} />
+            <FinalBossPhase
+              setGameState={setGameState}
+              gameState={gameState}
+              userId={user?.uid}
+              onQuestEvent={handleQuestEvent}
+            />
           );
         }
         break;
@@ -255,6 +395,13 @@ function App() {
           avatar={gameState.avatar}
           xp={gameState.xp}
           playerName={gameState.studentName}
+        />
+      )}
+      {user && gameState.characterCreated && (
+        <QuestTracker
+          activeQuests={gameState.activeQuests}
+          completedQuests={gameState.completedQuests}
+          questProgress={gameState.questProgress}
         />
       )}
       {renderPhase()}
