@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import BadgeCase from "./BadgeCase";
 import { GiBackpack } from "react-icons/gi";
 import InventoryModal from "./InventoryModal";
 import "./styles/Map.css";
+import { questById } from "../data/questDeck";
 
 const allRooms = [
   // Coordinates are relative to the map container (offset corrected)
@@ -23,6 +24,17 @@ function Map({ gameState, setGameState }) {
   const [dynamicRooms, setDynamicRooms] = useState([]);
   const [showBadges, setShowBadges] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
+
+  const questTargets = useMemo(() => {
+    const active = new Set();
+    (gameState.activeQuests || []).forEach((id) => {
+      const room = questById[id]?.criteria?.room;
+      if (room) {
+        active.add(room);
+      }
+    });
+    return active;
+  }, [gameState.activeQuests]);
 
   useEffect(() => {
     const updatedRooms = allRooms.map((room) => {
@@ -71,11 +83,24 @@ function Map({ gameState, setGameState }) {
         {dynamicRooms.map((room, index) => (
           <div
             key={index}
-            className={`room ${room.status} ${room.status === "fogged" ? "flicker" : ""}`}
+            className={`room ${room.status} ${
+              room.status === "fogged" ? "flicker" : ""
+            } ${questTargets.has(room.name) ? "quest-target" : ""}`}
             style={{ top: `${room.y}px`, left: `${room.x}px` }}
             onClick={() => handleRoomClick(room.name)}
           >
-            {room.status !== "fogged" ? room.name : "?"}
+            {room.status !== "fogged" ? (
+              <>
+                <span>{room.name}</span>
+                {questTargets.has(room.name) && (
+                  <span className="quest-icon" aria-label="Quest objective">
+                    ⭐ Quest Objective
+                  </span>
+                )}
+              </>
+            ) : (
+              "?"
+            )}
           </div>
         ))}
 
@@ -91,6 +116,7 @@ function Map({ gameState, setGameState }) {
       </div>
       <p className="map-instructions">
         🔍 Click on any visible room to investigate. Rooms will reveal themselves as you explore!
+        Quest icons highlight tabletop encounters that advance your campaign.
       </p>
       <button className="badge-button" onClick={() => setShowBadges(true)}>
         View Badges

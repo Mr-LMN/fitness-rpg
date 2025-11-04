@@ -15,8 +15,10 @@ export default function StartScreen({ onStart }) {
       <div className={styles.overlay} />
       <div className={styles.content}>
         <img src={logo} alt="Pencoedtre High Logo" className={styles.badge} />
-        <h1 className={styles.title}>Fitness RPG</h1>
-        <p className={styles.subtitle}>Begin your adventure to fitness glory.</p>
+        <h1 className={styles.title}>Fitness RPG: Tabletop Campaign</h1>
+        <p className={styles.subtitle}>
+          Draft your party, tackle fitness quests, and earn cosmetic glory for your crew.
+        </p>
         <button
           className={styles.startButton}
           onClick={onStart}

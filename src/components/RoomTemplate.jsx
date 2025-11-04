@@ -41,6 +41,7 @@ function getLinesByKey(key) {
   hasWorkout = false,
   hasScavenge = false,
   unlocksRoom = null,
+  onQuestEvent = () => {},
 }) {
   const [stage, setStage] = useState('narration');
   const [loot, setLoot] = useState(null);
@@ -69,8 +70,14 @@ function getLinesByKey(key) {
     else setStage('complete');
   };
 
-  const handleWarmupComplete = () => {
+  const handleWarmupComplete = (completedWarmup = true) => {
     setWarmupDone(true);
+    if (completedWarmup) {
+      onQuestEvent('warmupComplete', {
+        room: mapMarker,
+        focus: warmupFocus,
+      });
+    }
     if (hasWorkout) setStage('workout');
     else if (hasScavenge) setStage('scavenge');
     else setStage('complete');
@@ -78,7 +85,7 @@ function getLinesByKey(key) {
 
   const handleWarmupDecision = (wantWarmup) => {
     if (wantWarmup) setStage('warmupSelect');
-    else handleWarmupComplete();
+    else handleWarmupComplete(false);
   };
 
   const handleFocusSelect = (focus) => {
@@ -91,6 +98,10 @@ function getLinesByKey(key) {
       ...prev,
       xp: (prev.xp || 0) + 10,
     }));
+    onQuestEvent('workoutLogged', {
+      room: mapMarker,
+      focus: gameState.workoutFocus || workoutFocus || 'strength',
+    });
     if (safeQuiz) setStage('safeIntro');
     else if (hasScavenge) setStage('scavenge');
     else if (quizIntroKey) setStage('quizIntro');
@@ -100,11 +111,16 @@ function getLinesByKey(key) {
     else setStage('complete');
   };
 
-  const handleQuizComplete = (correct) => {
+  const handleQuizComplete = (correct, total) => {
     setGameState((prev) => ({
       ...prev,
       xp: (prev.xp || 0) + correct * 5,
     }));
+    onQuestEvent('quizComplete', {
+      room: mapMarker,
+      correct,
+      total,
+    });
     if (mapMarker === "Mrs. Roche's Room") {
       setStage('fitnessPrep');
     } else if (boss) setStage('boss');
@@ -127,6 +143,7 @@ function getLinesByKey(key) {
       }
       return { ...prev, ...updates };
     });
+    onQuestEvent('bossDefeated', { room: mapMarker });
     if (lootPool) setStage('loot');
     else setStage('complete');
   };
@@ -256,7 +273,7 @@ function getLinesByKey(key) {
         <ParallaxDust />
         <WarmupDisplay
           focus={warmupFocus}
-          onComplete={handleWarmupComplete}
+          onComplete={() => handleWarmupComplete(true)}
         />
       </div>
     );
