@@ -3,7 +3,13 @@ import WorkoutLogger from "./WorkoutLogger";
 import RandomWorkoutModal from "./RandomWorkoutModal";
 import "./styles/GameMenu.css";
 
-function GameMenu({ setGameState, gameState, userId, onQuestEvent }) {
+function GameMenu({
+  setGameState,
+  gameState,
+  userId,
+  onQuestEvent,
+  onResetProgress = () => {},
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showManualLog, setShowManualLog] = useState(false);
   const [showRandomModal, setShowRandomModal] = useState(false);
@@ -47,6 +53,15 @@ function GameMenu({ setGameState, gameState, userId, onQuestEvent }) {
               }}
             >
               Roll Random Workout
+            </button>
+            <button
+              className="menu-action danger"
+              onClick={() => {
+                setMenuOpen(false);
+                onResetProgress();
+              }}
+            >
+              Reset Progress
             </button>
           </div>
         )}

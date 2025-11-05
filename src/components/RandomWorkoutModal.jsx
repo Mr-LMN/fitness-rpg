@@ -24,18 +24,14 @@ function getRandomItems(source, count) {
   return picked;
 }
 
-function generateStrengthPlan(userWeight) {
-  const baseWeight = Math.max(6, Math.round((userWeight || 50) * 0.25));
+function generateStrengthPlan() {
   return getRandomItems(strengthChoices, 3).map((exercise) => {
     const sets = 3 + Math.floor(Math.random() * 2);
     const reps = 8 + Math.floor(Math.random() * 5);
-    const addWeight = baseWeight + Math.floor(Math.random() * 10);
     return {
       name: exercise.name,
       sets,
       reps,
-      weight: `${addWeight}`,
-      numericWeight: addWeight,
       type: exercise.type || "Strength",
       category: exercise.category,
       met: exercise.met,
@@ -71,12 +67,12 @@ function RandomWorkoutModal({
   const userWeight = getUserWeight();
   const [focus, setFocus] = useState(defaultFocus === "cardio" ? "cardio" : "strength");
   const [entries, setEntries] = useState(() =>
-    focus === "cardio" ? generateCardioPlan() : generateStrengthPlan(userWeight)
+    focus === "cardio" ? generateCardioPlan() : generateStrengthPlan()
   );
 
   useEffect(() => {
-    setEntries(focus === "cardio" ? generateCardioPlan() : generateStrengthPlan(userWeight));
-  }, [focus, userWeight]);
+    setEntries(focus === "cardio" ? generateCardioPlan() : generateStrengthPlan());
+  }, [focus]);
 
   const metrics = useMemo(
     () => calculateWorkoutMetrics(entries, userWeight, focus),
@@ -84,7 +80,7 @@ function RandomWorkoutModal({
   );
 
   const handleRegenerate = () => {
-    setEntries(focus === "cardio" ? generateCardioPlan() : generateStrengthPlan(userWeight));
+    setEntries(focus === "cardio" ? generateCardioPlan() : generateStrengthPlan());
   };
 
   const handleLog = async () => {
@@ -158,7 +154,7 @@ function RandomWorkoutModal({
           <p className="random-summary">
             {focus === "cardio"
               ? "Cardio sessions include a suggested duration and distance."
-              : "Strength sessions feature three lifts with suggested sets, reps, and load."}
+              : "Strength sessions feature three lifts with suggested sets and reps."}
           </p>
           <ul className="random-workout-list">
             {entries.map((entry, index) => (
@@ -167,7 +163,7 @@ function RandomWorkoutModal({
                 <span className="random-meta">
                   {focus === "cardio"
                     ? `${entry.duration} min · ${entry.distance} km`
-                    : `${entry.sets} × ${entry.reps} @ ${entry.weight}kg`}
+                    : `${entry.sets} × ${entry.reps}`}
                 </span>
               </li>
             ))}
