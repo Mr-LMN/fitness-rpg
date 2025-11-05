@@ -8,20 +8,21 @@
   background-blend-mode: multiply;
   color: #f5f5f5;
   padding: 30px;
-  border-radius: 12px;
+  border-radius: 16px;
   width: 90%;
   max-width: 650px;
   margin: 0 auto;
-  font-family: 'Garamond', serif;
-  box-shadow: 0 0 15px #00000088;
+  font-family: 'Poppins', 'Open Sans', sans-serif;
+  box-shadow: 0 16px 40px #00000066;
 }
 
 .log-title {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 600;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
   color: #f0f0f0;
+  letter-spacing: 0.4px;
 }
 
 .input-row {
@@ -36,9 +37,9 @@
 .input-row button {
   padding: 10px;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-family: 'Garamond', serif;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: 'Poppins', 'Open Sans', sans-serif;
 }
 
 .input-row input,
@@ -72,6 +73,12 @@
   margin-top: 20px;
 }
 
+.form-error {
+  color: #ff8a80;
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+}
+
 .logged-card {
   background: #1a1a1a;
   border: 1px solid #333;
@@ -81,9 +88,9 @@
 }
 
 .logged-card h4 {
-  font-size: 20px;
-  font-weight: bold;
-  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 6px;
   color: #fff;
 }
 
@@ -111,9 +118,9 @@
   color: #fff;
   border: none;
   padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-family: 'Garamond', serif;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: 'Poppins', 'Open Sans', sans-serif;
   cursor: pointer;
   transition: background 0.2s;
 }

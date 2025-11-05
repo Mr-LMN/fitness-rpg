@@ -12,6 +12,16 @@ export const badgeDefinitions = {
     label: "Workout Starter",
     description: "Logged your first workout!",
   },
+  workoutTrio: {
+    icon: <FaMedal />,
+    label: "Training Trio Streamer",
+    description: "Logged three workouts during the campaign.",
+  },
+  workoutQuint: {
+    icon: <GiLaurelsTrophy />,
+    label: "Campaign Conditioning Pennant",
+    description: "Logged five workouts to complete the conditioning milestone.",
+  },
   bossVanquisher: {
     icon: <GiLaurelsTrophy />,
     image: `${baseUrl}Badges/BossVanquisher_Badge.png`,

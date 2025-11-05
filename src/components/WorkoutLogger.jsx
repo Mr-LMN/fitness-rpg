@@ -7,11 +7,14 @@ import {
   parseWeightInput,
   formatWeightDisplay,
 } from "../utils";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../firebase";
 import SessionSummaryModal from "./SessionSummaryModal";
 import exerciseList from "../data/exerciseList";
 import cardioExercises from "../data/cardioExercises";
+import {
+  calculateWorkoutMetrics,
+  getExerciseMeta,
+} from "../helpers/workoutMetrics";
+import { persistWorkoutLog } from "../helpers/workoutPersistence";
 import "./styles/WorkoutLogger.css";
 
 function WorkoutLogger({
@@ -21,6 +24,8 @@ function WorkoutLogger({
   userId,
   yearGroup,
   onComplete,
+  onWorkoutLogged,
+  title,
   completeLabel = "Continue",
 }) {
   const cardioMode = workoutFocus === "cardio";
@@ -36,77 +41,106 @@ function WorkoutLogger({
   const [workoutLog, setWorkoutLog] = useState([]);
   const [showSummary, setShowSummary] = useState(false);
   const [summaryData, setSummaryData] = useState(null);
+  const [formError, setFormError] = useState("");
   const userWeight = getUserWeight();
+  const heading = title || (roomNumber ? `Log Your Workout (${roomNumber})` : "Log Your Workout");
 
   const handleAddExercise = () => {
     if (cardioMode) {
       if (exerciseInput.name && exerciseInput.duration && exerciseInput.distance) {
+        const meta = getExerciseMeta(exerciseInput.name) || {
+          category: "Cardio",
+          type: "Cardio",
+          met: 8,
+        };
         setWorkoutLog([
           ...workoutLog,
-          { ...exerciseInput, type: "Cardio", category: "Cardio", numericWeight: 0 },
+          {
+            name: exerciseInput.name,
+            duration: Number(exerciseInput.duration),
+            distance: Number(exerciseInput.distance),
+            type: meta.type || "Cardio",
+            category: meta.category || "Cardio",
+            met: meta.met,
+            numericWeight: 0,
+          },
         ]);
         setExerciseInput({ name: "", duration: "", distance: "" });
+        setFormError("");
       }
     } else {
       if (exerciseInput.name && exerciseInput.sets && exerciseInput.reps && exerciseInput.weight) {
         const numericWeight = parseWeightInput(exerciseInput.weight, userWeight);
         const displayWeight = formatWeightDisplay(exerciseInput.weight);
+        const meta = getExerciseMeta(exerciseInput.name) || {};
         setWorkoutLog([
           ...workoutLog,
-          { ...exerciseInput, weight: displayWeight, numericWeight },
+          {
+            name: exerciseInput.name,
+            sets: Number(exerciseInput.sets),
+            reps: Number(exerciseInput.reps),
+            weight: displayWeight,
+            numericWeight,
+            type: meta.type || "Strength",
+            category: meta.category || "Strength",
+            met: meta.met,
+          },
         ]);
         setExerciseInput({ name: "", sets: "", reps: "", weight: "" });
+        setFormError("");
       }
     }
   };
 
-  const handleFinishWorkout = () => {
-    const totalWeight = workoutLog.reduce((sum, w) => {
-      const weight =
-        w.numericWeight !== undefined
-          ? w.numericWeight
-          : parseWeightInput(w.weight, userWeight);
-      return sum + (parseFloat(w.sets) || 0) * (parseFloat(w.reps) || 0) * weight;
-    }, 0);
-    const distance = workoutLog.reduce((sum, w) => sum + (parseFloat(w.distance) || 0), 0);
-    const calories = Math.round(distance * 60 + totalWeight * 0.1);
-    const minutes = workoutLog.reduce((sum, w) => {
-      if (cardioMode) return sum + (parseFloat(w.duration) || 0);
-      const sets = parseFloat(w.sets) || 0;
-      const reps = parseFloat(w.reps) || 0;
-      return sum + (sets * reps * 3) / 60;
-    }, 0);
+  const handleFinishWorkout = async () => {
+    if (workoutLog.length === 0) {
+      setFormError("Add at least one exercise before finishing.");
+      return;
+    }
 
+    const metrics = calculateWorkoutMetrics(workoutLog, userWeight, workoutFocus);
     const summary = {
-      totalWeight: `${totalWeight.toFixed(1)} kg`,
-      distance: `${distance.toFixed(1)} km`,
-      calories: `${calories} kcal`,
+      totalWeight: `${metrics.totalWeight.toFixed(1)} kg`,
+      distance: `${metrics.distance.toFixed(1)} km`,
+      calories: `${metrics.calories.toFixed(1)} kcal`,
       exerciseCount: workoutLog.length,
     };
 
     setSummaryData(summary);
     setShowSummary(true);
 
-    // Save data to Firestore
-    saveWorkoutToFirestore({
-      totalWeightLifted: totalWeight,
-      distanceTravelled: distance,
-      caloriesBurned: calories,
-      exercisesLogged: workoutLog.length,
-      workoutDetails: workoutLog, // Optional, detailed logs
-      minutesLogged: minutes,
+    try {
+      await persistWorkoutLog({
+        userId,
+        yearGroup,
+        workoutData: {
+          totalWeightLifted: metrics.totalWeight,
+          distanceTravelled: metrics.distance,
+          caloriesBurned: Math.round(metrics.calories),
+          exercisesLogged: workoutLog.length,
+          workoutDetails: workoutLog,
+          minutesLogged: metrics.minutes,
+        },
+      });
+    } catch (error) {
+      // Error already logged in helper
+    }
+
+    updateLifetimeSummary({
+      weightLifted: metrics.totalWeight,
+      distance: metrics.distance,
+      calories: metrics.calories,
     });
+    logWorkoutMinutes(metrics.minutes);
 
-    updateLifetimeSummary({ weightLifted: totalWeight, distance, calories });
-    logWorkoutMinutes(minutes);
-
+    const roomLabel = roomNumber || "Free Log";
     setGameState((prev) => ({
       ...prev,
       xp: (prev.xp || 0) + 10,
       annotations: [
-        ...prev.annotations,
+        ...(prev.annotations || []),
         {
-          room: `Room ${roomNumber}`,
+          room: roomLabel,
           activity: "Workout completed",
           details: workoutLog,
           timestamp: new Date().toISOString(),
@@ -114,6 +148,15 @@ function WorkoutLogger({
       ],
     }));
     playSound();
+
+    if (typeof onWorkoutLogged === "function") {
+      onWorkoutLogged({
+        focus: workoutFocus,
+        metrics,
+        entries: workoutLog,
+        room: roomLabel,
+      });
+    }
   };
 
   const handleSummaryContinue = () => {
@@ -123,24 +166,9 @@ function WorkoutLogger({
     }
   };
 
-  const saveWorkoutToFirestore = async (workoutData) => {
-    try {
-      console.log("Saving workout for:", userId, workoutData);
-      await addDoc(collection(db, "workouts"), {
-        userId,
-        yearGroup,
-        ...workoutData,
-        timestamp: serverTimestamp(),
-      });
-      console.log("✅ Workout successfully logged in Firestore");
-    } catch (error) {
-      console.error("❌ Error logging workout to Firestore:", error);
-    }
-  };
-
   return (
     <div className="log-container">
-      <h3 className="log-title">Log Your Workout (Room {roomNumber})</h3>
+      <h3 className="log-title">{heading}</h3>
       <div className="input-row">
         <input
           list="exerciseOptions"
@@ -202,6 +230,8 @@ function WorkoutLogger({
           + Log Exercise
         </button>
       </div>
+
+      {formError && <p className="form-error">{formError}</p>}
 
       <div className="logged-workout">
         {workoutLog.map((entry, i) => (

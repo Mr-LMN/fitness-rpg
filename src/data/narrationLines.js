@@ -1,11 +1,11 @@
 const narrationLines = {
   general: {
     introPhase: [
-      "You were stuffed into a locker by bullies. You shouted for help, but no one came. Then… the evacuation alarm rang. Panic erupted outside. You screamed…and passed out from the lack of air.",
-      "\u23F1\uFE0F 24 hours later…",
-      "You awake—cold, cramped, and alone. The building is silent. Lights flicker. You scream again… nothing.",
-      "💥 Using the last of your strength, you kick the locker door until it swings open. You collapse out onto the changing room floor, freezing cold.",
-      "You must get warm fast or risk freezing in the dark...",
+      "Your eyes snap open to darkness. Metal presses against your back, the stale tang of sweat and bleach filling your lungs. The locker you were shoved into has become a coffin.",
+      "Somewhere beyond the metal door, the evacuation klaxon drones a low, dying wail. No footsteps. No teachers. Just the drip of a leaking pipe and your ragged breathing.",
+      "You slam your shoulder into the door. Once. Twice. On the third hit the lock gives. You spill out onto the locker room tiles, freezing air scalding your skin.",
+      "Rows of benches lie toppled. Steam clouds the air. Every muscle in your body screams for warmth and movement before the chill swallows you whole.",
+      "Time to wake the body, sharpen the mind, and find a way out of this tomb.",
     ],
     warmupIntro: [
       "Your muscles ache. You shuffle across the room, rubbing your arms. You spot a dusty rowing machine still plugged in.",
@@ -19,12 +19,11 @@ const narrationLines = {
       "\u26A1\uFE0F Leap onto the bench and push up into the tiles—{squatJumpGoal} squat jumps",
     ],
     mapIntroduction: [
-      "You step into the dim hallway, breathing heavy after escaping the locker room. Just as you start to gather your bearings, something crunches under your foot.",
-      "A torn, dusty school bag lies abandoned near the lockers. Its straps are frayed, but it feels sturdy enough to carry what you need.",
-      "Inside, you find a battered pamphlet-style school map, marked with strange scribbles: \"DO NOT ENTER - Roche?\" Some rooms are circled. Others crossed out.",
-      "Alongside it, an old sticky note: \"If you're reading this... stick to the Languages Wing.\"",
-      "You sling the bag over your shoulder. From now on, you can collect supplies and keep track of your path.",
-      "Mr. Watkins' room looks slightly ajar. It might be worth investigating first.",
+      "You stagger out of the locker room and nearly trip over a battered sports bag slumped against the wall. Someone left in a hurry.",
+      "Inside the bag is a torn pamphlet map. Red ink circles the Languages Wing and scrawled notes warn: \"Stick together. Roche lost it. Bring gear.\"",
+      "Tucked in the front pocket is a set of tabletop quest cards—objectives, rewards, and cryptic hints. Whoever owned this bag was planning a campaign.",
+      "This is your lifeline now. Sling it over your shoulder, track every item you scavenge, and let the tabletop plan guide you out.",
+      "First marker: Mr. Watkins' classroom. The door is cracked open, as if inviting your crew inside.",
     ],
     overlayIntro: {
       "Mr. Watkins' Room": [

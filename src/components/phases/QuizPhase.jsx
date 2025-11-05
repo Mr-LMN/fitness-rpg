@@ -107,6 +107,8 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
   ];
 
   // Build question pool
+  const [resetKey, setResetKey] = useState(0);
+
   const questionPool = useMemo(() => {
     let pool = Array.isArray(questions) && questions.length > 0 ? [...questions] : [...defaultPool];
     pool = pool.sort(() => Math.random() - 0.5);
@@ -133,7 +135,7 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
     }
 
     return pool;
-  }, [questions, showImpossibleFinal]);
+  }, [questions, showImpossibleFinal, resetKey]);
 
   const totalQuestions = questionPool.length;
 
@@ -179,6 +181,15 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
 
   // When complete, show results and call onComplete
   if (quizComplete) {
+    const handleReset = () => {
+      setCurrentQuestion(0);
+      setCorrectAnswers(0);
+      setQuizComplete(false);
+      setPenalty("");
+      setFinalWrong(false);
+      setResetKey((key) => key + 1);
+    };
+
     return (
       <div className="quiz-container">
         <h2>🎉 Quiz Complete</h2>
@@ -190,6 +201,11 @@ function QuizPhase({ questions = [], onComplete, showImpossibleFinal = false }) 
           </p>
         )}
         <button onClick={() => onComplete(correctAnswers, totalQuestions)}>Continue</button>
+        {correctAnswers < totalQuestions && (
+          <button className="quiz-option-btn retry" onClick={handleReset}>
+            Retry from Start
+          </button>
+        )}
       </div>
     );
   }
