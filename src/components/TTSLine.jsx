@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { speakText } from '../utils';
+import { speakText, isTtsEnabled, subscribeToTts } from '../utils';
 
 function TTSLine({ text, autoRead, className = '' }) {
   const [display, setDisplay] = useState('');
+  const [ttsEnabled, setTtsEnabled] = useState(isTtsEnabled());
+
+  useEffect(() => {
+    const unsubscribe = subscribeToTts(setTtsEnabled);
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     let i = 0;
@@ -12,19 +18,26 @@ function TTSLine({ text, autoRead, className = '' }) {
       setDisplay(text.slice(0, i));
       if (i >= text.length) {
         clearInterval(interval);
-        if (autoRead) speakText(text);
       }
     }, 30);
     return () => clearInterval(interval);
-  }, [text, autoRead]);
+  }, [text]);
+
+  useEffect(() => {
+    if (!autoRead || !ttsEnabled) return undefined;
+    const timeout = setTimeout(() => speakText(text), Math.max(text.length * 30, 300));
+    return () => clearTimeout(timeout);
+  }, [autoRead, text, ttsEnabled]);
 
   return (
     <p className={`tts-line ${className}`.trim()}>
       {display}
       <button
-        onClick={() => speakText(text)}
+        type="button"
+        onClick={() => ttsEnabled && speakText(text)}
         aria-label="Play narration"
         className="tts-play"
+        disabled={!ttsEnabled}
       >
         🔊
       </button>

@@ -15,14 +15,14 @@ function QuestTracker({ activeQuests = [], completedQuests = [], questProgress =
   return (
     <aside className="quest-tracker" aria-label="Quest tracker">
       <div className="quest-header">
-        <h3>🎲 Quest Board</h3>
+        <h3>Quest Board</h3>
         <p className="quest-tagline">
-          Draft encounters like a tabletop campaign. Rally your crew, conquer fitness trials,
-          and earn cosmetic glory.
+          Curated contracts from the shadow faculty. Track your progress, stay on objective, and
+          claim each eerie reward.
         </p>
       </div>
       {activeDetails.length === 0 ? (
-        <p className="quest-empty">All current quests complete! Visit the map for new leads.</p>
+        <p className="quest-empty">All current quests complete. Visit the map for new leads.</p>
       ) : (
         <ul className="quest-list">
           {activeDetails.map((quest) => {
@@ -30,19 +30,56 @@ function QuestTracker({ activeQuests = [], completedQuests = [], questProgress =
             const progress = Math.min(goal, questProgress[quest.id] || 0);
             const percent = Math.round((progress / goal) * 100);
             const reward = quest.reward || {};
+            const remaining = Math.max(goal - progress, 0);
+            const progressLabel =
+              goal > 1 ? `${progress} / ${goal}` : progress >= goal ? "Complete" : "1 Objective";
+            const remainingLabel =
+              remaining === 1 ? "1 task remaining" : `${remaining} tasks remaining`;
             return (
               <li key={quest.id} className={`quest-card quest-${quest.type}`}>
                 <div className="quest-card-header">
-                  <span className="quest-title">{quest.title}</span>
-                  <span className="quest-type">{quest.type === "knowledge" ? "Knowledge" : "Fitness"}</span>
+                  <div className="quest-card-title">
+                    <span className="quest-title">{quest.title}</span>
+                    <span className={`quest-type quest-type-${quest.type}`}>
+                      {quest.type === "knowledge" ? "Knowledge" : "Fitness"}
+                    </span>
+                  </div>
+                  <span className="quest-progress-value">
+                    {progress >= goal ? "Complete" : `${percent}%`}
+                  </span>
                 </div>
                 <p className="quest-description">{quest.description}</p>
-                <div className="quest-progress" role="progressbar" aria-valuemin={0} aria-valuemax={goal} aria-valuenow={progress}>
-                  <div className="quest-progress-fill" style={{ width: `${percent}%` }} />
-                </div>
-                <div className="quest-reward">
-                  Reward: {reward.xp || 0} XP
-                  {reward.badgeLabel ? ` · ${reward.badgeLabel}` : reward.badge ? " · Cosmetic badge" : ""}
+                <div className="quest-meta">
+                  <div className="quest-goal">
+                    <span className="quest-meta-label">Objective</span>
+                    <span className="quest-meta-value">{progressLabel}</span>
+                    {progress < goal && (
+                      <span className="quest-meta-hint">{remainingLabel}</span>
+                    )}
+                  </div>
+                  <div
+                    className="quest-progress"
+                    role="progressbar"
+                    aria-valuemin={0}
+                    aria-valuemax={goal}
+                    aria-valuenow={progress}
+                  >
+                    <div className="quest-progress-track">
+                      <div className="quest-progress-fill" style={{ width: `${percent}%` }} />
+                    </div>
+                    <span className="quest-progress-label">
+                      {progress >= goal ? "Ready to claim" : `${percent}% complete`}
+                    </span>
+                  </div>
+                  <div className="quest-reward">
+                    <span className="quest-meta-label">Rewards</span>
+                    <ul className="quest-reward-list">
+                      <li>⭐ {reward.xp || 0} XP</li>
+                      {(reward.badgeLabel || reward.badge) && (
+                        <li>🎖️ {reward.badgeLabel || "Cosmetic badge"}</li>
+                      )}
+                    </ul>
+                  </div>
                 </div>
               </li>
             );

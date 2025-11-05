@@ -18,6 +18,8 @@ const SOUND_MAP = {
 };
 
 let globalMuted = false;
+let ttsEnabled = false;
+const ttsListeners = new Set();
 
 export function setMuted(val) {
   globalMuted = !!val;
@@ -25,6 +27,25 @@ export function setMuted(val) {
 
 export function isMuted() {
   return globalMuted;
+}
+
+export function setTtsEnabled(val) {
+  ttsEnabled = !!val;
+  if (!ttsEnabled && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  ttsListeners.forEach((listener) => listener(ttsEnabled));
+}
+
+export function isTtsEnabled() {
+  return ttsEnabled;
+}
+
+export function subscribeToTts(listener) {
+  ttsListeners.add(listener);
+  return () => {
+    ttsListeners.delete(listener);
+  };
 }
 
 export function playSound(name = 'pickup', opts = {}) {
@@ -65,7 +86,7 @@ export function playVoice(filePath) {
 
 // Speak text using the backend /speak endpoint which proxies Google TTS
 export async function speakText(text) {
-  if (globalMuted || typeof fetch === 'undefined') return;
+  if (!ttsEnabled || globalMuted || typeof fetch === 'undefined') return;
 
   try {
     const response = await fetch('/speak', {
