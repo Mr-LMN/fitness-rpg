@@ -8,8 +8,9 @@
 
 .scene-image {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 14px;
   margin-bottom: 15px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
 }
 .room-content {
   position: absolute;
@@ -21,18 +22,34 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.4);
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(6, 10, 22, 0.75), rgba(6, 10, 22, 0.55));
+  backdrop-filter: blur(6px);
   text-align: center;
+  border-radius: 18px;
 }
 
 .rpg-text {
-  font-family: "Papyrus", fantasy;
-  text-shadow: 2px 2px 4px #000;
+  font-family: 'Poppins', 'Open Sans', sans-serif;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  line-height: 1.6;
+}
+
+.room-content h1,
+.room-content h2,
+.room-content h3 {
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 .room-container.interaction .scene-image {
-  opacity: 0.3;
-  transform: scale(0.95);
-  transition: opacity 0.3s, transform 0.3s;
+  opacity: 0.35;
+  transform: scale(0.97);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .room-content {
+    padding: 16px;
+  }
 }

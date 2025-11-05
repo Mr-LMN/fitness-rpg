@@ -1,5 +1,50 @@
 const questDeck = [
   {
+    id: "quest_workout_1",
+    title: "First Footing",
+    type: "fitness",
+    description:
+      "Log your first workout anywhere on campus to steady your crew's nerves.",
+    event: "workoutLogged",
+    goal: 1,
+    reward: {
+      xp: 15,
+      badge: "workoutStarter",
+      badgeLabel: "Workout Starter wrist wrap",
+    },
+    autoUnlock: true,
+  },
+  {
+    id: "quest_workout_3",
+    title: "Training Trio",
+    type: "fitness",
+    description:
+      "Log three workouts during the campaign to prove your momentum.",
+    event: "workoutLogged",
+    goal: 3,
+    reward: {
+      xp: 35,
+      badge: "workoutTrio",
+      badgeLabel: "Training Trio streamer",
+    },
+    prerequisites: ["quest_workout_1"],
+  },
+  {
+    id: "quest_workout_5",
+    title: "Campaign Conditioned",
+    type: "fitness",
+    description:
+      "Log five workouts across the map to finish the conditioning milestone.",
+    event: "workoutLogged",
+    goal: 5,
+    reward: {
+      xp: 60,
+      badge: "workoutQuint",
+      badgeLabel: "Campaign Conditioning pennant",
+    },
+    prerequisites: ["quest_workout_3"],
+  },
+  {
     id: "quest_spark_warmup",
     title: "Spark Gauntlet",
     type: "fitness",

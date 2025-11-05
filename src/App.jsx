@@ -22,6 +22,7 @@ import GlobalAudioControls from "./components/GlobalAudioControls";
 import StartScreen from "./components/StartScreen";
 import QuestTracker from "./components/QuestTracker";
 import questDeck from "./data/questDeck";
+import GameMenu from "./components/GameMenu";
 
 const INITIAL_STATE = {
   characterCreated: false,
@@ -402,6 +403,14 @@ function App() {
           activeQuests={gameState.activeQuests}
           completedQuests={gameState.completedQuests}
           questProgress={gameState.questProgress}
+        />
+      )}
+      {user && gameState.characterCreated && (
+        <GameMenu
+          setGameState={setGameState}
+          gameState={gameState}
+          userId={user?.uid}
+          onQuestEvent={handleQuestEvent}
         />
       )}
       {renderPhase()}

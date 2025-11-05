@@ -1,11 +1,13 @@
 .quiz-container {
   background: rgba(34, 34, 34, 0.9);
-  padding: 20px;
-  border-radius: 8px;
+  padding: 24px;
+  border-radius: 14px;
   text-align: center;
   max-width: 600px;
   margin: 0 auto;
   color: #fff;
+  font-family: 'Poppins', 'Open Sans', sans-serif;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
 }
 
 .quiz-question {
@@ -29,6 +31,16 @@
 }
 .quiz-option-btn:hover {
   background: #666;
+}
+
+.quiz-option-btn.retry {
+  margin-top: 12px;
+  background: #2f4858;
+  border-color: #4d6c7d;
+}
+
+.quiz-option-btn.retry:hover {
+  background: #3d5c70;
 }
 
 .penalty-message {

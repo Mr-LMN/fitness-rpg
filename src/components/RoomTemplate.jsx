@@ -98,10 +98,6 @@ function getLinesByKey(key) {
       ...prev,
       xp: (prev.xp || 0) + 10,
     }));
-    onQuestEvent('workoutLogged', {
-      room: mapMarker,
-      focus: gameState.workoutFocus || workoutFocus || 'strength',
-    });
     if (safeQuiz) setStage('safeIntro');
     else if (hasScavenge) setStage('scavenge');
     else if (quizIntroKey) setStage('quizIntro');
@@ -291,6 +287,14 @@ function getLinesByKey(key) {
             userId={userId}
             yearGroup={gameState.yearGroup}
             onComplete={handleWorkoutComplete}
+            onWorkoutLogged={({ focus }) =>
+              onQuestEvent('workoutLogged', {
+                room: mapMarker,
+                focus:
+                  focus || workoutFocus || gameState.workoutFocus || 'strength',
+              })
+            }
+            title={`Log Your Workout (${mapMarker})`}
             completeLabel="Upload Your Workout"
           />
         </div>
