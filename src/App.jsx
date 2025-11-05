@@ -273,6 +273,30 @@ function App() {
     }
   }, [gameState.characterCreated, gameState.questInitialised, handleQuestEvent]);
 
+  const handleResetProgress = useCallback(() => {
+    const confirmed = window.confirm(
+      "This will erase your current character and local progress. Are you sure you want to continue?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    if (user?.uid) {
+      localStorage.removeItem(`${CHECKPOINT_PREFIX}${user.uid}`);
+    }
+
+    localStorage.removeItem("lifetimeSummary");
+    localStorage.removeItem("weekData");
+    localStorage.removeItem("lastOpenDate");
+
+    setGameState({ ...INITIAL_STATE });
+    setPopupMessage(null);
+    setRecentBadge(null);
+    setShowHome(true);
+    prevXpLevel.current = 0;
+    prevBadgesRef.current = [];
+  }, [user]);
 
   const renderPhase = () => {
     if (!user) {
@@ -411,6 +435,7 @@ function App() {
           gameState={gameState}
           userId={user?.uid}
           onQuestEvent={handleQuestEvent}
+          onResetProgress={handleResetProgress}
         />
       )}
       {renderPhase()}

@@ -68,6 +68,14 @@
   background: rgba(74, 94, 125, 0.8);
 }
 
+.menu-action.danger {
+  background: #7a1f2b;
+}
+
+.menu-action.danger:hover {
+  background: #932738;
+}
+
 .menu-modal-overlay {
   position: fixed;
   inset: 0;
