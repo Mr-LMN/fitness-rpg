@@ -17,7 +17,7 @@ import FinalBossPhase from "./components/phases/FinalBossPhase";
 import XPBar from "./components/XPBar";
 import AccountabilityPopup from "./components/AccountabilityPopup";
 import BadgeUnlockedModal from "./components/BadgeUnlockedModal";
-import { playSound, stopSound, setMuted } from "./utils";
+import { playSound, stopSound, setMuted, setTtsEnabled } from "./utils";
 import GlobalAudioControls from "./components/GlobalAudioControls";
 import StartScreen from "./components/StartScreen";
 import QuestTracker from "./components/QuestTracker";
@@ -165,7 +165,8 @@ function App() {
   }, [gameState.badges]);
 
   useEffect(() => {
-    if (!user || gameState.introStage === 0) {
+    const shouldPlayAmbient = !muted && (!user || gameState.introStage === 0);
+    if (shouldPlayAmbient) {
       if (!ambientRef.current) {
         ambientRef.current = playSound('ambient', { loop: true, volume: 0.2 });
       }
@@ -173,7 +174,11 @@ function App() {
       stopSound(ambientRef.current);
       ambientRef.current = null;
     }
-  }, [user, gameState.introStage]);
+  }, [user, gameState.introStage, muted]);
+
+  useEffect(() => {
+    setTtsEnabled(gameState.textToSpeech);
+  }, [gameState.textToSpeech]);
 
   const handleQuestEvent = useCallback(
     (eventType, payload = {}) => {
@@ -453,10 +458,14 @@ function App() {
         toggleMute={() => setMutedState((m) => !m)}
         tts={gameState.textToSpeech}
         toggleTts={() =>
-          setGameState((prev) => ({
-            ...prev,
-            textToSpeech: !prev.textToSpeech,
-          }))
+          setGameState((prev) => {
+            const next = !prev.textToSpeech;
+            setTtsEnabled(next);
+            return {
+              ...prev,
+              textToSpeech: next,
+            };
+          })
         }
       />
     </div>

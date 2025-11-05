@@ -2,12 +2,28 @@ import React from 'react';
 
 function GlobalAudioControls({ muted, toggleMute, tts, toggleTts }) {
   return (
-    <div className="global-audio-controls">
-      <button onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'}>
-        {muted ? '🔇' : '🔊'}
+    <div className="global-audio-controls" role="group" aria-label="Audio preferences">
+      <button
+        type="button"
+        onClick={toggleMute}
+        aria-pressed={muted}
+        className={`audio-toggle ${muted ? 'is-off' : 'is-on'}`}
+      >
+        <span className="audio-icon" aria-hidden="true">
+          {muted ? '🔇' : '🔊'}
+        </span>
+        <span className="audio-label">{muted ? 'Sound Off' : 'Sound On'}</span>
       </button>
-      <button onClick={toggleTts} aria-label={tts ? 'Disable text to speech' : 'Enable text to speech'}>
-        {tts ? '🗣️' : '💬'}
+      <button
+        type="button"
+        onClick={toggleTts}
+        aria-pressed={tts}
+        className={`audio-toggle ${tts ? 'is-on' : 'is-off'}`}
+      >
+        <span className="audio-icon" aria-hidden="true">
+          {tts ? '🗣️' : '💬'}
+        </span>
+        <span className="audio-label">{tts ? 'Narrator On' : 'Narrator Off'}</span>
       </button>
     </div>
   );
