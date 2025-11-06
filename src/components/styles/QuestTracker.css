@@ -1,18 +1,18 @@
+
 .quest-tracker {
   position: fixed;
-  top: 80px;
-  right: 30px;
-  width: 300px;
-  max-height: calc(100vh - 140px);
-  overflow-y: auto;
+  bottom: 24px;
+  left: 28px;
+  width: 320px;
+  max-width: calc(100vw - 56px);
   padding: 18px 20px;
-  background: linear-gradient(160deg, rgba(9, 11, 25, 0.62), rgba(18, 13, 37, 0.55));
+  background: linear-gradient(180deg, rgba(9, 11, 25, 0.78), rgba(18, 13, 37, 0.65));
   border: 1px solid rgba(147, 92, 255, 0.4);
   border-radius: 18px;
   color: #efe8ff;
-  box-shadow: 0 22px 48px rgba(3, 2, 18, 0.65);
+  box-shadow: 0 18px 40px rgba(3, 2, 18, 0.55);
   backdrop-filter: blur(16px);
-  z-index: 1000;
+  z-index: 800;
 }
 
 .quest-tracker::-webkit-scrollbar {
@@ -49,6 +49,7 @@
   color: #ffd9a8;
   margin: 10px 0;
 }
+
 
 .quest-list {
   list-style: none;
@@ -207,6 +208,13 @@
   content: '';
 }
 
+.quest-queue-hint {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  color: rgba(205, 198, 255, 0.85);
+  line-height: 1.4;
+}
+
 .quest-completed {
   margin-top: 22px;
   padding-top: 14px;
@@ -245,15 +253,19 @@
 
 @media (max-width: 1024px) {
   .quest-tracker {
-    position: static;
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
     width: auto;
-    margin: 16px;
-    max-height: none;
   }
 }
 
 @media (max-width: 600px) {
   .quest-tracker {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
     padding: 16px;
   }
 }
