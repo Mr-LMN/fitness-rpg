@@ -1,11 +1,11 @@
 
 .quest-tracker {
   position: fixed;
-  bottom: 24px;
-  left: 28px;
-  width: 320px;
-  max-width: calc(100vw - 56px);
-  padding: 18px 20px;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(640px, calc(100vw - 64px));
+  padding: 16px 22px;
   background: linear-gradient(180deg, rgba(9, 11, 25, 0.78), rgba(18, 13, 37, 0.65));
   border: 1px solid rgba(147, 92, 255, 0.4);
   border-radius: 18px;
@@ -13,6 +13,15 @@
   box-shadow: 0 18px 40px rgba(3, 2, 18, 0.55);
   backdrop-filter: blur(16px);
   z-index: 800;
+}
+
+.quest-tracker::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 20px;
+  border: 1px solid rgba(147, 92, 255, 0.18);
+  pointer-events: none;
 }
 
 .quest-tracker::-webkit-scrollbar {
@@ -25,12 +34,16 @@
 }
 
 .quest-header {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .quest-header h3 {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   font-size: 1.15rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -39,9 +52,9 @@
 
 .quest-tagline {
   margin: 0;
-  font-size: 0.82rem;
-  color: rgba(205, 197, 245, 0.85);
-  line-height: 1.4;
+  font-size: 0.78rem;
+  color: rgba(205, 197, 245, 0.82);
+  line-height: 1.35;
 }
 
 .quest-empty {
@@ -63,9 +76,11 @@
   position: relative;
   background: linear-gradient(150deg, rgba(25, 17, 49, 0.78), rgba(12, 9, 28, 0.88));
   border-radius: 16px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  display: grid;
+  gap: 16px;
 }
 
 .quest-card::after {
@@ -82,7 +97,8 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .quest-card-title {
@@ -128,17 +144,27 @@
   padding: 4px 10px;
 }
 
+.quest-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.quest-overview {
+  flex: 1;
+}
+
 .quest-description {
   font-size: 0.85rem;
   line-height: 1.45;
-  margin: 0 0 12px;
+  margin: 0;
   color: rgba(227, 223, 255, 0.95);
 }
 
 .quest-meta {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .quest-meta-label {
@@ -209,14 +235,15 @@
 }
 
 .quest-queue-hint {
-  margin: 14px 0 0;
-  font-size: 0.78rem;
-  color: rgba(205, 198, 255, 0.85);
+  margin: 4px 0 0;
+  font-size: 0.75rem;
+  color: rgba(205, 198, 255, 0.8);
   line-height: 1.4;
+  text-align: center;
 }
 
 .quest-completed {
-  margin-top: 22px;
+  margin-top: 18px;
   padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -251,21 +278,59 @@
   color: #9effcb;
 }
 
+@media (min-width: 900px) {
+  .quest-card {
+    grid-template-columns: 1.15fr;
+  }
+
+  .quest-body {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .quest-overview {
+    max-width: 55%;
+  }
+
+  .quest-meta {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .quest-meta > * {
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(17, 13, 32, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
 @media (max-width: 1024px) {
   .quest-tracker {
-    position: fixed;
-    left: 16px;
-    right: 16px;
-    bottom: 16px;
-    width: auto;
+    width: min(540px, calc(100vw - 40px));
+    top: 18px;
   }
 }
 
 @media (max-width: 600px) {
   .quest-tracker {
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    padding: 16px;
+    width: calc(100vw - 24px);
+    top: 12px;
+    padding: 14px 16px;
+  }
+
+  .quest-card {
+    padding: 14px 16px;
+  }
+
+  .quest-meta {
+    gap: 12px;
   }
 }
