@@ -4,6 +4,7 @@ import { speakText, isTtsEnabled, subscribeToTts } from '../utils';
 function TTSLine({ text, autoRead, className = '' }) {
   const [display, setDisplay] = useState('');
   const [ttsEnabled, setTtsEnabled] = useState(isTtsEnabled());
+  const shouldAutoRead = autoRead ?? true;
 
   useEffect(() => {
     const unsubscribe = subscribeToTts(setTtsEnabled);
@@ -24,10 +25,10 @@ function TTSLine({ text, autoRead, className = '' }) {
   }, [text]);
 
   useEffect(() => {
-    if (!autoRead || !ttsEnabled) return undefined;
+    if (!shouldAutoRead || !ttsEnabled) return undefined;
     const timeout = setTimeout(() => speakText(text), Math.max(text.length * 30, 300));
     return () => clearTimeout(timeout);
-  }, [autoRead, text, ttsEnabled]);
+  }, [shouldAutoRead, text, ttsEnabled]);
 
   return (
     <p className={`tts-line ${className}`.trim()}>

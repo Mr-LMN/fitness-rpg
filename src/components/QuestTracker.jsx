@@ -7,84 +7,53 @@ function QuestTracker({ activeQuests = [], completedQuests = [], questProgress =
     .map((id) => questById[id])
     .filter(Boolean);
 
+  const currentQuest = activeDetails[0];
+
+  const upcomingCount = Math.max(activeDetails.length - 1, 0);
+
   const recentCompletions = (completedQuests || [])
     .slice(-3)
     .map((id) => questById[id])
     .filter(Boolean);
 
+  const currentStats = currentQuest
+    ? getQuestStats(currentQuest, questProgress[currentQuest.id] || 0)
+    : null;
+
   return (
     <aside className="quest-tracker" aria-label="Quest tracker">
       <div className="quest-header">
-        <h3>Quest Board</h3>
+        <h3>Quest Focus</h3>
         <p className="quest-tagline">
-          Curated contracts from the shadow faculty. Track your progress, stay on objective, and
-          claim each eerie reward.
+          Stay on the active contract. New objectives will appear once this task is complete.
         </p>
       </div>
-      {activeDetails.length === 0 ? (
+      {!currentQuest ? (
         <p className="quest-empty">All current quests complete. Visit the map for new leads.</p>
       ) : (
-        <ul className="quest-list">
-          {activeDetails.map((quest) => {
-            const goal = quest.goal || 1;
-            const progress = Math.min(goal, questProgress[quest.id] || 0);
-            const percent = Math.round((progress / goal) * 100);
-            const reward = quest.reward || {};
-            const remaining = Math.max(goal - progress, 0);
-            const progressLabel =
-              goal > 1 ? `${progress} / ${goal}` : progress >= goal ? "Complete" : "1 Objective";
-            const remainingLabel =
-              remaining === 1 ? "1 task remaining" : `${remaining} tasks remaining`;
-            return (
-              <li key={quest.id} className={`quest-card quest-${quest.type}`}>
-                <div className="quest-card-header">
-                  <div className="quest-card-title">
-                    <span className="quest-title">{quest.title}</span>
-                    <span className={`quest-type quest-type-${quest.type}`}>
-                      {quest.type === "knowledge" ? "Knowledge" : "Fitness"}
-                    </span>
-                  </div>
-                  <span className="quest-progress-value">
-                    {progress >= goal ? "Complete" : `${percent}%`}
-                  </span>
-                </div>
-                <p className="quest-description">{quest.description}</p>
-                <div className="quest-meta">
-                  <div className="quest-goal">
-                    <span className="quest-meta-label">Objective</span>
-                    <span className="quest-meta-value">{progressLabel}</span>
-                    {progress < goal && (
-                      <span className="quest-meta-hint">{remainingLabel}</span>
-                    )}
-                  </div>
-                  <div
-                    className="quest-progress"
-                    role="progressbar"
-                    aria-valuemin={0}
-                    aria-valuemax={goal}
-                    aria-valuenow={progress}
-                  >
-                    <div className="quest-progress-track">
-                      <div className="quest-progress-fill" style={{ width: `${percent}%` }} />
-                    </div>
-                    <span className="quest-progress-label">
-                      {progress >= goal ? "Ready to claim" : `${percent}% complete`}
-                    </span>
-                  </div>
-                  <div className="quest-reward">
-                    <span className="quest-meta-label">Rewards</span>
-                    <ul className="quest-reward-list">
-                      <li>⭐ {reward.xp || 0} XP</li>
-                      {(reward.badgeLabel || reward.badge) && (
-                        <li>🎖️ {reward.badgeLabel || "Cosmetic badge"}</li>
-                      )}
-                    </ul>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <div className={`quest-card quest-${currentQuest.type}`} key={currentQuest.id}>
+          <div className="quest-card-header">
+            <div className="quest-card-title">
+              <span className="quest-title">{currentQuest.title}</span>
+              <span className={`quest-type quest-type-${currentQuest.type}`}>
+                {currentQuest.type === "knowledge" ? "Knowledge" : "Fitness"}
+              </span>
+            </div>
+            <span className="quest-progress-value">
+              {currentStats?.safeProgress >= (currentStats?.goal || 1)
+                ? "Complete"
+                : `${currentStats?.percent ?? 0}%`}
+            </span>
+          </div>
+          <QuestDetails quest={currentQuest} stats={currentStats} />
+        </div>
+      )}
+      {upcomingCount > 0 && (
+        <p className="quest-queue-hint">
+          {upcomingCount === 1
+            ? "1 hidden contract will reveal after this objective."
+            : `${upcomingCount} hidden contracts will unlock once this objective is cleared.`}
+        </p>
       )}
       {recentCompletions.length > 0 && (
         <div className="quest-completed">
@@ -98,6 +67,59 @@ function QuestTracker({ activeQuests = [], completedQuests = [], questProgress =
       )}
     </aside>
   );
+}
+
+function QuestDetails({ quest, stats }) {
+  const { goal, safeProgress, percent, remaining, reward, progressLabel, remainingLabel } =
+    stats || getQuestStats(quest, 0);
+  return (
+    <>
+      <p className="quest-description">{quest.description}</p>
+      <div className="quest-meta">
+        <div className="quest-goal">
+          <span className="quest-meta-label">Objective</span>
+          <span className="quest-meta-value">{progressLabel}</span>
+          {safeProgress < goal && <span className="quest-meta-hint">{remainingLabel}</span>}
+        </div>
+        <div
+          className="quest-progress"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={goal}
+          aria-valuenow={safeProgress}
+        >
+          <div className="quest-progress-track">
+            <div className="quest-progress-fill" style={{ width: `${percent}%` }} />
+          </div>
+          <span className="quest-progress-label">
+            {safeProgress >= goal ? "Ready to claim" : `${percent}% complete`}
+          </span>
+        </div>
+        <div className="quest-reward">
+          <span className="quest-meta-label">Rewards</span>
+          <ul className="quest-reward-list">
+            <li>⭐ {reward.xp || 0} XP</li>
+            {(reward.badgeLabel || reward.badge) && (
+              <li>🎖️ {reward.badgeLabel || "Cosmetic badge"}</li>
+            )}
+          </ul>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function getQuestStats(quest, progress = 0) {
+  const goal = quest.goal || 1;
+  const safeProgress = Math.min(goal, progress);
+  const percent = Math.round((safeProgress / goal) * 100);
+  const reward = quest.reward || {};
+  const remaining = Math.max(goal - safeProgress, 0);
+  const progressLabel =
+    goal > 1 ? `${safeProgress} / ${goal}` : safeProgress >= goal ? "Complete" : "1 Objective";
+  const remainingLabel = remaining === 1 ? "1 task remaining" : `${remaining} tasks remaining`;
+
+  return { goal, safeProgress, percent, reward, remaining, progressLabel, remainingLabel };
 }
 
 export default QuestTracker;
