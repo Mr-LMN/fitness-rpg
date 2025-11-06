@@ -70,11 +70,13 @@ function QuestTracker({ activeQuests = [], completedQuests = [], questProgress =
 }
 
 function QuestDetails({ quest, stats }) {
-  const { goal, safeProgress, percent, remaining, reward, progressLabel, remainingLabel } =
+  const { goal, safeProgress, percent, reward, progressLabel, remainingLabel } =
     stats || getQuestStats(quest, 0);
   return (
-    <>
-      <p className="quest-description">{quest.description}</p>
+    <div className="quest-body">
+      <div className="quest-overview">
+        <p className="quest-description">{quest.description}</p>
+      </div>
       <div className="quest-meta">
         <div className="quest-goal">
           <span className="quest-meta-label">Objective</span>
@@ -105,7 +107,7 @@ function QuestDetails({ quest, stats }) {
           </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
