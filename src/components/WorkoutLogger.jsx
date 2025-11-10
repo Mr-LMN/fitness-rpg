@@ -15,6 +15,7 @@ import {
   getExerciseMeta,
 } from "../helpers/workoutMetrics";
 import { persistWorkoutLog } from "../helpers/workoutPersistence";
+import BenchmarkAmrapTracker from "./BenchmarkAmrapTracker";
 import "./styles/WorkoutLogger.css";
 
 function WorkoutLogger({
@@ -27,6 +28,7 @@ function WorkoutLogger({
   onWorkoutLogged,
   title,
   completeLabel = "Continue",
+  specialWorkout = null,
 }) {
   const cardioMode = workoutFocus === "cardio";
   const allowedCategories = ["Core", "Legs", "Chest", "Back", "Arms", "Functional"];
@@ -41,9 +43,116 @@ function WorkoutLogger({
   const [workoutLog, setWorkoutLog] = useState([]);
   const [showSummary, setShowSummary] = useState(false);
   const [summaryData, setSummaryData] = useState(null);
+  const [summaryVariant, setSummaryVariant] = useState("standard");
   const [formError, setFormError] = useState("");
   const userWeight = getUserWeight();
-  const heading = title || (roomNumber ? `Log Your Workout (${roomNumber})` : "Log Your Workout");
+  const heading =
+    specialWorkout?.title ||
+    title ||
+    (roomNumber ? `Log Your Workout (${roomNumber})` : "Log Your Workout");
+  const isBenchmarkAmrap = specialWorkout?.variant === "benchmark-amrap";
+
+  const handleAmrapSubmit = async ({ roundsCompleted, roundsState }) => {
+    if (!isBenchmarkAmrap) return;
+    if (!roundsCompleted) {
+      setFormError("Tick off at least one round before finishing.");
+      return;
+    }
+
+    setFormError("");
+
+    const summary = {
+      roundsCompleted,
+      timeCap: specialWorkout?.timeCapMinutes
+        ? `${specialWorkout.timeCapMinutes}-minute cap`
+        : null,
+      notes: specialWorkout?.notes || specialWorkout?.subtitle || null,
+      movements: specialWorkout?.movements || [],
+    };
+
+    setSummaryVariant("amrap");
+    setSummaryData(summary);
+    setShowSummary(true);
+
+    try {
+      await persistWorkoutLog({
+        userId,
+        yearGroup,
+        workoutData: {
+          type: "benchmarkAmrap",
+          roundsCompleted,
+          roundHistory: roundsState,
+          timeCapMinutes: specialWorkout?.timeCapMinutes || null,
+          workoutTitle: heading,
+          movements: specialWorkout?.movements || [],
+        },
+      });
+    } catch (error) {
+      // Error already logged in helper
+    }
+
+    updateLifetimeSummary({ weightLifted: 0, distance: 0, calories: 0 });
+    logWorkoutMinutes(specialWorkout?.timeCapMinutes || 0);
+
+    const roomLabel = roomNumber || specialWorkout?.title || "Free Log";
+    setGameState((prev) => ({
+      ...prev,
+      xp: (prev.xp || 0) + 10,
+      annotations: [
+        ...(prev.annotations || []),
+        {
+          room: roomLabel,
+          activity: heading,
+          details: {
+            type: "benchmarkAmrap",
+            roundsCompleted,
+            roundHistory: roundsState,
+          },
+          timestamp: new Date().toISOString(),
+        },
+      ],
+    }));
+
+    playSound();
+
+    if (typeof onWorkoutLogged === "function") {
+      onWorkoutLogged({
+        focus: specialWorkout?.variant || workoutFocus,
+        metrics: { roundsCompleted },
+        entries: roundsState,
+        room: roomLabel,
+      });
+    }
+  };
+
+  const handleSummaryContinue = () => {
+    setShowSummary(false);
+    setSummaryVariant("standard");
+    if (onComplete) {
+      onComplete();
+    }
+  };
+
+  if (isBenchmarkAmrap) {
+    return (
+      <div className="log-container amrap-mode">
+        <h3 className="log-title">{heading}</h3>
+        <BenchmarkAmrapTracker
+          config={specialWorkout}
+          onSubmit={handleAmrapSubmit}
+          error={formError}
+        />
+        {showSummary && (
+          <SessionSummaryModal
+            summary={summaryData}
+            onContinue={handleSummaryContinue}
+            continueLabel={completeLabel}
+            variant={summaryVariant}
+          />
+        )}
+      </div>
+    );
+  }
 
   const handleAddExercise = () => {
     if (cardioMode) {
@@ -106,6 +215,7 @@ function WorkoutLogger({
       exerciseCount: workoutLog.length,
     };
 
+    setSummaryVariant("standard");
     setSummaryData(summary);
     setShowSummary(true);
 
@@ -156,13 +266,6 @@ function WorkoutLogger({
         entries: workoutLog,
         room: roomLabel,
       });
-    }
-  };
-
-  const handleSummaryContinue = () => {
-    setShowSummary(false);
-    if (onComplete) {
-      onComplete();
     }
   };
 
@@ -257,6 +360,7 @@ function WorkoutLogger({
           summary={summaryData}
           onContinue={handleSummaryContinue}
           continueLabel={completeLabel}
+          variant={summaryVariant}
         />
       )}
     </div>

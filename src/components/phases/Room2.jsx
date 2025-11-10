@@ -21,6 +21,7 @@ function Room2(props) {
       requiresWarmup={config.requiresWarmup}
       hasWorkout={config.hasWorkout}
       unlocksRoom={config.unlocksRoom}
+      specialWorkout={config.specialWorkout}
     />
   );
 }

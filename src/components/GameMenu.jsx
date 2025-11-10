@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import WorkoutLogger from "./WorkoutLogger";
 import RandomWorkoutModal from "./RandomWorkoutModal";
+import benchmarkAmrap from "../data/benchmarkAmrap";
 import "./styles/GameMenu.css";
 
 function GameMenu({
@@ -13,6 +14,7 @@ function GameMenu({
   const [menuOpen, setMenuOpen] = useState(false);
   const [showManualLog, setShowManualLog] = useState(false);
   const [showRandomModal, setShowRandomModal] = useState(false);
+  const [showBenchmarkLog, setShowBenchmarkLog] = useState(false);
   const [manualFocus, setManualFocus] = useState(gameState.workoutFocus || "strength");
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
@@ -44,6 +46,15 @@ function GameMenu({
               }}
             >
               Log Free Workout
+            </button>
+            <button
+              className="menu-action"
+              onClick={() => {
+                setMenuOpen(false);
+                setShowBenchmarkLog(true);
+              }}
+            >
+              Benchmark AMRAP Tracker
             </button>
             <button
               className="menu-action"
@@ -106,6 +117,41 @@ function GameMenu({
                 });
               }}
               onComplete={() => setShowManualLog(false)}
+              completeLabel="Close"
+            />
+          </div>
+        </div>
+      )}
+
+      {showBenchmarkLog && (
+        <div className="menu-modal-overlay">
+          <div className="menu-modal">
+            <div className="menu-modal-header">
+              <h3>{benchmarkAmrap.title}</h3>
+              <button
+                className="close-btn"
+                onClick={() => setShowBenchmarkLog(false)}
+                aria-label="Close benchmark tracker"
+              >
+                ×
+              </button>
+            </div>
+            <WorkoutLogger
+              key="benchmark-amrap"
+              title={benchmarkAmrap.title}
+              roomNumber={null}
+              setGameState={setGameState}
+              workoutFocus="benchmark-amrap"
+              userId={userId}
+              yearGroup={gameState.yearGroup}
+              specialWorkout={benchmarkAmrap}
+              onWorkoutLogged={({ focus }) => {
+                onQuestEvent("workoutLogged", {
+                  room: benchmarkAmrap.title,
+                  focus: focus || benchmarkAmrap.variant,
+                });
+              }}
+              onComplete={() => setShowBenchmarkLog(false)}
               completeLabel="Close"
             />
           </div>

@@ -22,16 +22,14 @@ const roomImages = {
 function getLinesByKey(key) {
   return key.split('.').reduce((obj, part) => (obj ? obj[part] : null), narrationLines) || [];
 }
-
-
-  function RoomTemplate({
+function RoomTemplate({
   narrationKey,
   workoutFocus,
   quiz,
   safeQuiz,
   safeIntroKey,
-    boss,
-    quizIntroKey,
+  boss,
+  quizIntroKey,
   lootPool,
   mapMarker,
   gameState,
@@ -41,6 +39,7 @@ function getLinesByKey(key) {
   hasWorkout = false,
   hasScavenge = false,
   unlocksRoom = null,
+  specialWorkout = null,
   onQuestEvent = () => {},
 }) {
   const [stage, setStage] = useState('narration');
@@ -286,12 +285,17 @@ function getLinesByKey(key) {
             workoutFocus={workoutFocus || gameState.workoutFocus}
             userId={userId}
             yearGroup={gameState.yearGroup}
+            specialWorkout={specialWorkout}
             onComplete={handleWorkoutComplete}
             onWorkoutLogged={({ focus }) =>
               onQuestEvent('workoutLogged', {
                 room: mapMarker,
                 focus:
-                  focus || workoutFocus || gameState.workoutFocus || 'strength',
+                  focus ||
+                  specialWorkout?.variant ||
+                  workoutFocus ||
+                  gameState.workoutFocus ||
+                  'strength',
               })
             }
             title={`Log Your Workout (${mapMarker})`}

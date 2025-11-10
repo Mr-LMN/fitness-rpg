@@ -16,6 +16,15 @@
   box-shadow: 0 16px 40px #00000066;
 }
 
+.log-container.amrap-mode {
+  max-width: 560px;
+  padding: 32px 28px;
+}
+
+.log-container.amrap-mode .log-title {
+  margin-bottom: 12px;
+}
+
 .log-title {
   font-size: 28px;
   font-weight: 600;

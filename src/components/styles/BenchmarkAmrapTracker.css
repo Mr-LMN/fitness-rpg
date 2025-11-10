@@ -1,0 +1,202 @@
+.amrap-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.amrap-subtitle,
+.amrap-notes {
+  margin: 0;
+  text-align: center;
+  color: #cbd5f5;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.amrap-info-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(139, 92, 246, 0.18));
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #e0f2ff;
+}
+
+.amrap-info-card .label {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.amrap-info-card strong {
+  font-size: 1.35rem;
+}
+
+.amrap-movements {
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.amrap-movements .movement-heading {
+  margin: 0 0 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #f8fafc;
+}
+
+.amrap-movements ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #dbeafe;
+  display: grid;
+  gap: 6px;
+}
+
+.amrap-rounds {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.amrap-round {
+  position: relative;
+  background: rgba(23, 37, 84, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.amrap-round input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.amrap-round .round-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.25);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #f8fafc;
+}
+
+.amrap-round .round-status {
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: #cbd5f5;
+}
+
+.amrap-round.completed {
+  border-color: rgba(45, 212, 191, 0.7);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+  background: rgba(15, 118, 110, 0.35);
+}
+
+.amrap-round.completed .round-number {
+  background: rgba(16, 185, 129, 0.85);
+}
+
+.amrap-round.completed .round-status {
+  color: #bbf7d0;
+}
+
+.amrap-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.add-round-btn,
+.reset-rounds-btn {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #e2e8f0;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.add-round-btn:hover,
+.reset-rounds-btn:hover {
+  background: rgba(59, 130, 246, 0.35);
+  transform: translateY(-1px);
+}
+
+.reset-rounds-btn {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.amrap-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 12px;
+  padding: 16px 18px;
+  gap: 12px;
+}
+
+.amrap-count span {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.amrap-count strong {
+  font-size: 1.6rem;
+  color: #f8fafc;
+}
+
+.finish-amrap-btn {
+  border: none;
+  background: linear-gradient(135deg, #22d3ee, #10b981);
+  color: #042f2e;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.finish-amrap-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(34, 211, 238, 0.3);
+}
+
+@media (max-width: 540px) {
+  .amrap-rounds {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  .amrap-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .finish-amrap-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
