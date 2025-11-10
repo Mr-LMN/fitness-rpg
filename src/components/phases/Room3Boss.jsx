@@ -17,6 +17,7 @@ function Room3Boss(props) {
       requiresWarmup={config.requiresWarmup}
       hasWorkout={config.hasWorkout}
       unlocksRoom={config.unlocksRoom}
+      specialWorkout={config.specialWorkout}
     />
   );
 }

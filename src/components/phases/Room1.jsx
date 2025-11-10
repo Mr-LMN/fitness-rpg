@@ -13,6 +13,7 @@ function Room1(props) {
       hasWorkout={config.hasWorkout}
       hasScavenge={config.hasScavenge}
       unlocksRoom={config.unlocksRoom}
+      specialWorkout={config.specialWorkout}
     />
   );
 }
