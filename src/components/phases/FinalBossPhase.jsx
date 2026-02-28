@@ -1,76 +1,76 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import ParallaxDust from "../ParallaxDust";
 import BlazePods from "../BlazePods";
 import { playSound, updateLifetimeSummary, logWorkoutMinutes } from "../../utils";
 import TTSLine from "../TTSLine";
 import "../styles/RoomScene.css";
+import { BADGES, SPEED_THRESHOLDS } from "../../constants";
 
 function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
   const [timer, setTimer] = useState(0);
   const [battleStarted, setBattleStarted] = useState(false);
   const [battleFinished, setBattleFinished] = useState(false);
-  const [intervalId, setIntervalId] = useState(null);
+  // Capture timer at finish time so the display doesn't change after stopping
+  const finalTimerRef = useRef(0);
 
   const formattedTime = useMemo(() => {
     if (timer < 60) return `${timer}s`;
     const minutes = Math.floor(timer / 60);
     const remaining = timer % 60;
-    if (remaining === 0) return `${minutes}m`;
-    return `${minutes}m ${remaining.toString().padStart(2, "0")}s`;
+    return remaining === 0 ? `${minutes}m` : `${minutes}m ${remaining.toString().padStart(2, "0")}s`;
   }, [timer]);
 
   useEffect(() => {
-    if (battleStarted && !battleFinished) {
-      const id = setInterval(() => {
-        setTimer((prev) => prev + 1);
-      }, 1000);
-      setIntervalId(id);
-      return () => clearInterval(id);
-    }
+    if (!battleStarted || battleFinished) return;
+    const id = setInterval(() => setTimer((t) => t + 1), 1000);
+    return () => clearInterval(id);
   }, [battleStarted, battleFinished]);
 
   const handleStart = () => {
-    playSound('alarm');
+    playSound("alarm");
     setBattleStarted(true);
   };
 
   const handleFinish = () => {
-    clearInterval(intervalId);
+    finalTimerRef.current = timer;
     setBattleFinished(true);
 
-    setGameState((prev) => ({
-      ...prev,
-      xp: (prev.xp || 0) + 50,
-      bossDefeated: true,
-      victory: true,
-      inventory: [
-        ...(prev.inventory || []),
-        {
-          id: 'map_piece_2',
-          name: 'Map Piece #2 (Maths Department)',
-          rarity: 'rare',
-          description: 'A scrap leading to the Maths Department.',
-          isNew: true,
+    setGameState((prev) => {
+      const newBadges = [BADGES.BOSS_VANQUISHER];
+      if (finalTimerRef.current <= SPEED_THRESHOLDS.SPEED_RUNNER) newBadges.push(BADGES.SPEED_RUNNER);
+      if (finalTimerRef.current <= SPEED_THRESHOLDS.TOP_TEN) newBadges.push(BADGES.TOP_TEN);
+
+      // Only add badges not already earned
+      const badgesToAdd = newBadges.filter((b) => !prev.badges.includes(b));
+
+      return {
+        ...prev,
+        xp: (prev.xp || 0) + 50,
+        bossDefeated: true,
+        victory: true,
+        inventory: [
+          ...(prev.inventory || []),
+          {
+            id: "map_piece_2",
+            name: "Map Piece #2 (Maths Department)",
+            rarity: "rare",
+            description: "A scrap leading to the Maths Department.",
+            isNew: true,
+          },
+        ],
+        badges: [...prev.badges, ...badgesToAdd],
+        leaderboardEntry: {
+          time: finalTimerRef.current,
+          date: new Date().toISOString(),
+          workout: "Operation Slamstorm",
         },
-      ],
-      badges: [
-        ...prev.badges,
-        ...(prev.badges.includes("bossVanquisher") ? [] : ["bossVanquisher"]),
-        ...(timer <= 120 && !prev.badges.includes("speedRunner")
-          ? ["speedRunner"]
-          : []),
-        ...(timer <= 100 && !prev.badges.includes("topTen") ? ["topTen"] : []),
-      ],
-      leaderboardEntry: {
-        time: timer,
-        date: new Date().toISOString(),
-        workout: "Operation Slamstorm",
-      },
-    }));
+      };
+    });
+
     updateLifetimeSummary({ calories: 0, bossesDefeated: 1 });
-    logWorkoutMinutes(timer / 60);
+    logWorkoutMinutes(finalTimerRef.current / 60);
     playSound();
-    onQuestEvent('bossDefeated', { room: 'Fitness Suite', timer });
+    onQuestEvent("bossDefeated", { room: "Fitness Suite", timer: finalTimerRef.current });
   };
 
   return (
@@ -90,7 +90,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
         {!battleStarted && (
           <>
             <p>
-              The fitness suite lights flare to life. Mrs. Roche’s mutated silhouette
+              The fitness suite lights flare to life. Mrs. Roche's mutated silhouette
               staggers between overturned machines, her roar echoing off the mirrors.
             </p>
             <p>
@@ -129,7 +129,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
               Among the scattered equipment you spot Map Piece #2 – the Maths Department
               wing. It slides neatly into your scavenged bag.
             </p>
-            <TTSLine text="You’ve finished scavenging and discovered Map Piece #2 (Maths Department). It’s been added to your backpack for later use." />
+            <TTSLine text="You've finished scavenging and discovered Map Piece #2 (Maths Department). It's been added to your backpack for later use." />
           </>
         )}
       </div>

@@ -10,7 +10,6 @@ import Map from "./components/Map";
 import Room1 from "./components/phases/Room1";
 import Room2 from "./components/phases/Room2";
 import Room3Boss from "./components/phases/Room3Boss";
-import QuizPhase from "./components/phases/QuizPhase";
 import VictoryPhase from "./components/phases/VictoryPhase";
 import RoomNarrativeOverlay from "./components/RoomNarrativeOverlay";
 import FinalBossPhase from "./components/phases/FinalBossPhase";
@@ -23,6 +22,7 @@ import StartScreen from "./components/StartScreen";
 import QuestTracker from "./components/QuestTracker";
 import questDeck from "./data/questDeck";
 import GameMenu from "./components/GameMenu";
+import { ROOMS } from "./constants";
 
 const INITIAL_STATE = {
   characterCreated: false,
@@ -35,7 +35,7 @@ const INITIAL_STATE = {
   introStage: 0,
   currentRoom: null,
   completedRooms: [],
-  visibleRooms: ["Mr. Watkins' Room"],
+  visibleRooms: [ROOMS.MR_WATKINS],
   annotations: [],
   inventory: [],
   bossReady: false,
@@ -56,8 +56,11 @@ const INITIAL_STATE = {
   questInitialised: false,
 };
 
-const CHECKPOINT_PREFIX = 'checkpoint_';
+const CHECKPOINT_PREFIX = "checkpoint_";
 
+const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+// Maps a quest event + payload to a boolean indicating whether criteria match.
 const matchesQuestCriteria = (quest, payload) => {
   const criteria = quest.criteria || {};
   switch (quest.event) {
@@ -77,6 +80,14 @@ const matchesQuestCriteria = (quest, payload) => {
   }
 };
 
+// Maps each room name to its component so App doesn't grow a new if-block per room.
+const ROOM_COMPONENTS = {
+  [ROOMS.MR_WATKINS]: Room1,
+  [ROOMS.MRS_JOHN]: Room2,
+  [ROOMS.MRS_ROCHE]: Room3Boss,
+  [ROOMS.FITNESS_SUITE]: FinalBossPhase,
+};
+
 function App() {
   const [user, setUser] = useState(null);
   const [gameState, setGameState] = useState({ ...INITIAL_STATE });
@@ -84,27 +95,25 @@ function App() {
   const [recentBadge, setRecentBadge] = useState(null);
   const [muted, setMutedState] = useState(false);
   const [showHome, setShowHome] = useState(true);
-  
+
   const ambientRef = useRef(null);
   const prevXpLevel = useRef(0);
   const prevBadgesRef = useRef([]);
 
   // Load checkpoint when a user logs in
   useEffect(() => {
-    if (user) {
-      const saved = localStorage.getItem(`${CHECKPOINT_PREFIX}${user.uid}`);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          setGameState({ ...INITIAL_STATE, ...parsed });
-        } catch (err) {
-          console.error('Failed to parse checkpoint', err);
-        }
+    if (!user) return;
+    const saved = localStorage.getItem(`${CHECKPOINT_PREFIX}${user.uid}`);
+    if (saved) {
+      try {
+        setGameState({ ...INITIAL_STATE, ...JSON.parse(saved) });
+      } catch (err) {
+        console.error("Failed to parse checkpoint", err);
       }
     }
   }, [user]);
 
-  // Save progress on every state change
+  // Persist progress on every state change
   useEffect(() => {
     if (user) {
       localStorage.setItem(
@@ -118,42 +127,39 @@ function App() {
     setMuted(muted);
   }, [muted]);
 
+  // Weekly challenge check — runs once on mount
   useEffect(() => {
     const now = new Date();
-    const lastOpen = localStorage.getItem('lastOpenDate');
-    if (!lastOpen || new Date(lastOpen).toDateString() !== now.toDateString()) {
-      localStorage.setItem('lastOpenDate', now.toISOString());
-    }
+    localStorage.setItem("lastOpenDate", now.toISOString());
 
-    const week = JSON.parse(localStorage.getItem('weekData') || '{}');
+    const week = JSON.parse(localStorage.getItem("weekData") || "{}");
     if (!week.start) {
       week.start = now.toISOString();
       week.minutes = 0;
-    } else {
-      const start = new Date(week.start);
-      if (now - start >= 7 * 24 * 60 * 60 * 1000) {
-        if ((week.minutes || 0) >= 60) {
-          setPopupMessage('Great job! You hit your weekly workout target!');
-        } else {
-          setPopupMessage('You missed the weekly workout target. Starting over.');
-          setGameState({ ...INITIAL_STATE });
-          setUser(null);
-        }
-        week.start = now.toISOString();
-        week.minutes = 0;
+    } else if (now - new Date(week.start) >= ONE_WEEK_MS) {
+      if ((week.minutes || 0) >= 60) {
+        setPopupMessage("Great job! You hit your weekly workout target!");
+      } else {
+        setPopupMessage("You missed the weekly workout target. Starting over.");
+        setGameState({ ...INITIAL_STATE });
+        setUser(null);
       }
+      week.start = now.toISOString();
+      week.minutes = 0;
     }
-    localStorage.setItem('weekData', JSON.stringify(week));
+    localStorage.setItem("weekData", JSON.stringify(week));
   }, []);
 
+  // Play a level-up sound when the XP level increases
   useEffect(() => {
     const level = Math.floor(gameState.xp / 100);
     if (level > prevXpLevel.current) {
-      playSound('xpLevel');
+      playSound("xpLevel");
     }
     prevXpLevel.current = level;
   }, [gameState.xp]);
 
+  // Show badge modal for newly earned badges
   useEffect(() => {
     const newBadges = gameState.badges.filter(
       (b) => !prevBadgesRef.current.includes(b)
@@ -164,11 +170,12 @@ function App() {
     prevBadgesRef.current = gameState.badges;
   }, [gameState.badges]);
 
+  // Ambient audio — play on home/start screen, stop once logged in
   useEffect(() => {
     const shouldPlayAmbient = !muted && (!user || gameState.introStage === 0);
     if (shouldPlayAmbient) {
       if (!ambientRef.current) {
-        ambientRef.current = playSound('ambient', { loop: true, volume: 0.2 });
+        ambientRef.current = playSound("ambient", { loop: true, volume: 0.2 });
       }
     } else if (ambientRef.current) {
       stopSound(ambientRef.current);
@@ -183,9 +190,7 @@ function App() {
   const handleQuestEvent = useCallback(
     (eventType, payload = {}) => {
       setGameState((prev) => {
-        if (!prev.characterCreated) {
-          return prev;
-        }
+        if (!prev.characterCreated) return prev;
 
         const isInit = eventType === "init";
         const activeSet = new Set(prev.activeQuests || []);
@@ -195,19 +200,17 @@ function App() {
         let xpBonus = 0;
         let changed = false;
 
+        // Auto-unlock quests on init
         if (isInit) {
           questDeck.forEach((quest) => {
-            if (
-              quest.autoUnlock &&
-              !activeSet.has(quest.id) &&
-              !completedSet.has(quest.id)
-            ) {
+            if (quest.autoUnlock && !activeSet.has(quest.id) && !completedSet.has(quest.id)) {
               activeSet.add(quest.id);
               changed = true;
             }
           });
         }
 
+        // Progress active quests that match this event
         if (!isInit) {
           questDeck.forEach((quest) => {
             if (!activeSet.has(quest.id)) return;
@@ -215,10 +218,9 @@ function App() {
             if (!matchesQuestCriteria(quest, payload)) return;
 
             const goal = quest.goal || 1;
-            const increment = quest.increment || 1;
             const newProgress = Math.min(
               goal,
-              (questProgress[quest.id] || 0) + increment
+              (questProgress[quest.id] || 0) + (quest.increment || 1)
             );
             questProgress[quest.id] = newProgress;
             changed = true;
@@ -227,36 +229,24 @@ function App() {
               activeSet.delete(quest.id);
               completedSet.add(quest.id);
               xpBonus += quest.reward?.xp || 0;
-              if (quest.reward?.badge && !badgeSet.has(quest.reward.badge)) {
-                badgeSet.add(quest.reward.badge);
-              }
+              if (quest.reward?.badge) badgeSet.add(quest.reward.badge);
               delete questProgress[quest.id];
             }
           });
         }
 
+        // Unlock quests whose prerequisites are now met
         questDeck.forEach((quest) => {
-          if (activeSet.has(quest.id) || completedSet.has(quest.id)) {
-            return;
-          }
+          if (activeSet.has(quest.id) || completedSet.has(quest.id)) return;
           const prerequisites = quest.prerequisites || [];
-          const prerequisitesMet = prerequisites.every((id) =>
-            completedSet.has(id)
-          );
-          if (
-            (isInit && quest.autoUnlock) ||
-            (!isInit && prerequisitesMet)
-          ) {
-            if (quest.autoUnlock || prerequisitesMet) {
-              activeSet.add(quest.id);
-              changed = true;
-            }
+          const prerequisitesMet = prerequisites.every((id) => completedSet.has(id));
+          if (isInit ? quest.autoUnlock : prerequisitesMet) {
+            activeSet.add(quest.id);
+            changed = true;
           }
         });
 
-        if (!changed) {
-          return prev;
-        }
+        if (!changed) return prev;
 
         return {
           ...prev,
@@ -271,6 +261,7 @@ function App() {
     [setGameState]
   );
 
+  // Initialise quests once the character is created
   useEffect(() => {
     if (gameState.characterCreated && !gameState.questInitialised) {
       handleQuestEvent("init");
@@ -282,15 +273,11 @@ function App() {
     const confirmed = window.confirm(
       "This will erase your current character and local progress. Are you sure you want to continue?"
     );
-
-    if (!confirmed) {
-      return;
-    }
+    if (!confirmed) return;
 
     if (user?.uid) {
       localStorage.removeItem(`${CHECKPOINT_PREFIX}${user.uid}`);
     }
-
     localStorage.removeItem("lifetimeSummary");
     localStorage.removeItem("weekData");
     localStorage.removeItem("lastOpenDate");
@@ -305,13 +292,21 @@ function App() {
 
   const renderPhase = () => {
     if (!user) {
-      if (showHome) {
-        return <StartScreen onStart={() => setShowHome(false)} />;
-      }
-      return <LoginForm onLogin={(u) => setUser(u)} />;
+      return showHome
+        ? <StartScreen onStart={() => setShowHome(false)} />
+        : <LoginForm onLogin={(u) => setUser(u)} />;
     }
-    if (!gameState.characterCreated)
+
+    if (!gameState.characterCreated) {
       return <CharacterCreation gameState={gameState} setGameState={setGameState} />;
+    }
+
+    const sharedRoomProps = {
+      setGameState,
+      gameState,
+      userId: user?.uid,
+      onQuestEvent: handleQuestEvent,
+    };
 
     switch (gameState.introStage) {
       case 0:
@@ -323,12 +318,7 @@ function App() {
           />
         );
       case 1:
-        return (
-          <WarmUpPhase
-            setGameState={setGameState}
-            gameState={gameState}
-          />
-        );
+        return <WarmUpPhase setGameState={setGameState} gameState={gameState} />;
       case 2:
         return <MobilityPhase setGameState={setGameState} />;
       case 3:
@@ -342,13 +332,8 @@ function App() {
           />
         );
       case 5:
-        return (
-          <Map
-            gameState={gameState}
-            setGameState={setGameState}
-          />
-        );
-      case 6:
+        return <Map gameState={gameState} setGameState={setGameState} />;
+      case 6: {
         if (gameState.showOverlay) {
           return (
             <RoomNarrativeOverlay
@@ -357,91 +342,44 @@ function App() {
               textToSpeech={gameState.textToSpeech}
               enhancedReading={gameState.enhancedReading}
               onContinue={() =>
-                setGameState((prev) => ({
-                  ...prev,
-                  showOverlay: false,
-                }))
+                setGameState((prev) => ({ ...prev, showOverlay: false }))
               }
             />
           );
         }
-        if (gameState.currentRoom === "Mr. Watkins' Room") {
-          return (
-            <Room1
-              setGameState={setGameState}
-              gameState={gameState}
-              userId={user?.uid}
-              onQuestEvent={handleQuestEvent}
-            />
-          );
-        }
-        if (gameState.currentRoom === "Mrs. John's Room") {
-          return (
-            <Room2
-              setGameState={setGameState}
-              gameState={gameState}
-              userId={user?.uid}
-              onQuestEvent={handleQuestEvent}
-            />
-          );
-        }
-        if (gameState.currentRoom === "Mrs. Roche's Room") {
-          return (
-            <Room3Boss
-              setGameState={setGameState}
-              gameState={gameState}
-              userId={user?.uid}
-              onQuestEvent={handleQuestEvent}
-            />
-          );
-        }
-        if (gameState.currentRoom === "Fitness Suite") {
-          return (
-            <FinalBossPhase
-              setGameState={setGameState}
-              gameState={gameState}
-              userId={user?.uid}
-              onQuestEvent={handleQuestEvent}
-            />
-          );
-        }
-        break;
+        const RoomComponent = ROOM_COMPONENTS[gameState.currentRoom];
+        return RoomComponent ? <RoomComponent {...sharedRoomProps} /> : null;
+      }
       case 7:
-        if (gameState.victory) {
-          return <VictoryPhase gameState={gameState} />;
-        }
-        break;
+        return gameState.victory ? <VictoryPhase gameState={gameState} /> : null;
       default:
-        console.log("Unknown phase");
+        console.error("Unknown introStage:", gameState.introStage);
+        return <div>Something went wrong. No valid phase loaded.</div>;
     }
-
-    return <div>Something went wrong. No valid phase loaded.</div>;
   };
 
   return (
     <div className={gameState.enhancedReading ? "enhanced-reading" : ""}>
       {user && gameState.characterCreated && (
-        <XPBar
-          avatar={gameState.avatar}
-          xp={gameState.xp}
-          playerName={gameState.studentName}
-        />
-      )}
-      {user && gameState.characterCreated && (
-        <QuestTracker
-          activeQuests={gameState.activeQuests}
-          completedQuests={gameState.completedQuests}
-          questProgress={gameState.questProgress}
-        />
-      )}
-      {user && gameState.characterCreated && (
-        <GameMenu
-          setGameState={setGameState}
-          gameState={gameState}
-          userId={user?.uid}
-          onQuestEvent={handleQuestEvent}
-          onResetProgress={handleResetProgress}
-        />
+        <>
+          <XPBar
+            avatar={gameState.avatar}
+            xp={gameState.xp}
+            playerName={gameState.studentName}
+          />
+          <QuestTracker
+            activeQuests={gameState.activeQuests}
+            completedQuests={gameState.completedQuests}
+            questProgress={gameState.questProgress}
+          />
+          <GameMenu
+            setGameState={setGameState}
+            gameState={gameState}
+            userId={user?.uid}
+            onQuestEvent={handleQuestEvent}
+            onResetProgress={handleResetProgress}
+          />
+        </>
       )}
       {renderPhase()}
       {recentBadge && (
@@ -451,7 +389,10 @@ function App() {
         />
       )}
       {popupMessage && (
-        <AccountabilityPopup message={popupMessage} onClose={() => setPopupMessage(null)} />
+        <AccountabilityPopup
+          message={popupMessage}
+          onClose={() => setPopupMessage(null)}
+        />
       )}
       <GlobalAudioControls
         muted={muted}
@@ -461,10 +402,7 @@ function App() {
           setGameState((prev) => {
             const next = !prev.textToSpeech;
             setTtsEnabled(next);
-            return {
-              ...prev,
-              textToSpeech: next,
-            };
+            return { ...prev, textToSpeech: next };
           })
         }
       />
