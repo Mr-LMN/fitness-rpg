@@ -8,7 +8,8 @@
   padding: 28px 24px 20px;
   margin: 20px auto;
   border-radius: 16px;
-  max-width: 80%;
+  width: min(920px, 92%);
+  max-width: 100%;
   text-align: left;
   font-size: 1.05rem;
   line-height: 1.65;
@@ -17,6 +18,10 @@
     0 16px 40px rgba(3, 2, 18, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(10px);
+  max-height: min(58vh, 460px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .enhanced {
@@ -36,8 +41,10 @@
 .lineContainer {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 3em;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .line {
@@ -62,6 +69,8 @@
 }
 
 .continueButton {
+  align-self: center;
+  margin-top: auto;
   padding: 10px 28px;
   font-size: 0.88rem;
   font-weight: 600;
@@ -118,4 +127,17 @@
 .enhanced .continueButton:hover:not(:disabled) {
   background: linear-gradient(135deg, #388e3c, #43a047);
   box-shadow: 0 6px 18px rgba(45, 125, 50, 0.35);
+}
+
+
+@media (max-width: 768px) {
+  .box {
+    width: 96%;
+    max-height: 62vh;
+    padding: 18px 16px 14px;
+  }
+
+  .continueButton {
+    width: 100%;
+  }
 }
