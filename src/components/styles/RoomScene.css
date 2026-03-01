@@ -48,8 +48,65 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+/* --- Explore prompt --- */
+.explore-prompt-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.explore-btn {
+  border: none;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.explore-btn:hover {
+  transform: translateY(-2px);
+}
+
+.scavenge-btn {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #1c1917;
+}
+
+.scavenge-btn:hover {
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.35);
+}
+
+.press-on-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+}
+
+.press-on-btn:hover {
+  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.35);
+}
+
+.scavenge-toast {
+  margin: 8px 0 0;
+  padding: 8px 16px;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 8px;
+  color: #86efac;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
 @media (max-width: 768px) {
   .room-content {
     padding: 16px;
+  }
+
+  .explore-prompt-actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

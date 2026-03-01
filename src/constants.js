@@ -22,6 +22,7 @@ export const STAGES = {
   BOSS: "boss",
   LOOT: "loot",
   SCAVENGE: "scavenge",
+  EXPLORE_PROMPT: "explorePrompt",
   COMPLETE: "complete",
 };
 
