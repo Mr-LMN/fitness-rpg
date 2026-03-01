@@ -1,21 +1,21 @@
 // Default question pool used by QuizPhase when no room-specific questions are provided.
 export const defaultQuizPool = [
-  { q: "What is 'blue' in Spanish?", options: [{ label: "Azul", correct: true }, { label: "Rojo", correct: false }, { label: "Verde", correct: false }] },
-  { q: "What is 'yellow' in Welsh?", options: [{ label: "Melyn", correct: true }, { label: "Du", correct: false }, { label: "Glas", correct: false }] },
-  { q: "Translate 'apple' to Spanish.", options: [{ label: "Manzana", correct: true }, { label: "Pera", correct: false }, { label: "Uva", correct: false }] },
-  { q: "What is 'cat' in Spanish?", options: [{ label: "Gato", correct: true }, { label: "Perro", correct: false }, { label: "Caballo", correct: false }] },
-  { q: "What is 'black' in Welsh?", options: [{ label: "Du", correct: true }, { label: "Glas", correct: false }, { label: "Gwyn", correct: false }] },
-  { q: "Translate 'house' to Spanish.", options: [{ label: "Casa", correct: true }, { label: "Carro", correct: false }, { label: "Mesa", correct: false }] },
-  { q: "How do you say 'book' in Welsh?", options: [{ label: "Llyfr", correct: true }, { label: "Cadair", correct: false }, { label: "Dwr", correct: false }] },
-  { q: "What is 'please' in Spanish?", options: [{ label: "Por favor", correct: true }, { label: "Buenos días", correct: false }, { label: "Gracias", correct: false }] },
+  { q: "What is 'blue' in Spanish?", level: "entry", subject: "Spanish", options: [{ label: "Azul", correct: true }, { label: "Rojo", correct: false }, { label: "Verde", correct: false }] },
+  { q: "What is 'yellow' in Welsh?", level: "entry", subject: "Welsh", options: [{ label: "Melyn", correct: true }, { label: "Du", correct: false }, { label: "Glas", correct: false }] },
+  { q: "Translate 'apple' to Spanish.", level: "ks3", subject: "Spanish", options: [{ label: "Manzana", correct: true }, { label: "Pera", correct: false }, { label: "Uva", correct: false }] },
+  { q: "What is 'cat' in Spanish?", level: "entry", subject: "Spanish", options: [{ label: "Gato", correct: true }, { label: "Perro", correct: false }, { label: "Caballo", correct: false }] },
+  { q: "What is 'black' in Welsh?", level: "entry", subject: "Welsh", options: [{ label: "Du", correct: true }, { label: "Glas", correct: false }, { label: "Gwyn", correct: false }] },
+  { q: "Translate 'house' to Spanish.", level: "ks3", subject: "Spanish", options: [{ label: "Casa", correct: true }, { label: "Carro", correct: false }, { label: "Mesa", correct: false }] },
+  { q: "How do you say 'book' in Welsh?", level: "ks3", subject: "Welsh", options: [{ label: "Llyfr", correct: true }, { label: "Cadair", correct: false }, { label: "Dwr", correct: false }] },
+  { q: "What is 'please' in Spanish?", level: "ks3", subject: "Spanish", options: [{ label: "Por favor", correct: true }, { label: "Buenos días", correct: false }, { label: "Gracias", correct: false }] },
 ];
 
 // Extra questions used to pad the pool to at least 6 when fewer are available.
 export const extraQuizPool = [
-  { q: "How do you say 'hello' in Welsh?", options: [{ label: "Helo", correct: true }, { label: "Diolch", correct: false }, { label: "Hwyl", correct: false }] },
-  { q: "Translate 'school' to Welsh.", options: [{ label: "Ysgol", correct: true }, { label: "Ty", correct: false }, { label: "Bws", correct: false }] },
-  { q: "What is 'red' in Spanish?", options: [{ label: "Rojo", correct: true }, { label: "Negro", correct: false }, { label: "Verde", correct: false }] },
-  { q: "How do you say 'goodbye' in Welsh?", options: [{ label: "Hwyl fawr", correct: true }, { label: "Nos da", correct: false }, { label: "Croeso", correct: false }] },
+  { q: "How do you say 'hello' in Welsh?", level: "entry", subject: "Welsh", options: [{ label: "Helo", correct: true }, { label: "Diolch", correct: false }, { label: "Hwyl", correct: false }] },
+  { q: "Translate 'school' to Welsh.", level: "ks3", subject: "Welsh", options: [{ label: "Ysgol", correct: true }, { label: "Ty", correct: false }, { label: "Bws", correct: false }] },
+  { q: "What is 'red' in Spanish?", level: "entry", subject: "Spanish", options: [{ label: "Rojo", correct: true }, { label: "Negro", correct: false }, { label: "Verde", correct: false }] },
+  { q: "How do you say 'goodbye' in Welsh?", level: "entry", subject: "Welsh", options: [{ label: "Hwyl fawr", correct: true }, { label: "Nos da", correct: false }, { label: "Croeso", correct: false }] },
 ];
 
 export const quizPool = {
@@ -23,6 +23,8 @@ export const quizPool = {
     room2: [
       {
         question: "What is the Spanish word for 'red'?",
+        level: "entry",
+        subject: "Spanish",
         options: [
           { label: 'Rojo', correct: true },
           { label: 'Azul', correct: false },
@@ -32,6 +34,8 @@ export const quizPool = {
       },
       {
         question: "What does 'feliz' mean in Spanish?",
+        level: "ks3",
+        subject: "Spanish",
         options: [
           { label: 'Sad', correct: false },
           { label: 'Happy', correct: true },
@@ -41,6 +45,8 @@ export const quizPool = {
       },
       {
         question: "What is the Spanish word for 'Monday'?",
+        level: "ks3",
+        subject: "Spanish",
         options: [
           { label: 'Lunes', correct: true },
           { label: 'Martes', correct: false },
@@ -50,6 +56,8 @@ export const quizPool = {
       },
       {
         question: "Translate 'verde' to English:",
+        level: "ks3",
+        subject: "Spanish",
         options: [
           { label: 'Green', correct: true },
           { label: 'Blue', correct: false },
@@ -57,10 +65,34 @@ export const quizPool = {
           { label: 'Orange', correct: false },
         ],
       },
+      {
+        question: "What is the Spanish word for 'dog'?",
+        level: "entry",
+        subject: "Spanish",
+        options: [
+          { label: 'Perro', correct: true },
+          { label: 'Gato', correct: false },
+          { label: 'Caballo', correct: false },
+          { label: 'Vaca', correct: false },
+        ],
+      },
+      {
+        question: "What does 'grande' mean in Spanish?",
+        level: "ks4",
+        subject: "Spanish",
+        options: [
+          { label: 'Big', correct: true },
+          { label: 'Small', correct: false },
+          { label: 'Tall', correct: false },
+          { label: 'Fast', correct: false },
+        ],
+      },
     ],
     rocheBoss: [
       {
         q: "What is the Spanish word for 'yellow'?",
+        level: "entry",
+        subject: "Spanish",
         options: [
           { label: 'Amarillo', correct: true },
           { label: 'Rojo', correct: false },
@@ -70,6 +102,8 @@ export const quizPool = {
       },
       {
         q: "How do you say 'thank you' in Welsh?",
+        level: "ks3",
+        subject: "Welsh",
         options: [
           { label: 'Diolch', correct: true },
           { label: 'Croeso', correct: false },
@@ -79,6 +113,8 @@ export const quizPool = {
       },
       {
         q: "Translate 'blue' to Spanish:",
+        level: "entry",
+        subject: "Spanish",
         options: [
           { label: 'Azul', correct: true },
           { label: 'Negro', correct: false },
@@ -88,6 +124,8 @@ export const quizPool = {
       },
       {
         q: "What does 'nos da' mean in Welsh?",
+        level: "ks3",
+        subject: "Welsh",
         options: [
           { label: 'Good night', correct: true },
           { label: 'Good morning', correct: false },
@@ -97,6 +135,8 @@ export const quizPool = {
       },
       {
         q: "How do you say 'dog' in Spanish?",
+        level: "entry",
+        subject: "Spanish",
         options: [
           { label: 'Perro', correct: true },
           { label: 'Gato', correct: false },
@@ -106,11 +146,35 @@ export const quizPool = {
       },
       {
         q: "What is the Welsh word for 'school'?",
+        level: "ks3",
+        subject: "Welsh",
         options: [
           { label: 'Ysgol', correct: true },
           { label: 'Cartref', correct: false },
           { label: 'Bws', correct: false },
           { label: 'Cwch', correct: false },
+        ],
+      },
+      {
+        q: "How do you say 'I like' in Spanish?",
+        level: "ks4",
+        subject: "Spanish",
+        options: [
+          { label: 'Me gusta', correct: true },
+          { label: 'Me llamo', correct: false },
+          { label: 'Tengo', correct: false },
+          { label: 'Quiero', correct: false },
+        ],
+      },
+      {
+        q: "What does 'bore da' mean in Welsh?",
+        level: "ks4",
+        subject: "Welsh",
+        options: [
+          { label: 'Good morning', correct: true },
+          { label: 'Good night', correct: false },
+          { label: 'Good afternoon', correct: false },
+          { label: 'Goodbye', correct: false },
         ],
       },
     ],
