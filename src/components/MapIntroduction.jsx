@@ -5,7 +5,7 @@ import { playSound } from "../utils";
 import narrationLines from "../data/narrationLines";
 import ScrollingNarrationBox from "./ScrollingNarrationBox";
 
-function MapIntroduction({ setGameState, textToSpeech = false, enhancedReading = false }) {
+function MapIntroduction({ setGameState, textToSpeech = false, enhancedReading = false, readingAge = 'not-sure' }) {
   const handleViewMap = () => {
     if (typeof setGameState !== "function") {
       console.error("setGameState is not a function. Please check the props passed to MapIntroduction.");
@@ -34,6 +34,7 @@ function MapIntroduction({ setGameState, textToSpeech = false, enhancedReading =
           lines={narrationLines.general.mapIntroduction}
           autoRead={textToSpeech}
           enhancedMode={enhancedReading}
+          readingAge={readingAge}
           onComplete={handleViewMap}
         />
       </div>

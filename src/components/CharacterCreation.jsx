@@ -110,6 +110,7 @@ function CharacterCreation({ gameState, setGameState, userId }) {
         yearGroup: gameState.yearGroup,
         avatar: gameState.avatar || "pirate",
         xp: gameState.xp || 0,
+        readingAge: gameState.readingAge || "not-sure",
       });
     }
   };
@@ -218,6 +219,26 @@ function CharacterCreation({ gameState, setGameState, userId }) {
               </select>
               <p className="cc-field-hint">
                 You can change this at any time in the menu.
+              </p>
+            </div>
+            <div className="cc-field">
+              <label className="cc-label" htmlFor="cc-reading-age">Reading Age</label>
+              <select
+                id="cc-reading-age"
+                className="cc-select"
+                value={gameState.readingAge || "not-sure"}
+                onChange={(e) => update("readingAge", e.target.value)}
+              >
+                <option value="not-sure">Not sure — use my year group default</option>
+                <option value="under7">Under 7</option>
+                <option value="7-8">7–8</option>
+                <option value="9-10">9–10</option>
+                <option value="11-12">11–12</option>
+                <option value="13-14">13–14</option>
+                <option value="15+">15+</option>
+              </select>
+              <p className="cc-field-hint">
+                This adjusts the story text to match your reading level.
               </p>
             </div>
           </div>

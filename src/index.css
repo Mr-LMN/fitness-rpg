@@ -326,6 +326,53 @@ input, select, textarea {
   padding-top: 0;
 }
 
+/* ── Reading Entry Mode (reading age under 9) ── */
+
+.reading-entry button {
+  min-height: 56px;
+  min-width: 120px;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  padding: 12px 24px;
+}
+
+.reading-entry .rpg-text,
+.reading-entry [class*="line"],
+.reading-entry [class*="box"] {
+  font-size: 1.4rem;
+  line-height: 1.75;
+}
+
+/* ── Reading Simple Mode (reading age 9-12) ── */
+
+.reading-simple button {
+  min-height: 48px;
+  min-width: 100px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  padding: 10px 20px;
+}
+
+/* ── Survivor / Injured Status ── */
+
+@keyframes injuredPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  50%       { box-shadow: 0 0 0 5px rgba(239, 68, 68, 0.35); }
+}
+
+.xpbar-injured {
+  animation: injuredPulse 2s ease-in-out infinite;
+  border-bottom-color: rgba(239, 68, 68, 0.4);
+}
+
+.xpbar-injured-notice {
+  font-size: 0.72rem;
+  color: #f87171;
+  font-weight: 600;
+  margin-top: 3px;
+  letter-spacing: 0.2px;
+}
+
 /* ── Reduced motion ── */
 
 @media (prefers-reduced-motion: reduce) {

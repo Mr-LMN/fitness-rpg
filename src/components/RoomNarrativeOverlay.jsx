@@ -17,6 +17,7 @@ function RoomNarrativeOverlay({
   onContinue,
   textToSpeech = false,
   enhancedReading = false,
+  readingAge = 'not-sure',
 }) {
   useEffect(() => {
     const audio = playSound('openingDoor');
@@ -57,6 +58,7 @@ function RoomNarrativeOverlay({
           lines={lines}
           autoRead={textToSpeech}
           enhancedMode={enhancedReading}
+          readingAge={readingAge}
           onComplete={() => {
             playSound('creakingDoor');
             onContinue();
