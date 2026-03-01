@@ -1,5 +1,5 @@
 import React from "react";
-import { GiLaurelsTrophy, GiLightningTrio, GiBookmarklet } from "react-icons/gi";
+import { GiLaurelsTrophy, GiLightningTrio, GiBookmarklet, GiAnvil, GiFist, GiTrophyCup } from "react-icons/gi";
 import { FaMedal, FaFeatherAlt, FaChessKnight } from "react-icons/fa";
 import "./styles/BadgeCase.css";
 
@@ -71,6 +71,21 @@ export const badgeDefinitions = {
     icon: <GiLaurelsTrophy />,
     label: "Championship Pennant",
     description: "Triumphed in the Arena Finale tabletop encounter.",
+  },
+  ironResolve: {
+    icon: <GiAnvil />,
+    label: "Iron Resolve",
+    description: "Logged ten workouts. The grind made you unstoppable.",
+  },
+  unstoppable: {
+    icon: <GiFist />,
+    label: "Unstoppable Force",
+    description: "Logged fifteen workouts. A true warrior.",
+  },
+  hallOfFame: {
+    icon: <GiTrophyCup />,
+    label: "Hall of Fame",
+    description: "Logged twenty-five workouts. Elite status achieved.",
   },
 };
 

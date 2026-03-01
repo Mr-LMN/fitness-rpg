@@ -1,25 +1,31 @@
+/* ============================================================
+   SHARED OVERLAY — Used by RoomNarrativeOverlay, Inventory, etc.
+   ============================================================ */
+
 .overlay-bg {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  inset: 0;
+  z-index: 900;
+  background: rgba(4, 6, 16, 0.85);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
-}
-.badge-unlock-bg {
-  background: rgba(0, 0, 0, 0.9);
+  padding: 20px;
 }
 
 .overlay-box {
-  background: #222;
-  padding: 20px;
-  border-radius: 8px;
+  background: linear-gradient(160deg, rgba(22, 28, 42, 0.97), rgba(12, 16, 28, 0.95));
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   text-align: center;
   max-width: 500px;
+  width: 100%;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
 .overlay-avatar {
@@ -29,6 +35,6 @@
 
 .overlay-image {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 15px;
 }
