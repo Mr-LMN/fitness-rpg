@@ -59,7 +59,7 @@ const SafeQuizEvent = ({
       if (lives - 1 === 0) {
         const exercise = FAILURE_EXERCISES[Math.floor(Math.random() * FAILURE_EXERCISES.length)];
         setQuizCompleted(true);
-        setFeedback(`Access Denied. You must now complete ${exercise} to break it open.`);
+        setFeedback(`TITAN: "The code failed, but I can override the lock. Complete ${exercise} and I'll force the safe open for you."`);
         onFailure(exercise);
       }
     }
