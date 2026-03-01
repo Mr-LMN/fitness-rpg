@@ -15,6 +15,7 @@ import {
   getExerciseMeta,
 } from "../helpers/workoutMetrics";
 import { persistWorkoutLog } from "../helpers/workoutPersistence";
+import { updateUserProfile } from "../helpers/userProfile";
 import BenchmarkAmrapTracker from "./BenchmarkAmrapTracker";
 import "./styles/WorkoutLogger.css";
 
@@ -29,6 +30,8 @@ function WorkoutLogger({
   workoutFocus,
   userId,
   yearGroup,
+  studentName,
+  avatar,
   onComplete,
   onWorkoutLogged,
   title,
@@ -96,18 +99,29 @@ function WorkoutLogger({
     setSummaryData(summary);
     setShowSummary(true);
 
+    const amrapWorkoutData = {
+      type: "benchmarkAmrap",
+      roundsCompleted,
+      roundHistory: roundsState,
+      timeCapMinutes: specialWorkout?.timeCapMinutes || null,
+      workoutTitle: heading,
+      movements: specialWorkout?.movements || [],
+      studentName: studentName || null,
+    };
+
     try {
       await persistWorkoutLog({
         userId,
         yearGroup,
-        workoutData: {
-          type: "benchmarkAmrap",
-          roundsCompleted,
-          roundHistory: roundsState,
-          timeCapMinutes: specialWorkout?.timeCapMinutes || null,
-          workoutTitle: heading,
-          movements: specialWorkout?.movements || [],
-        },
+        workoutData: amrapWorkoutData,
+      });
+      // Sync profile — increment workout count
+      await updateUserProfile({
+        userId,
+        studentName,
+        yearGroup,
+        avatar,
+        workoutData: { minutesLogged: specialWorkout?.timeCapMinutes || 0 },
       });
     } catch {
       // Error already logged in helper
@@ -188,16 +202,31 @@ function WorkoutLogger({
     });
     setShowSummary(true);
 
+    const stdWorkoutData = {
+      totalWeightLifted: metrics.totalWeight,
+      distanceTravelled: metrics.distance,
+      caloriesBurned: Math.round(metrics.calories),
+      exercisesLogged: workoutLog.length,
+      workoutDetails: workoutLog,
+      minutesLogged: metrics.minutes,
+      studentName: studentName || null,
+    };
+
     try {
       await persistWorkoutLog({
         userId,
         yearGroup,
+        workoutData: stdWorkoutData,
+      });
+      // Sync aggregated profile data to Firestore
+      await updateUserProfile({
+        userId,
+        studentName,
+        yearGroup,
+        avatar,
         workoutData: {
-          totalWeightLifted: metrics.totalWeight,
-          distanceTravelled: metrics.distance,
           caloriesBurned: Math.round(metrics.calories),
-          exercisesLogged: workoutLog.length,
-          workoutDetails: workoutLog,
+          totalWeightLifted: metrics.totalWeight,
           minutesLogged: metrics.minutes,
         },
       });

@@ -299,6 +299,8 @@ function RoomTemplate({
               workoutFocus={workoutFocus || gameState.workoutFocus}
               userId={userId}
               yearGroup={gameState.yearGroup}
+              studentName={gameState.studentName}
+              avatar={gameState.avatar}
               specialWorkout={specialWorkout}
               onComplete={handleWorkoutComplete}
               onWorkoutLogged={({ focus }) =>

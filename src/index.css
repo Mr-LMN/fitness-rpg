@@ -1,94 +1,157 @@
+/* ============================================================
+   GLOBAL STYLES — Fitness RPG: Pencoedtre High School
+   ASD-friendly: clear hierarchy, consistent spacing, reduced noise
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Open+Sans:wght@400;600&display=swap');
+
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: 'Poppins', 'Open Sans', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #121212;
-  color: #eee;
+  background-color: #0a0c18;
+  color: #e5e7eb;
+  min-height: 100vh;
+  /* Slightly larger base font for readability */
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* ── Reset / Base ── */
 
 button {
   padding: 10px 20px;
-  font-size: 16px;
-  background-color: #6c757d;
-  color: #fff;
-  border: none;
+  font-size: 0.9rem;
+  font-family: inherit;
+  background-color: #374151;
+  color: #f9fafb;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 8px;
+  transition: background 0.2s ease, transform 0.15s ease;
+  font-weight: 600;
 }
+
 button:hover:not(:disabled) {
-  background-color: #555;
+  background-color: #4b5563;
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 button:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
+  transform: none;
 }
 
+/* Focus ring for keyboard navigation (important for ASD users) */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(164, 198, 57, 0.8);
+  outline-offset: 2px;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ── Enhanced Reading Mode ── */
+
 .enhanced-reading {
-  background-color: #fffae5;
-  color: #000;
-  font-size: 1.1rem;
+  background-color: #fefce8 !important;
+  color: #1c1917 !important;
+  font-size: 1.08rem !important;
+}
+
+.enhanced-reading * {
+  color: #1c1917;
 }
 
 .enhanced-reading .rpg-text {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
+  line-height: 1.8;
 }
 
-.rarity-common {
-  color: #b0b0b0;
+.enhanced-reading button {
+  border: 2px solid #1c1917;
+  font-size: 1rem;
 }
 
-.rarity-uncommon {
-  color: #2ecc71;
-}
+/* ── Rarity Colours ── */
 
-.rarity-rare {
-  color: #3498db;
-}
-
-.rarity-legendary {
-  color: #e67e22;
-  font-weight: bold;
-}
+.rarity-common    { color: #9ca3af; }
+.rarity-uncommon  { color: #34d399; }
+.rarity-rare      { color: #60a5fa; }
+.rarity-legendary { color: #f59e0b; font-weight: 700; }
 
 .loot-new {
-  animation: pulse 1s ease-in-out infinite;
+  animation: pulse 1.2s ease-in-out infinite;
 }
+
+/* ── Animations ── */
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.06); }
 }
 
-/* Themed button styles used across workout logging components */
-.primary-btn {
-  background-color: #a4c639;
-  color: #111;
-  border-radius: 6px;
-  font-weight: bold;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Shared Button Themes ── */
+
+.primary-btn {
+  background: linear-gradient(135deg, #a4c639, #7ea82a);
+  color: #111;
+  border-radius: 8px;
+  font-weight: 700;
+  border: none;
+}
+
 .primary-btn:hover:not(:disabled) {
-  background-color: #b6d73a;
+  background: linear-gradient(135deg, #b6d73a, #8fc030);
+  box-shadow: 0 4px 14px rgba(164, 198, 57, 0.3);
 }
 
 .add-btn {
-  background-color: #444;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-}
-.add-btn:hover:not(:disabled) {
-  background-color: #666;
+  gap: 6px;
+  padding: 8px 14px;
+  color: #d1d5db;
 }
 
-/* Overlay used for narration sequences */
+.add-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ── Narration Manager ── */
+
 .narration-manager {
   position: relative;
   display: flex;
@@ -97,24 +160,27 @@ button:disabled {
   align-items: center;
   text-align: center;
   min-height: 100vh;
-  padding: 20px;
+  padding: 24px 20px;
   background-size: cover;
   background-position: center;
   background-blend-mode: multiply;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.65);
   color: #fff;
 }
 
 .continue-hint {
-  font-size: 0.8rem;
-  opacity: 0.75;
+  font-size: 0.82rem;
+  opacity: 0.65;
+  letter-spacing: 0.5px;
+  animation: pulse 2s ease-in-out infinite;
 }
 
-/* Small speaker button used in narration lines */
+/* ── TTS Button ── */
+
 .tts-line {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .tts-play {
@@ -122,57 +188,61 @@ button:disabled {
   border: none;
   color: inherit;
   cursor: pointer;
-  font-size: 1em;
-  padding: 0 2px;
+  font-size: 0.95em;
+  padding: 0 3px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
 }
 
+.tts-play:hover {
+  opacity: 1;
+}
+
+/* ── Global Audio Controls ── */
 
 .global-audio-controls {
   position: fixed;
-  bottom: 12px;
-  right: 12px;
+  bottom: 14px;
+  right: 14px;
   display: flex;
-  gap: 10px;
-  padding: 10px 14px;
-  background: rgba(12, 10, 24, 0.6);
-  border: 1px solid rgba(147, 92, 255, 0.5);
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(10, 10, 24, 0.75);
+  border: 1px solid rgba(164, 198, 57, 0.3);
   border-radius: 16px;
-  box-shadow: 0 14px 36px rgba(6, 4, 20, 0.55);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
   z-index: 1000;
 }
 
 .audio-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(32, 26, 58, 0.6);
-  border: 1px solid rgba(147, 92, 255, 0.45);
+  gap: 6px;
+  background: rgba(30, 28, 58, 0.7);
+  border: 1px solid rgba(164, 198, 57, 0.3);
   border-radius: 999px;
-  color: #ede5ff;
-  font-size: 0.85rem;
+  color: #e5e7eb;
+  font-size: 0.8rem;
   font-weight: 600;
-  padding: 8px 14px;
+  padding: 6px 12px;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .audio-toggle .audio-icon {
-  font-size: 1.1rem;
-}
-
-.audio-toggle .audio-label {
-  letter-spacing: 0.04em;
+  font-size: 1rem;
 }
 
 .audio-toggle.is-on {
-  background: linear-gradient(120deg, rgba(146, 92, 255, 0.85), rgba(77, 197, 163, 0.75));
+  background: linear-gradient(120deg, rgba(164, 198, 57, 0.8), rgba(100, 200, 140, 0.6));
   color: #0b0a19;
-  border-color: rgba(255, 255, 255, 0.35);
+  border-color: rgba(255, 255, 255, 0.3);
+  font-weight: 700;
 }
 
 .audio-toggle.is-off {
-  opacity: 0.75;
+  opacity: 0.65;
 }
 
 .audio-toggle:focus-visible {
@@ -181,6 +251,55 @@ button:disabled {
 }
 
 .audio-toggle:hover:not(:disabled) {
-  background: rgba(82, 58, 122, 0.75);
-  color: #f5ebff;
+  background: rgba(70, 58, 102, 0.8);
+  color: #fff;
+}
+
+/* ── Scrollbar ── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(164, 198, 57, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(164, 198, 57, 0.5);
+}
+
+/* ── Utility ── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Responsive page padding (account for fixed XP bar) ── */
+.map-page,
+.boss-fight-page,
+.final-boss-page,
+.room-container,
+.character-creation-container,
+.login-screen {
+  padding-top: 56px; /* height of XP bar */
+}
+
+/* Skip XP bar padding on screens that don't have it */
+.login-screen {
+  padding-top: 0;
 }
