@@ -7,15 +7,12 @@ import ScrollingNarrationBox from "./ScrollingNarrationBox";
 
 function MapIntroduction({ setGameState, textToSpeech = false, enhancedReading = false, readingAge = 'not-sure' }) {
   const handleViewMap = () => {
-    if (typeof setGameState !== "function") {
-      console.error("setGameState is not a function. Please check the props passed to MapIntroduction.");
-      return;
-    }
+    if (typeof setGameState !== "function") return;
 
     setGameState((prev) => ({
       ...prev,
-      introStage: 5, // Transition to map view stage
-      visibleRooms: [...prev.visibleRooms, "Mr. Watkins' Room"], // Safely add "Mr. Watkins' Room"
+      introStage: 5,
+      visibleRooms: [...prev.visibleRooms, "Mr. Watkins' Room"],
     }));
     playSound();
   };
@@ -29,7 +26,7 @@ function MapIntroduction({ setGameState, textToSpeech = false, enhancedReading =
       />
       <ParallaxDust />
       <div className="room-content rpg-text">
-        <h2>🎒 A New Beginning</h2>
+        <h2 className="phase-heading">MISSION BRIEFING</h2>
         <ScrollingNarrationBox
           lines={narrationLines.general.mapIntroduction}
           autoRead={textToSpeech}

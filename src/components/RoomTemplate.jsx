@@ -13,6 +13,8 @@ import ParallaxDust from './ParallaxDust';
 import './styles/RoomScene.css';
 import TTSLine from './TTSLine';
 import { ROOMS, STAGES } from '../constants';
+import { getReadingProfile } from '../helpers/readingProfile';
+import { adaptNarrative, adaptSingleLine } from '../helpers/narrativeAdapter';
 
 const SCAVENGE_BOOST_LOOT = lootItems.filter(
   (item) => item.type === 'boost' && (item.rarity === 'common' || item.rarity === 'uncommon')
@@ -280,7 +282,8 @@ function RoomTemplate({
 
   // --- Stage-specific content helpers ---
 
-  const scavengeLines = narrationLines.languages?.room1?.scavenge || [];
+  const readingProfile = getReadingProfile(gameState.readingAge || 'not-sure');
+  const scavengeLines = adaptNarrative(narrationLines.languages?.room1?.scavenge, readingProfile);
 
   // --- Render ---
 
@@ -302,6 +305,7 @@ function RoomTemplate({
           lines={lines}
           onComplete={handleNarrationDone}
           backgroundImage={ROOM_IMAGES[mapMarker]}
+          readingAge={gameState.readingAge}
         />
       );
 
@@ -376,6 +380,7 @@ function RoomTemplate({
           lines={safeIntroLines}
           onComplete={() => setStage(STAGES.SAFE_QUIZ)}
           backgroundImage={ROOM_IMAGES[mapMarker]}
+          readingAge={gameState.readingAge}
         />
       );
 
@@ -396,6 +401,7 @@ function RoomTemplate({
           lines={quizIntroLines}
           onComplete={() => setStage(STAGES.QUIZ)}
           backgroundImage="/quiz_door.png"
+          readingAge={gameState.readingAge}
         />
       );
 
@@ -410,7 +416,7 @@ function RoomTemplate({
       );
 
     case STAGES.FITNESS_PREP:
-      return <FitnessSuite setGameState={setGameState} />;
+      return <FitnessSuite setGameState={setGameState} gameState={gameState} />;
 
     case STAGES.SAFE_PENALTY:
       return roomWrapper(
@@ -449,7 +455,7 @@ function RoomTemplate({
       );
 
     case STAGES.EXPLORE_PROMPT: {
-      const exploreLines = narrationLines.languages?.room1?.explorePrompt || [];
+      const exploreLines = adaptNarrative(narrationLines.languages?.room1?.explorePrompt, readingProfile);
       return roomWrapper(
         <>
           {exploreLines.map((line, i) => (
@@ -489,27 +495,26 @@ function RoomTemplate({
       );
     }
 
-    case STAGES.COMPLETE:
+    case STAGES.COMPLETE: {
+      const foundItemText = loot?.name?.includes('Map Piece') && mapMarker === ROOMS.MR_WATKINS
+        ? adaptSingleLine(narrationLines.languages.room1.foundItem, readingProfile).replace('{item}', loot.name)
+        : null;
+      const restText = mapMarker === ROOMS.MR_WATKINS
+        ? adaptSingleLine(narrationLines.languages.room1.rest, readingProfile)
+        : null;
       return roomWrapper(
         <>
           {loot && (
             <TTSLine
-              text={`You have finished scavenging for supplies and found ${loot.name}! This has been added to your backpack for later use.`}
+              text={`You found ${loot.name}! It has been added to your backpack.`}
             />
           )}
-          {loot &&
-            loot.name.includes('Map Piece') &&
-            mapMarker === ROOMS.MR_WATKINS && (
-              <TTSLine
-                text={narrationLines.languages.room1.foundItem.replace('{item}', loot.name)}
-              />
-            )}
-          {mapMarker === ROOMS.MR_WATKINS && (
-            <TTSLine text={narrationLines.languages.room1.rest} />
-          )}
+          {foundItemText && <TTSLine text={foundItemText} />}
+          {restText && <TTSLine text={restText} />}
           <button onClick={handleReturnToMap}>Return to Map</button>
         </>
       );
+    }
 
     default:
       return null;

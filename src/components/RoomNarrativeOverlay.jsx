@@ -33,7 +33,10 @@ function RoomNarrativeOverlay({
     "Mrs. John's Room": "/Mrs_JohnsRoom.png",
     "Mrs. Roche's Room": "/Mrs_RochesRoom.png",
   };
-  const lines = narrationLines.general.overlayIntro[roomName] || ["You enter the room…"];
+  // overlayIntro[roomName] is now a tiered object { rich:[...], standard:[...], ... }
+  // ScrollingNarrationBox → adaptNarrative handles tier selection via readingAge
+  const rawLines = narrationLines.general.overlayIntro[roomName] || ["You enter the room..."];
+  const lines = rawLines;
 
   return (
     <div

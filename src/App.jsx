@@ -26,6 +26,7 @@ import SLTDashboard from "./components/SLTDashboard";
 import { ROOMS } from "./constants";
 import { updateUserProfile, syncUserXP } from "./helpers/userProfile";
 import { getReadingProfile } from "./helpers/readingProfile";
+import StreakBanner, { updateStreak } from "./components/StreakBanner";
 
 const INITIAL_STATE = {
   characterCreated: false,
@@ -102,13 +103,15 @@ function App() {
   const [muted, setMutedState] = useState(false);
   const [showHome, setShowHome] = useState(true);
   const [showSLT, setShowSLT] = useState(false);
+  const [streakData, setStreakData] = useState(null); // { streak, lastLogin }
+  const [showStreak, setShowStreak] = useState(false);
 
   const ambientRef = useRef(null);
   const prevXpLevel = useRef(0);
   const prevBadgesRef = useRef([]);
   const profileSyncedRef = useRef(false);
 
-  // Load checkpoint when user logs in
+  // Load checkpoint + update streak when user logs in
   useEffect(() => {
     if (!user) return;
     const saved = localStorage.getItem(`${CHECKPOINT_PREFIX}${user.uid}`);
@@ -119,6 +122,10 @@ function App() {
         console.error("Failed to parse checkpoint", err);
       }
     }
+    // Update daily streak
+    const newStreak = updateStreak();
+    setStreakData(newStreak);
+    if (newStreak.streak > 0) setShowStreak(true);
   }, [user]);
 
   // Persist progress on every state change
@@ -393,9 +400,9 @@ function App() {
       case 1:
         return <WarmUpPhase setGameState={setGameState} gameState={gameState} />;
       case 2:
-        return <MobilityPhase setGameState={setGameState} />;
+        return <MobilityPhase setGameState={setGameState} gameState={gameState} />;
       case 3:
-        return <EscapePhase setGameState={setGameState} />;
+        return <EscapePhase setGameState={setGameState} gameState={gameState} />;
       case 4:
         return (
           <MapIntroduction
@@ -476,6 +483,13 @@ function App() {
         <BadgeUnlockedModal
           badgeId={recentBadge}
           onClose={() => setRecentBadge(null)}
+        />
+      )}
+      {showStreak && streakData && gameState.characterCreated && (
+        <StreakBanner
+          streak={streakData.streak}
+          readingAge={gameState.readingAge}
+          onDismiss={() => setShowStreak(false)}
         />
       )}
       {popupMessage && (
