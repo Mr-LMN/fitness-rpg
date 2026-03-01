@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
 import { playSound } from "../../utils";
+import narrationLines from "../../data/narrationLines";
+import ScrollingNarrationBox from "../ScrollingNarrationBox";
 
-function FitnessSuite({ setGameState }) {
-  const [ready, setReady] = useState(false);
-
-  const handleReady = () => {
-    playSound('footsteps');
-    setReady(true);
-  };
+function FitnessSuite({ setGameState, gameState = {} }) {
+  const [narrativeDone, setNarrativeDone] = useState(false);
+  const { textToSpeech = false, enhancedReading = false, readingAge = 'not-sure' } = gameState;
 
   const handleStart = () => {
     playSound('alarm');
@@ -25,22 +23,37 @@ function FitnessSuite({ setGameState }) {
       <img src="/FitnessSuite.png" alt="Fitness Suite" className="scene-image" />
       <ParallaxDust />
       <div className="room-content rpg-text">
-        {!ready ? (
+        {!narrativeDone ? (
           <>
-            <h2>🏃 Dash to the Fitness Suite</h2>
-            <p>You sprint down the dark corridor toward the fitness suite.</p>
-            <p>Take a breath and prepare for the hero workout.</p>
-            <button onClick={handleReady}>I'm Ready</button>
+            <h2 className="phase-heading phase-heading--danger">FINAL ASSESSMENT</h2>
+            <ScrollingNarrationBox
+              lines={narrationLines.general.finalBossBriefing}
+              autoRead={textToSpeech}
+              enhancedMode={enhancedReading}
+              readingAge={readingAge}
+              onComplete={() => setNarrativeDone(true)}
+            />
           </>
         ) : (
           <>
-            <h2>🔥 Hero Workout: 21-15-9</h2>
-            <ul>
-              <li>21 Calories on Assault Bike</li>
-              <li>15 Slam Balls</li>
-              <li>9 Burpees</li>
-            </ul>
-            <button onClick={handleStart}>Start Final Battle</button>
+            <h2 className="phase-heading phase-heading--danger">OPERATION SLAMSTORM</h2>
+            <div className="fitness-suite-preview">
+              <div className="fitness-suite-exercise">
+                <span className="fse-target">21</span>
+                <span className="fse-name">Assault Bike Calories</span>
+              </div>
+              <div className="fitness-suite-exercise">
+                <span className="fse-target">15</span>
+                <span className="fse-name">Slam Balls</span>
+              </div>
+              <div className="fitness-suite-exercise">
+                <span className="fse-target">9</span>
+                <span className="fse-name">Burpees</span>
+              </div>
+            </div>
+            <button className="primary-btn" onClick={handleStart}>
+              Enter the Arena
+            </button>
           </>
         )}
       </div>

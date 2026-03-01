@@ -14,7 +14,7 @@ function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = fals
       <img src="/locker_Room.png" alt="Locker Room" className="scene-image" />
       <ParallaxDust />
       <div className="room-content rpg-text">
-        <h2>🧊 Locked In</h2>
+        <h2 className="phase-heading phase-heading--danger">LOCKDOWN</h2>
         <ScrollingNarrationBox
           lines={narrationLines.general.introPhase}
           autoRead={textToSpeech}

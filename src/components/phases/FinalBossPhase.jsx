@@ -90,7 +90,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
   const handleStart = () => {
     playSound("alarm");
     setBattleStarted(true);
-    addLog("⚡ BATTLE STARTED! Complete all 3 exercises to defeat Mrs. Roche!");
+    addLog("BATTLE STARTED! Complete all 3 exercises to shut down TITAN!");
   };
 
   const handlePhaseSubmit = () => {
@@ -128,7 +128,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
     setBattleFinished(true);
 
     const dealtDamage = BOSS_MAX_HP - Math.max(0, finalHp);
-    addLog(`🎉 Mrs. Roche defeated! ${dealtDamage} total damage dealt!`);
+    addLog(`TITAN DEFEATED! ${dealtDamage} total damage dealt!`);
 
     setGameState((prev) => {
       const newBadges = [BADGES.BOSS_VANQUISHER];
@@ -202,7 +202,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
 
         {/* Header */}
         <div className="final-boss-header">
-          <h1 className="final-boss-title">🏋️ Final Boss: Operation Slamstorm</h1>
+          <h1 className="final-boss-title">FINAL BOSS: OPERATION SLAMSTORM</h1>
           <div className="final-boss-timer">
             {battleStarted ? (
               <span className={`timer-value ${!battleFinished ? "timer-ticking" : "timer-done"}`}>
@@ -217,7 +217,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
         {/* Boss HP Bar */}
         <div className={`final-hp-section ${hitFlash ? "hp-hit-flash" : ""}`}>
           <div className="final-hp-label">
-            <span>👹 Mutated Mrs. Roche</span>
+            <span>TITAN MAINFRAME</span>
             <span className="final-hp-num">{Math.max(0, bossHp)} / {BOSS_MAX_HP} HP</span>
           </div>
           <div className="final-hp-track">
@@ -250,11 +250,11 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
         {!battleStarted && (
           <div className="final-prebattle">
             <p className="final-lore">
-              The fitness suite lights flare to life. Mrs. Roche's mutated silhouette
-              staggers between overturned machines, her roar echoing off the mirrors.
+              TITAN's arena flares to life. Every screen blazes red. The assault bikes,
+              slam balls, and burpee stations form a gauntlet designed to break you.
             </p>
             <p className="final-lore">
-              Complete the <strong>21-15-9 Hero Workout</strong> to drive her back and escape!
+              Complete the <strong>21-15-9 Hero Workout</strong> to shut TITAN down for good!
             </p>
             <div className="final-workout-preview">
               {WORKOUT_PHASES.map((ph) => (
@@ -340,7 +340,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
             <div className="fv-burst">🎉</div>
             <h2 className="fv-title">VICTORY!</h2>
             <p className="fv-sub">
-              Mrs. Roche crashes to the rubber flooring. The alarms taper into silence.
+              TITAN's systems collapse. The red lights shift to green. Every door in the school unlocks.
             </p>
             <div className="fv-stats">
               <div className="fvs-item">
