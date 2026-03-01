@@ -25,6 +25,7 @@ import GameMenu from "./components/GameMenu";
 import SLTDashboard from "./components/SLTDashboard";
 import { ROOMS } from "./constants";
 import { updateUserProfile, syncUserXP } from "./helpers/userProfile";
+import { getReadingProfile } from "./helpers/readingProfile";
 
 const INITIAL_STATE = {
   characterCreated: false,
@@ -34,6 +35,7 @@ const INITIAL_STATE = {
   weight: "",
   workoutFocus: "",
   avatar: "pirate",
+  readingAge: "not-sure",
   introStage: 0,
   currentRoom: null,
   completedRooms: [],
@@ -57,6 +59,9 @@ const INITIAL_STATE = {
   completedQuests: [],
   questProgress: {},
   questInitialised: false,
+  survivorStatus: null,
+  recoveryWorkoutsNeeded: 2,
+  recoveryWorkoutsCompleted: 0,
 };
 
 const CHECKPOINT_PREFIX = "checkpoint_";
@@ -143,9 +148,13 @@ function App() {
       if ((week.minutes || 0) >= 60) {
         setPopupMessage("Great job! You hit your weekly workout target!");
       } else {
-        setPopupMessage("You missed the weekly workout target. Starting over.");
-        setGameState({ ...INITIAL_STATE });
-        setUser(null);
+        setPopupMessage("⚠️ You've been weakened — complete 2 workouts to recover.");
+        setGameState((prev) => ({
+          ...prev,
+          survivorStatus: 'injured',
+          recoveryWorkoutsNeeded: 2,
+          recoveryWorkoutsCompleted: 0,
+        }));
       }
       week.start = now.toISOString();
       week.minutes = 0;
@@ -275,15 +284,33 @@ function App() {
           }
         });
 
+        // Handle injury recovery — track workouts logged while injured
+        let recoveryUpdate = {};
+        if (eventType === 'workoutLogged' && prev.survivorStatus === 'injured') {
+          const newCompleted = (prev.recoveryWorkoutsCompleted || 0) + 1;
+          const recovered = newCompleted >= (prev.recoveryWorkoutsNeeded || 2);
+          recoveryUpdate = {
+            recoveryWorkoutsCompleted: recovered ? 0 : newCompleted,
+            survivorStatus: recovered ? null : 'injured',
+          };
+          changed = true;
+        }
+
         if (!changed) return prev;
+
+        // Halve XP gains while injured
+        const effectiveXpBonus = prev.survivorStatus === 'injured'
+          ? Math.floor(xpBonus / 2)
+          : xpBonus;
 
         return {
           ...prev,
-          xp: prev.xp + xpBonus,
+          xp: prev.xp + effectiveXpBonus,
           badges: Array.from(badgeSet),
           activeQuests: Array.from(activeSet),
           completedQuests: Array.from(completedSet),
           questProgress,
+          ...recoveryUpdate,
         };
       });
     },
@@ -360,6 +387,7 @@ function App() {
             setGameState={setGameState}
             textToSpeech={gameState.textToSpeech}
             enhancedReading={gameState.enhancedReading}
+            readingAge={gameState.readingAge}
           />
         );
       case 1:
@@ -374,6 +402,7 @@ function App() {
             setGameState={setGameState}
             textToSpeech={gameState.textToSpeech}
             enhancedReading={gameState.enhancedReading}
+            readingAge={gameState.readingAge}
           />
         );
       case 5:
@@ -392,6 +421,7 @@ function App() {
               avatar={gameState.avatar}
               textToSpeech={gameState.textToSpeech}
               enhancedReading={gameState.enhancedReading}
+              readingAge={gameState.readingAge}
               onContinue={() =>
                 setGameState((prev) => ({ ...prev, showOverlay: false }))
               }
@@ -409,8 +439,13 @@ function App() {
     }
   };
 
+  const readingProfile = getReadingProfile(gameState.readingAge || 'not-sure');
+  const readingLevelClass = readingProfile.level === 'entry' ? 'reading-entry'
+    : readingProfile.level === 'simple' ? 'reading-simple'
+    : '';
+
   return (
-    <div className={gameState.enhancedReading ? "enhanced-reading" : ""}>
+    <div className={[gameState.enhancedReading ? 'enhanced-reading' : '', readingLevelClass].filter(Boolean).join(' ')}>
       {user && gameState.characterCreated && (
         <>
           <XPBar
@@ -418,6 +453,9 @@ function App() {
             xp={gameState.xp}
             playerName={gameState.studentName}
             badges={gameState.badges}
+            survivorStatus={gameState.survivorStatus}
+            recoveryWorkoutsCompleted={gameState.recoveryWorkoutsCompleted}
+            recoveryWorkoutsNeeded={gameState.recoveryWorkoutsNeeded}
           />
           <QuestTracker
             activeQuests={gameState.activeQuests}

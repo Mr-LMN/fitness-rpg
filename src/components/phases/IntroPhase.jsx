@@ -5,7 +5,7 @@ import { playVoice, playSound } from "../../utils";
 import narrationLines from "../../data/narrationLines";
 import ScrollingNarrationBox from "../ScrollingNarrationBox";
 
-function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = false }) {
+function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = false, readingAge = 'not-sure' }) {
   useEffect(() => {
     playVoice('/voices/intro-phase.wav');
   }, []);
@@ -19,6 +19,7 @@ function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = fals
           lines={narrationLines.general.introPhase}
           autoRead={textToSpeech}
           enhancedMode={enhancedReading}
+          readingAge={readingAge}
           onComplete={() => {
             playSound("footsteps");
             setGameState((prev) => ({ ...prev, introStage: 1 }));

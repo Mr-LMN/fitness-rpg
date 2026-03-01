@@ -13,6 +13,7 @@ export async function updateUserProfile({
   xp = null,
   xpGain = 0,
   workoutData = null,
+  readingAge = null,
 }) {
   if (!userId) return;
 
@@ -25,6 +26,10 @@ export async function updateUserProfile({
     avatar: avatar || "pirate",
     lastActive: serverTimestamp(),
   };
+
+  if (readingAge !== null) {
+    baseUpdate.readingAge = readingAge;
+  }
 
   // Only set xp when explicitly provided (e.g. character creation);
   // otherwise increment by xpGain so we never overwrite the stored total.

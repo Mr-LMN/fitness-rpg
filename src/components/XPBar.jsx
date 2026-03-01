@@ -19,13 +19,14 @@ const LEVEL_TITLES = [
   "Legend",
 ];
 
-function XPBar({ avatar, xp, playerName, badges = [] }) {
+function XPBar({ avatar, xp, playerName, badges = [], survivorStatus, recoveryWorkoutsCompleted = 0, recoveryWorkoutsNeeded = 2 }) {
   const level = Math.floor((xp || 0) / 100);
   const xpInLevel = (xp || 0) % 100;
   const title = LEVEL_TITLES[Math.min(level, LEVEL_TITLES.length - 1)];
+  const isInjured = survivorStatus === 'injured';
 
   return (
-    <div className="xpbar-wrap">
+    <div className={`xpbar-wrap ${isInjured ? 'xpbar-injured' : ''}`}>
       <div className="xpbar-avatar" aria-hidden="true">
         {AVATAR_ICONS[avatar] || AVATAR_ICONS.pirate}
       </div>
@@ -51,6 +52,11 @@ function XPBar({ avatar, xp, playerName, badges = [] }) {
           />
           <span className="xpbar-xp-label">{xp} XP</span>
         </div>
+        {isInjured && (
+          <div className="xpbar-injured-notice" role="alert" aria-live="polite">
+            ⚠️ Weakened — complete {recoveryWorkoutsNeeded - recoveryWorkoutsCompleted} workout{recoveryWorkoutsNeeded - recoveryWorkoutsCompleted !== 1 ? 's' : ''} to recover
+          </div>
+        )}
       </div>
       {badges.length > 0 && (
         <div className="xpbar-badges" aria-label={`${badges.length} badges earned`}>
