@@ -7,18 +7,22 @@ import { adaptSingleLine } from '../helpers/narrativeAdapter';
  * Calculates login streak from localStorage.
  * Stores: { dates: ["2026-03-01", ...], lastLogin: "2026-03-01" }
  */
-export function getStreakData() {
+const STREAK_PREFIX = 'streak_';
+
+export function getStreakData(userId) {
+  const key = userId ? `${STREAK_PREFIX}${userId}` : 'streakData';
   try {
-    const raw = JSON.parse(localStorage.getItem('streakData') || '{}');
+    const raw = JSON.parse(localStorage.getItem(key) || '{}');
     return { streak: raw.streak || 0, lastLogin: raw.lastLogin || null };
   } catch {
     return { streak: 0, lastLogin: null };
   }
 }
 
-export function updateStreak() {
+export function updateStreak(userId) {
+  const key = userId ? `${STREAK_PREFIX}${userId}` : 'streakData';
   const today = new Date().toISOString().slice(0, 10);
-  const data = getStreakData();
+  const data = getStreakData(userId);
 
   if (data.lastLogin === today) return data; // Already logged today
 
@@ -34,7 +38,7 @@ export function updateStreak() {
   }
 
   const newData = { streak: newStreak, lastLogin: today };
-  localStorage.setItem('streakData', JSON.stringify(newData));
+  localStorage.setItem(key, JSON.stringify(newData));
   return newData;
 }
 

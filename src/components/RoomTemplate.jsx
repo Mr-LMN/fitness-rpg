@@ -162,7 +162,7 @@ function RoomTemplate({
       return { ...prev, ...updates };
     });
 
-    const extraLines = narrationLines.languages?.room1?.extraScavenge || [];
+    const extraLines = adaptNarrative(narrationLines.languages?.room1?.extraScavenge, readingProfile);
     if (extraLines.length > 0) {
       setLastScavengeLine(extraLines[extraScavengeCount % extraLines.length]);
     }

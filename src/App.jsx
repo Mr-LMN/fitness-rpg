@@ -122,8 +122,8 @@ function App() {
         console.error("Failed to parse checkpoint", err);
       }
     }
-    // Update daily streak
-    const newStreak = updateStreak();
+    // Update daily streak (scoped by user.uid)
+    const newStreak = updateStreak(user.uid);
     setStreakData(newStreak);
     if (newStreak.streak > 0) setShowStreak(true);
   }, [user]);
@@ -339,6 +339,7 @@ function App() {
 
     if (user?.uid) {
       localStorage.removeItem(`${CHECKPOINT_PREFIX}${user.uid}`);
+      localStorage.removeItem(`streak_${user.uid}`);
     }
     localStorage.removeItem("lifetimeSummary");
     localStorage.removeItem("weekData");
