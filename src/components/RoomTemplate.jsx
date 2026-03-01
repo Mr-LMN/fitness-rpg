@@ -131,8 +131,12 @@ function RoomTemplate({
     setStage(nextAfterWorkout());
   };
 
-  const handleQuizComplete = (correct, total) => {
-    setGameState((prev) => ({ ...prev, xp: (prev.xp || 0) + correct * 5 }));
+  const handleQuizComplete = (correct, total, finalLevel) => {
+    setGameState((prev) => ({
+      ...prev,
+      xp: (prev.xp || 0) + correct * 5,
+      ...(finalLevel ? { studentLevel: finalLevel } : {}),
+    }));
     onQuestEvent('quizComplete', { room: mapMarker, correct, total });
     setStage(nextAfterQuiz());
   };
@@ -295,6 +299,7 @@ function RoomTemplate({
           <div className="room-content">
             <WorkoutLogger
               roomNumber={mapMarker}
+              gameState={gameState}
               setGameState={setGameState}
               workoutFocus={workoutFocus || gameState.workoutFocus}
               userId={userId}
@@ -356,6 +361,7 @@ function RoomTemplate({
           questions={quiz}
           onComplete={handleQuizComplete}
           showImpossibleFinal={mapMarker === ROOMS.MRS_ROCHE}
+          studentLevel={gameState.studentLevel || "entry"}
         />
       );
 

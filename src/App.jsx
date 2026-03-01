@@ -52,6 +52,7 @@ const INITIAL_STATE = {
   showOverlay: true,
   enhancedReading: false,
   textToSpeech: false,
+  studentLevel: "entry",
   activeQuests: [],
   completedQuests: [],
   questProgress: {},

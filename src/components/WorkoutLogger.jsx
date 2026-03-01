@@ -26,6 +26,7 @@ const EMPTY_STRENGTH_INPUT = { name: "", sets: "", reps: "", weight: "" };
 
 function WorkoutLogger({
   roomNumber,
+  gameState = { inventory: [] },
   setGameState,
   workoutFocus,
   userId,
@@ -53,6 +54,7 @@ function WorkoutLogger({
   const [summaryData, setSummaryData] = useState(null);
   const [summaryVariant, setSummaryVariant] = useState("standard");
   const [formError, setFormError] = useState("");
+  const [boostToast, setBoostToast] = useState("");
 
   const userWeight = getUserWeight();
   const heading =
@@ -61,16 +63,32 @@ function WorkoutLogger({
     (roomNumber ? `Log Your Workout (${roomNumber})` : "Log Your Workout");
   const roomLabel = roomNumber || specialWorkout?.title || "Free Log";
 
-  // Shared: award XP, append annotation, notify quest system, play sound
-  const finaliseWorkout = ({ focus, metrics, entries, logEntry }) => {
-    setGameState((prev) => ({
-      ...prev,
-      xp: (prev.xp || 0) + 10,
-      annotations: [
-        ...(prev.annotations || []),
-        { room: roomLabel, ...logEntry, timestamp: new Date().toISOString() },
-      ],
-    }));
+  // Shared: award XP (with optional boost), append annotation, notify quest system, play sound
+  const finaliseWorkout = ({ focus, metrics, entries, logEntry, usedBoostItem = null }) => {
+    setGameState((prev) => {
+      const baseXP = 10;
+      const xpMultiplier = 1 + (usedBoostItem?.effect?.xpBoost || 0);
+      const xpGain = Math.round(baseXP * xpMultiplier);
+
+      let inventory = prev.inventory || [];
+      if (usedBoostItem) {
+        // Remove the first instance of the used item from inventory
+        const idx = inventory.findIndex((it) => it.id === usedBoostItem.id);
+        if (idx !== -1) {
+          inventory = [...inventory.slice(0, idx), ...inventory.slice(idx + 1)];
+        }
+      }
+
+      return {
+        ...prev,
+        xp: (prev.xp || 0) + xpGain,
+        inventory,
+        annotations: [
+          ...(prev.annotations || []),
+          { room: roomLabel, ...logEntry, timestamp: new Date().toISOString() },
+        ],
+      };
+    });
     playSound("xpLevel", { volume: 0.5 });
 
     if (typeof onWorkoutLogged === "function") {
@@ -195,7 +213,32 @@ function WorkoutLogger({
       return;
     }
 
-    const metrics = calculateWorkoutMetrics(workoutLog, userWeight, workoutFocus);
+    // Check inventory for consumable boosts to apply this session
+    const inventory = gameState.inventory || [];
+    const xpItem = inventory.find((it) => it.effect?.xpBoost);
+    const weightItem = inventory.find((it) => it.effect?.weightBoost);
+    const distanceItem = inventory.find((it) => it.effect?.distanceBoost);
+    // Priority: XP boost > weight boost > distance boost
+    const activeBoost = xpItem || weightItem || distanceItem;
+
+    const rawMetrics = calculateWorkoutMetrics(workoutLog, userWeight, workoutFocus);
+
+    // Apply weight/distance boosts to metrics if present
+    const metrics = {
+      ...rawMetrics,
+      totalWeight: weightItem
+        ? rawMetrics.totalWeight * (1 + weightItem.effect.weightBoost)
+        : rawMetrics.totalWeight,
+      distance: distanceItem
+        ? rawMetrics.distance * (1 + distanceItem.effect.distanceBoost)
+        : rawMetrics.distance,
+    };
+
+    if (activeBoost) {
+      setBoostToast(`✨ ${activeBoost.name} used — boost applied this session!`);
+      setTimeout(() => setBoostToast(""), 4000);
+    }
+
     setSummaryVariant("standard");
     setSummaryData({
       totalWeight: `${metrics.totalWeight.toFixed(1)} kg`,
@@ -250,6 +293,7 @@ function WorkoutLogger({
       metrics,
       entries: workoutLog,
       logEntry: { activity: "Workout completed", details: workoutLog },
+      usedBoostItem: activeBoost || null,
     });
   };
 
@@ -365,6 +409,7 @@ function WorkoutLogger({
         ))}
       </div>
 
+      {boostToast && <p className="boost-toast">{boostToast}</p>}
       <button className="primary-btn finish-btn" onClick={handleFinishWorkout}>
         Finish Workout
       </button>

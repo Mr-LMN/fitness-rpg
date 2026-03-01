@@ -139,13 +139,30 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
 
       const badgesToAdd = newBadges.filter((b) => !prev.badges.includes(b));
 
+      // Apply xpBoost from first matching consumable in inventory
+      const inventory = prev.inventory || [];
+      const xpItem = inventory.find((it) => it.effect?.xpBoost);
+      const baseXP = 50;
+      const xpGain = Math.round(baseXP * (1 + (xpItem?.effect?.xpBoost || 0)));
+
+      let updatedInventory = inventory;
+      if (xpItem) {
+        const idx = inventory.findIndex((it) => it.id === xpItem.id);
+        if (idx !== -1) {
+          updatedInventory = [
+            ...inventory.slice(0, idx),
+            ...inventory.slice(idx + 1),
+          ];
+        }
+      }
+
       return {
         ...prev,
-        xp: (prev.xp || 0) + 50,
+        xp: (prev.xp || 0) + xpGain,
         bossDefeated: true,
         victory: true,
         inventory: [
-          ...(prev.inventory || []),
+          ...updatedInventory,
           {
             id: "map_piece_2",
             name: "Map Piece #2 (Maths Department)",

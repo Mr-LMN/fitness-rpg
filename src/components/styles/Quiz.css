@@ -43,8 +43,51 @@
   background: #3d5c70;
 }
 
+.quiz-header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.quiz-level-badge {
+  background: #2d6a4f;
+  color: #d8f3dc;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+.quiz-progress {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
 .penalty-message {
-  color: #ff9c9c;
+  color: #ffd166;
   margin-top: 10px;
-  font-weight: bold;
+  font-style: italic;
+}
+
+.level-notice {
+  color: #74c69d;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.boost-toast {
+  background: #1d3557;
+  color: #a8dadc;
+  border: 1px solid #457b9d;
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
 }
