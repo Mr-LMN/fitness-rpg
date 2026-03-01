@@ -132,12 +132,20 @@ export async function speakText(text) {
 
 /**
  * Estimate calories burned using MET, weight, and duration or reps/sets.
- * @param {Object} exercise - The exercise object (must include `met`)
- * @param {number} userWeightKg - Student weight in kg (default = 50)
- * @param {number} durationMin - For cardio or time-based movements
- * @param {number} sets - For strength exercises
- * @param {number} reps - For strength exercises
- * @param {number} weightLiftedPerRep - In kg (for weighted strength moves)
+ *
+ * Cardio: standard MET × bodyweight × hours formula.
+ *
+ * Resistance training: uses the ACSM kcal/min formula with adjustments for
+ *   - rest periods between sets (45 s for kids / school setting)
+ *   - load intensity (heavier weight relative to bodyweight = more energy)
+ *   - compound vs isolation bias (higher-MET exercises engage more muscle mass)
+ *
+ * @param {Object}  exercise            - The exercise object (must include `met`)
+ * @param {number}  userWeightKg        - Student weight in kg (default = 50)
+ * @param {number}  durationMin         - For cardio or time-based movements
+ * @param {number}  sets                - For strength exercises
+ * @param {number}  reps                - For strength exercises
+ * @param {number}  weightLiftedPerRep  - In kg (for weighted strength moves)
  * @returns {number} Estimated calories burned
  */
 export function estimateCalories({
@@ -151,17 +159,41 @@ export function estimateCalories({
   const met = exercise.met || 0;
 
   if (durationMin > 0) {
-    // Cardio or timed movement
+    // Cardio / timed movement — standard MET formula
     return +(met * userWeightKg * (durationMin / 60)).toFixed(1);
   }
 
   if (sets > 0 && reps > 0) {
-    const estimatedTimeMin = (sets * reps * 3) / 60; // Assume ~3 seconds per rep
-    const adjustedMet = met || 4.0;
-    return +(adjustedMet * userWeightKg * (estimatedTimeMin / 60)).toFixed(1);
+    const baseMET = met || 4.5;
+
+    // --- Time estimation ---
+    // ~4 seconds per rep (controlled eccentric + concentric for kids)
+    const repTimeSec = 4;
+    // 45 seconds rest between sets (typical for school-age kids)
+    const restBetweenSetsSec = 45;
+    const activeTimeSec = sets * reps * repTimeSec;
+    const restTimeSec = Math.max(sets - 1, 0) * restBetweenSetsSec;
+    const totalTimeMin = (activeTimeSec + restTimeSec) / 60;
+
+    // --- ACSM kcal/min formula ---
+    // kcal/min = (MET × 3.5 × bodyweight_kg) / 200
+    const kcalPerMin = (baseMET * 3.5 * userWeightKg) / 200;
+
+    // --- Load intensity scaling ---
+    // Heavier loads relative to bodyweight increase metabolic demand.
+    // Capped at 1.8× so a kid lifting very heavy doesn't get absurd numbers.
+    const loadRatio = weightLiftedPerRep / Math.max(userWeightKg, 30);
+    const intensityMultiplier = 1.0 + Math.min(loadRatio * 0.6, 0.8);
+
+    // --- Compound exercise bonus ---
+    // Exercises with higher MET values tend to recruit more muscle groups.
+    const compoundBonus = baseMET >= 5.0 ? 1.15 : 1.0;
+
+    const totalCalories = kcalPerMin * totalTimeMin * intensityMultiplier * compoundBonus;
+    return +totalCalories.toFixed(1);
   }
 
-  return 0; // Unknown case
+  return 0;
 }
 
 export function updateLifetimeSummary({ weightLifted = 0, distance = 0, calories = 0, bossesDefeated = 0 }) {
