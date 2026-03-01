@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+/* ============================================================
+   START SCREEN — First impression, premium landing
+   ============================================================ */
 
 .container {
   position: relative;
@@ -14,7 +16,11 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: linear-gradient(
+    180deg,
+    rgba(6, 4, 18, 0.5) 0%,
+    rgba(10, 8, 24, 0.7) 100%
+  );
 }
 
 .content {
@@ -25,63 +31,99 @@
   flex-direction: column;
   align-items: center;
   color: #f5f5f5;
-  font-family: 'Inter', 'Roboto', sans-serif;
-  animation: fadeIn 1s ease-out forwards;
+  font-family: 'Poppins', 'Open Sans', sans-serif;
+  animation: contentIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.1s;
   opacity: 0;
 }
 
 .badge {
-  width: 110px;
-  height: 110px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
   border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  margin-bottom: 20px;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(147, 92, 255, 0.15);
+  margin-bottom: 24px;
+  animation: badgePulse 4s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 40px rgba(147, 92, 255, 0.15); }
+  50% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 60px rgba(147, 92, 255, 0.25); }
 }
 
 .title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin: 0 0 10px;
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin: 0 0 12px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  margin-bottom: 40px;
+  margin: 0 0 40px;
+  font-size: 1.05rem;
+  color: rgba(230, 225, 255, 0.75);
+  line-height: 1.5;
+  max-width: 500px;
 }
 
 .startButton {
-  padding: 12px 32px;
-  font-size: 1.2rem;
-  background-color: #388e3c;
-  color: #fff;
+  padding: 14px 44px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: inherit;
+  background: linear-gradient(135deg, #a4c639, #7ea82a);
+  color: #111;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-  transition: box-shadow 0.3s, transform 0.3s;
-  animation: fadeIn 1.5s ease-out forwards;
+  box-shadow: 0 4px 20px rgba(164, 198, 57, 0.25);
+  transition: all 0.2s ease;
+  animation: contentIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.4s;
   opacity: 0;
 }
 
 .startButton:hover {
-  box-shadow: 0 0 10px rgba(56, 142, 60, 0.8);
+  background: linear-gradient(135deg, #b6d73a, #8fc030);
+  box-shadow: 0 8px 32px rgba(164, 198, 57, 0.4);
+  transform: translateY(-2px);
 }
 
-.startButton:focus {
-  outline: 3px solid #fff;
-  outline-offset: 2px;
+.startButton:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 12px rgba(164, 198, 57, 0.2);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.startButton:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 3px;
+}
+
+@keyframes contentIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
   .title {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
   .subtitle {
+    font-size: 0.95rem;
+  }
+  .startButton {
+    padding: 12px 36px;
     font-size: 1rem;
   }
 }

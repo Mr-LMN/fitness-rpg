@@ -1,12 +1,206 @@
-.badge-earned {
+/* ============================================================
+   BADGE UNLOCK — Dramatic reveal with glow burst
+   ============================================================ */
+
+.badge-overlay-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 2, 16, 0);
+  backdrop-filter: blur(0px);
+  transition: background 0.4s ease, backdrop-filter 0.4s ease;
+  padding: 24px;
+}
+
+.badge-overlay-visible {
+  background: rgba(4, 2, 16, 0.88);
+  backdrop-filter: blur(8px);
+}
+
+/* ── Card ── */
+
+.badge-reveal-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  padding: 20px;
+  background: linear-gradient(160deg, rgba(28, 20, 58, 0.95), rgba(14, 10, 30, 0.98));
+  border: 1px solid rgba(147, 92, 255, 0.35);
+  border-radius: 24px;
+  padding: 40px 32px 32px;
+  width: min(360px, 100%);
+  box-shadow:
+    0 32px 80px rgba(3, 2, 18, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  color: #f0e8ff;
+  overflow: hidden;
+
+  /* Entrance */
+  opacity: 0;
+  transform: scale(0.85) translateY(20px);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.badge-earned .badge-img {
-  width: 150px;
-  margin-bottom: 10px;
-  filter: drop-shadow(0 0 6px #fff);
+
+.badge-reveal-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
-.badge-unlock-bg {
-  background: rgba(0, 0, 0, 0.95);
+
+/* ── Glow background ── */
+
+.badge-glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(147, 92, 255, 0.25) 0%,
+    rgba(66, 233, 187, 0.08) 50%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+}
+
+/* ── Ray burst ── */
+
+.badge-burst {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.badge-ray {
+  position: absolute;
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(255, 215, 100, 0.5), transparent);
+  border-radius: 2px;
+  transform-origin: center 0;
+  transform: translateX(-50%) rotate(calc(var(--ray-i) * 45deg));
+  animation: rayFade 2s ease-out infinite;
+  animation-delay: calc(var(--ray-i) * 0.1s);
+}
+
+@keyframes rayFade {
+  0% { opacity: 0; height: 20px; }
+  30% { opacity: 0.7; height: 60px; }
+  100% { opacity: 0; height: 80px; }
+}
+
+/* ── Icon ── */
+
+.badge-icon-wrap {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 16px;
+}
+
+.badge-reveal-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(147, 92, 255, 0.5));
+  animation: badgeFloat 3s ease-in-out infinite;
+}
+
+.badge-reveal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(147, 92, 255, 0.2), rgba(66, 233, 187, 0.15));
+  border: 2px solid rgba(147, 92, 255, 0.4);
+  color: #d0b8ff;
+  box-shadow: 0 0 30px rgba(147, 92, 255, 0.3);
+  animation: badgeFloat 3s ease-in-out infinite;
+}
+
+@keyframes badgeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ── Text ── */
+
+.badge-reveal-tag {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 215, 100, 0.85);
+  font-weight: 700;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.badge-reveal-label {
+  margin: 0 0 8px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f0e8ff, #ffd764);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  z-index: 2;
+}
+
+.badge-reveal-desc {
+  margin: 0 0 24px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(220, 210, 255, 0.75);
+  max-width: 280px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Claim button ── */
+
+.badge-reveal-btn {
+  position: relative;
+  z-index: 2;
+  padding: 10px 36px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  background: linear-gradient(135deg, #935cff, #6b3fd4);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(147, 92, 255, 0.35);
+  transition: all 0.2s ease;
+}
+
+.badge-reveal-btn:hover {
+  background: linear-gradient(135deg, #a06fff, #7e4ee8);
+  box-shadow: 0 6px 28px rgba(147, 92, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.badge-reveal-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 12px rgba(147, 92, 255, 0.3);
 }

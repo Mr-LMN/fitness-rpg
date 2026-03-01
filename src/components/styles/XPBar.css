@@ -12,10 +12,10 @@
   align-items: center;
   gap: 10px;
   padding: 8px 16px;
-  background: rgba(10, 12, 24, 0.88);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(164, 198, 57, 0.2);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(180deg, rgba(10, 12, 24, 0.92), rgba(10, 12, 24, 0.85));
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(164, 198, 57, 0.15);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
 }
 
 .xpbar-avatar {
@@ -71,14 +71,14 @@
   position: relative;
   height: 8px;
   background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
+  border-radius: 999px;
   overflow: hidden;
 }
 
 .xpbar-fill {
   height: 100%;
   background: linear-gradient(90deg, #7ea82a, #a4c639, #ffd166);
-  border-radius: 4px;
+  border-radius: 999px;
   transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
 }
@@ -91,7 +91,7 @@
   right: 0;
   height: 40%;
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
+  border-radius: 999px;
 }
 
 .xpbar-xp-label {
@@ -113,8 +113,8 @@
   color: #ffd166;
   font-weight: 700;
   flex-shrink: 0;
-  background: rgba(255, 209, 102, 0.1);
-  border: 1px solid rgba(255, 209, 102, 0.2);
+  background: rgba(255, 209, 102, 0.08);
+  border: 1px solid rgba(255, 209, 102, 0.18);
   border-radius: 20px;
   padding: 4px 10px;
 }

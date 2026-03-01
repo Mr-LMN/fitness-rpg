@@ -1,4 +1,7 @@
 const questDeck = [
+  // ── WORKOUT GRIND CHAIN ──────────────────────────────────────
+  // The core progression loop. Each tier unlocks after the previous,
+  // giving students a clear target and visible momentum.
   {
     id: "quest_workout_1",
     title: "First Footing",
@@ -10,9 +13,10 @@ const questDeck = [
     reward: {
       xp: 15,
       badge: "workoutStarter",
-      badgeLabel: "Workout Starter wrist wrap",
+      badgeLabel: "Workout Starter",
     },
     autoUnlock: true,
+    tier: 1,
   },
   {
     id: "quest_workout_3",
@@ -25,9 +29,10 @@ const questDeck = [
     reward: {
       xp: 35,
       badge: "workoutTrio",
-      badgeLabel: "Training Trio streamer",
+      badgeLabel: "Training Trio",
     },
     prerequisites: ["quest_workout_1"],
+    tier: 2,
   },
   {
     id: "quest_workout_5",
@@ -40,10 +45,61 @@ const questDeck = [
     reward: {
       xp: 60,
       badge: "workoutQuint",
-      badgeLabel: "Campaign Conditioning pennant",
+      badgeLabel: "Campaign Conditioning",
     },
     prerequisites: ["quest_workout_3"],
+    tier: 3,
   },
+  {
+    id: "quest_workout_10",
+    title: "Iron Resolve",
+    type: "fitness",
+    description:
+      "Log ten workouts. The grind separates rookies from warriors.",
+    event: "workoutLogged",
+    goal: 10,
+    reward: {
+      xp: 100,
+      badge: "ironResolve",
+      badgeLabel: "Iron Resolve",
+    },
+    prerequisites: ["quest_workout_5"],
+    tier: 4,
+  },
+  {
+    id: "quest_workout_15",
+    title: "Unstoppable Force",
+    type: "fitness",
+    description:
+      "Log fifteen workouts. Your dedication is becoming legendary.",
+    event: "workoutLogged",
+    goal: 15,
+    reward: {
+      xp: 150,
+      badge: "unstoppable",
+      badgeLabel: "Unstoppable Force",
+    },
+    prerequisites: ["quest_workout_10"],
+    tier: 5,
+  },
+  {
+    id: "quest_workout_25",
+    title: "Hall of Fame",
+    type: "fitness",
+    description:
+      "Log twenty-five workouts. Only the elite reach this milestone.",
+    event: "workoutLogged",
+    goal: 25,
+    reward: {
+      xp: 250,
+      badge: "hallOfFame",
+      badgeLabel: "Hall of Fame",
+    },
+    prerequisites: ["quest_workout_15"],
+    tier: 6,
+  },
+
+  // ── ROOM CHALLENGES ──────────────────────────────────────────
   {
     id: "quest_spark_warmup",
     title: "Spark Gauntlet",
@@ -56,7 +112,7 @@ const questDeck = [
     reward: {
       xp: 25,
       badge: "warmupChampion",
-      badgeLabel: "Warm-Up Vanguard cosmetic badge",
+      badgeLabel: "Warm-Up Vanguard",
     },
     autoUnlock: true,
   },
@@ -72,10 +128,12 @@ const questDeck = [
     reward: {
       xp: 30,
       badge: "strengthCaptain",
-      badgeLabel: "Squad Captain sash",
+      badgeLabel: "Squad Captain",
     },
     prerequisites: ["quest_spark_warmup"],
   },
+
+  // ── KNOWLEDGE ────────────────────────────────────────────────
   {
     id: "quest_languages_trial",
     title: "KS3 Linguist Trial",
@@ -88,10 +146,12 @@ const questDeck = [
     reward: {
       xp: 40,
       badge: "ks3Polyglot",
-      badgeLabel: "KS3 Polyglot Pin (cosmetic)",
+      badgeLabel: "KS3 Polyglot",
     },
     prerequisites: ["quest_spark_warmup"],
   },
+
+  // ── BOSS ENCOUNTERS ──────────────────────────────────────────
   {
     id: "quest_arena_finale",
     title: "Arena Finale",

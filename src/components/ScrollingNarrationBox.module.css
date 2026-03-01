@@ -1,56 +1,121 @@
+/* ============================================================
+   SCROLLING NARRATION BOX — Immersive text display
+   ============================================================ */
+
 .box {
-  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
-  color: #fff; /* White text for standard mode */
-  padding: 20px;
+  background: linear-gradient(170deg, rgba(10, 8, 24, 0.85), rgba(16, 12, 32, 0.78));
+  color: #efe8ff;
+  padding: 28px 24px 20px;
   margin: 20px auto;
-  border-radius: 10px; /* Rounded corners */
-  max-width: 80%; /* Adjust max-width as needed */
-  text-align: left; /* Align text left for readability */
-  font-size: 18px;
-  line-height: 1.5;
+  border-radius: 16px;
+  max-width: 80%;
+  text-align: left;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  border: 1px solid rgba(147, 92, 255, 0.15);
+  box-shadow:
+    0 16px 40px rgba(3, 2, 18, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
 }
 
 .enhanced {
-  background-color: #fffae5; /* Light background for enhanced mode */
-  color: #000; /* Black text for enhanced mode */
-  font-size: 24px; /* Larger font size */
-  line-height: 1.8; /* Increased line spacing */
+  background: linear-gradient(170deg, #fffde8, #fff8d6);
+  color: #1c1917;
+  font-size: 1.35rem;
+  line-height: 1.85;
   font-family: 'OpenDyslexic', Arial, sans-serif;
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
-.textContainer {
+.enhanced * {
+  color: #1c1917;
+}
+
+.lineContainer {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 3em;
 }
 
 .line {
   opacity: 0;
-  animation: fadeIn 0.6s forwards;
+  animation: narrateFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes narrateFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .buttonContainer {
-  text-align: center; /* Center the button */
+  text-align: center;
   margin-top: 20px;
 }
 
-.continueButton, .ttsButton {
-  border: none;
-  background: #5a5a5a;
+.continueButton {
+  padding: 10px 28px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  background: linear-gradient(135deg, rgba(147, 92, 255, 0.8), rgba(108, 63, 212, 0.85));
   color: #fff;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
+  box-shadow: 0 4px 16px rgba(147, 92, 255, 0.25);
+  transition: all 0.2s ease;
+}
+
+.continueButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(160, 111, 255, 0.9), rgba(126, 78, 232, 0.92));
+  box-shadow: 0 6px 22px rgba(147, 92, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.continueButton:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(147, 92, 255, 0.2);
+}
+
+.continueButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .ttsButton {
   margin-left: 0.5rem;
   background: transparent;
   border: none;
-  color: #fff;
+  color: inherit;
   cursor: pointer;
   font-size: 1.2em;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.ttsButton:hover {
+  opacity: 1;
+}
+
+/* Enhanced mode button overrides */
+.enhanced .continueButton {
+  background: linear-gradient(135deg, #2d7d32, #388e3c);
+  color: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(45, 125, 50, 0.25);
+}
+
+.enhanced .continueButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #388e3c, #43a047);
+  box-shadow: 0 6px 18px rgba(45, 125, 50, 0.35);
 }

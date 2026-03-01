@@ -1,3 +1,8 @@
+/* ============================================================
+   PARALLAX DUST — Multi-layer floating particle system
+   GPU-accelerated with will-change for smooth performance
+   ============================================================ */
+
 .dust-layer {
   pointer-events: none;
   position: absolute;
@@ -7,7 +12,6 @@
   height: 100%;
   overflow: hidden;
   z-index: 1;
-  opacity: 0.6; /* Reduce overall intensity */
 }
 
 .dust {
@@ -16,29 +20,52 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  /* Lower opacity so the dust doesn't overpower the UI */
-  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
-  background-size: 3px 3px;
-  animation: dust-float 50s linear infinite;
+  will-change: transform;
 }
 
+/* Layer 1 — Fine mist, slow drift */
 .dust1 {
-  animation-duration: 50s;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 4px 4px;
+  animation: dustDrift1 55s linear infinite;
+  opacity: 0.5;
 }
 
+/* Layer 2 — Medium particles, purple tint */
 .dust2 {
-  animation-duration: 65s;
+  background-image: radial-gradient(rgba(147, 92, 255, 0.08) 1px, transparent 1px);
+  background-size: 6px 6px;
+  animation: dustDrift2 70s linear infinite;
+  opacity: 0.4;
 }
 
+/* Layer 3 — Large sparse particles, warm tint */
 .dust3 {
-  animation-duration: 80s;
+  background-image: radial-gradient(rgba(255, 209, 102, 0.06) 1px, transparent 1px);
+  background-size: 8px 8px;
+  animation: dustDrift3 90s linear infinite;
+  opacity: 0.35;
 }
 
-@keyframes dust-float {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(50%, -50%, 0);
+/* Each layer drifts in a slightly different direction for parallax depth */
+@keyframes dustDrift1 {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(40%, -30%, 0); }
+}
+
+@keyframes dustDrift2 {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-25%, -45%, 0); }
+}
+
+@keyframes dustDrift3 {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(30%, -20%, 0); }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .dust1, .dust2, .dust3 {
+    animation: none;
   }
 }
