@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: url('/global-bg.png') center/cover no-repeat fixed;
+  background: url('/images/global-bg.png') center/cover no-repeat fixed;
   text-align: center;
   color: #fff;
 }

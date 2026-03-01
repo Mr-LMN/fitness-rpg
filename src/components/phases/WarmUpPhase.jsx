@@ -16,7 +16,7 @@ function WarmUpPhase({ setGameState, gameState = {} }) {
 
   return (
     <div className="room-container">
-      <img src="/RowingMachine.png" alt="Rowing Machine" className="scene-image" />
+      <img src="/images/RowingMachine.png" alt="Rowing Machine" className="scene-image" />
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2 className="phase-heading">WARM-UP PROTOCOL</h2>

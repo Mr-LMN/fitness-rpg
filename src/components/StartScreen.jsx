@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./StartScreen.module.css";
-import logo from "/Pencoedtre_Logo.png";
+import logo from "/images/Pencoedtre_Logo.png";
 
 export default function StartScreen({ onStart }) {
   const [phase, setPhase] = useState(0);

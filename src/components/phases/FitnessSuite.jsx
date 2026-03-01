@@ -20,7 +20,7 @@ function FitnessSuite({ setGameState, gameState = {} }) {
 
   return (
     <div className="room-container">
-      <img src="/FitnessSuite.png" alt="Fitness Suite" className="scene-image" />
+      <img src="/images/FitnessSuite.png" alt="Fitness Suite" className="scene-image" />
       <ParallaxDust />
       <div className="room-content rpg-text">
         {!narrativeDone ? (

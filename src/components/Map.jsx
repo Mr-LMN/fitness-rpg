@@ -196,7 +196,7 @@ function Map({ gameState, setGameState, userId }) {
         <div className="map-canvas">
           {/* Background */}
           <img
-            src="/Pamphletmap.png"
+            src="/images/Pamphletmap.png"
             alt="Pencoedtre school map"
             className="map-bg"
             draggable={false}

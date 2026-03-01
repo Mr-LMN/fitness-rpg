@@ -20,7 +20,7 @@ function MapIntroduction({ setGameState, textToSpeech = false, enhancedReading =
   return (
     <div className="room-container">
       <img
-        src="/Leaving_the_LockerRoom.png"
+        src="/images/Leaving_the_LockerRoom.png"
         alt="Leaving the Locker Room"
         className="scene-image"
       />
