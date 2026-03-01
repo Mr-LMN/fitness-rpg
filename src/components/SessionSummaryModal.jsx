@@ -14,14 +14,14 @@ import {
 import "./styles/SessionSummary.css";
 
 const MOTIVATIONAL_MESSAGES = [
-  "You crushed it! Every rep makes you stronger.",
-  "Beast mode activated! Keep pushing your limits.",
-  "That was legendary! Your future self will thank you.",
-  "Workout complete! You're levelling up in real life.",
-  "Power level increasing! Nothing can stop you now.",
-  "You showed up and gave it everything. That's what champions do.",
-  "Another session banked! You're building something amazing.",
-  "Gains unlocked! Your body is getting stronger every session.",
+  "TITAN ANALYSIS: Subject performance exceeds baseline. Threat level upgraded.",
+  "TITAN LOG: Physical output remarkable. Recalibrating difficulty parameters.",
+  "TITAN WARNING: Subject is growing stronger. Countermeasures insufficient.",
+  "Workout logged. Every session weakens TITAN's hold on the school.",
+  "TITAN ALERT: Anomalous effort detected. Subject classified as high-priority.",
+  "Mr. Watkins would be proud. That's what Pencoedtre students are made of.",
+  "Another session in the books. TITAN's defences are cracking.",
+  "TITAN STATUS: Subject resilience exceeding all projections. Remarkable.",
 ];
 
 function SessionSummaryModal({
@@ -47,7 +47,7 @@ function SessionSummaryModal({
   return (
     <div className="session-summary-overlay">
       <div className="session-summary-box">
-        <h2 className="session-summary-header">SESSION COMPLETE</h2>
+        <h2 className="session-summary-header">WORKOUT LOGGED</h2>
 
         <div className="xp-gain-banner">
           <IoStar className="xp-icon" />

@@ -1,67 +1,66 @@
 const questDeck = [
-  // ── WORKOUT GRIND CHAIN ──────────────────────────────────────
-  // The core progression loop. Each tier unlocks after the previous,
-  // giving students a clear target and visible momentum.
+  // ── TITAN RESISTANCE CHAIN ─────────────────────────────────
+  // Core progression. Each tier weakens TITAN's hold on the school.
   {
     id: "quest_workout_1",
-    title: "First Footing",
+    title: "System Probe",
     type: "fitness",
     description:
-      "Log your first workout anywhere on campus to steady your crew's nerves.",
+      "Log your first workout. TITAN is watching — show it you're not giving up.",
     event: "workoutLogged",
     goal: 1,
     reward: {
       xp: 15,
       badge: "workoutStarter",
-      badgeLabel: "Workout Starter",
+      badgeLabel: "First Signal",
     },
     autoUnlock: true,
     tier: 1,
   },
   {
     id: "quest_workout_3",
-    title: "Training Trio",
+    title: "Signal Boost",
     type: "fitness",
     description:
-      "Log three workouts during the campaign to prove your momentum.",
+      "Log 3 workouts. TITAN's sensors are recalibrating — keep the pressure up.",
     event: "workoutLogged",
     goal: 3,
     reward: {
       xp: 35,
       badge: "workoutTrio",
-      badgeLabel: "Training Trio",
+      badgeLabel: "Signal Boost",
     },
     prerequisites: ["quest_workout_1"],
     tier: 2,
   },
   {
     id: "quest_workout_5",
-    title: "Campaign Conditioned",
+    title: "Firewall Breach",
     type: "fitness",
     description:
-      "Log five workouts across the map to finish the conditioning milestone.",
+      "Log 5 workouts. Your consistency is cracking TITAN's defences.",
     event: "workoutLogged",
     goal: 5,
     reward: {
       xp: 60,
       badge: "workoutQuint",
-      badgeLabel: "Campaign Conditioning",
+      badgeLabel: "Firewall Breaker",
     },
     prerequisites: ["quest_workout_3"],
     tier: 3,
   },
   {
     id: "quest_workout_10",
-    title: "Iron Resolve",
+    title: "Iron Protocol",
     type: "fitness",
     description:
-      "Log ten workouts. The grind separates rookies from warriors.",
+      "Log 10 workouts. TITAN classifies you as a high-priority threat.",
     event: "workoutLogged",
     goal: 10,
     reward: {
       xp: 100,
       badge: "ironResolve",
-      badgeLabel: "Iron Resolve",
+      badgeLabel: "Iron Protocol",
     },
     prerequisites: ["quest_workout_5"],
     tier: 4,
@@ -71,7 +70,7 @@ const questDeck = [
     title: "Unstoppable Force",
     type: "fitness",
     description:
-      "Log fifteen workouts. Your dedication is becoming legendary.",
+      "Log 15 workouts. TITAN's threat assessment: MAXIMUM.",
     event: "workoutLogged",
     goal: 15,
     reward: {
@@ -84,87 +83,87 @@ const questDeck = [
   },
   {
     id: "quest_workout_25",
-    title: "Hall of Fame",
+    title: "Legend of Pencoedtre",
     type: "fitness",
     description:
-      "Log twenty-five workouts. Only the elite reach this milestone.",
+      "Log 25 workouts. No other subject in TITAN's records has achieved this.",
     event: "workoutLogged",
     goal: 25,
     reward: {
       xp: 250,
       badge: "hallOfFame",
-      badgeLabel: "Hall of Fame",
+      badgeLabel: "Legend of Pencoedtre",
     },
     prerequisites: ["quest_workout_15"],
     tier: 6,
   },
 
-  // ── ROOM CHALLENGES ──────────────────────────────────────────
+  // ── OVERRIDE CODE MISSIONS ─────────────────────────────────
   {
     id: "quest_spark_warmup",
-    title: "Spark Gauntlet",
+    title: "Combat Ready",
     type: "fitness",
     description:
-      "Complete a warm-up with your crew in Mr. Watkins' Room to forge the party.",
+      "Complete a warm-up in Mr. Watkins' Room. TITAN requires physical readiness.",
     event: "warmupComplete",
     criteria: { room: "Mr. Watkins' Room" },
     goal: 1,
     reward: {
       xp: 25,
       badge: "warmupChampion",
-      badgeLabel: "Warm-Up Vanguard",
+      badgeLabel: "Combat Ready",
     },
     autoUnlock: true,
   },
   {
     id: "quest_strength_log",
-    title: "Captain of Strength",
+    title: "Power Surge",
     type: "fitness",
     description:
-      "Log a strength-focused workout anywhere on campus to inspire your team.",
+      "Log a strength workout. TITAN's physical assessment requires raw power.",
     event: "workoutLogged",
     criteria: { focus: "strength" },
     goal: 1,
     reward: {
       xp: 30,
       badge: "strengthCaptain",
-      badgeLabel: "Squad Captain",
+      badgeLabel: "Power Surge",
     },
     prerequisites: ["quest_spark_warmup"],
   },
 
-  // ── KNOWLEDGE ────────────────────────────────────────────────
+  // ── CIPHER MISSIONS ────────────────────────────────────────
   {
     id: "quest_languages_trial",
-    title: "KS3 Linguist Trial",
+    title: "Cipher Cracker",
     type: "knowledge",
     description:
-      "Answer at least five KS3 language questions correctly in Mrs. Roche's room to earn a Polyglot Pin.",
+      "Answer 5+ language questions correctly in Mrs. Roche's room to crack TITAN's encryption.",
     event: "quizComplete",
     criteria: { room: "Mrs. Roche's Room", minCorrect: 5 },
     goal: 1,
     reward: {
       xp: 40,
       badge: "ks3Polyglot",
-      badgeLabel: "KS3 Polyglot",
+      badgeLabel: "Cipher Cracker",
     },
     prerequisites: ["quest_spark_warmup"],
   },
 
-  // ── BOSS ENCOUNTERS ──────────────────────────────────────────
+  // ── FINAL MISSION ──────────────────────────────────────────
   {
     id: "quest_arena_finale",
-    title: "Arena Finale",
+    title: "TITAN Shutdown",
     type: "fitness",
     description:
-      "Defeat the Fitness Suite boss with your crew to claim the Championship Pennant.",
+      "Complete Operation Slamstorm in the Fitness Suite to shut TITAN down.",
     event: "bossDefeated",
     criteria: { room: "Fitness Suite" },
     goal: 1,
     reward: {
       xp: 60,
       badge: "arenaChampion",
-      badgeLabel: "Championship Pennant",
+      badgeLabel: "TITAN Slayer",
     },
     prerequisites: ["quest_languages_trial"],
   },

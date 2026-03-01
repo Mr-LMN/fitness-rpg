@@ -14,7 +14,7 @@ const ALL_ROOMS = [
     xPct: 20,
     yPct: 28,
     icon: "🏫",
-    description: "Strength and knowledge await",
+    description: "Override Code #1 — Physical Assessment",
   },
   {
     name: "Mrs. John's Room",
@@ -22,15 +22,15 @@ const ALL_ROOMS = [
     xPct: 58,
     yPct: 18,
     icon: "📚",
-    description: "Languages and mental fortitude",
+    description: "Override Code #2 — Language Cipher",
   },
   {
     name: "Mrs. Roche's Room",
     id: "roche",
     xPct: 58,
     yPct: 50,
-    icon: "🧪",
-    description: "The boss chamber — prepare yourself",
+    icon: "❄️",
+    description: "Override Code #3 — Neural Interface",
   },
   {
     name: "Fitness Suite",
@@ -38,7 +38,7 @@ const ALL_ROOMS = [
     xPct: 58,
     yPct: 74,
     icon: "🏋️",
-    description: "Final Boss: Operation Slamstorm",
+    description: "TITAN Mainframe — Operation Slamstorm",
   },
 ];
 
@@ -128,14 +128,16 @@ function Map({ gameState, setGameState, userId }) {
   const totalCount = ALL_ROOMS.length;
   const progressPct = Math.round((clearedCount / totalCount) * 100);
   const newItemCount = (gameState.inventory || []).filter((i) => i.isNew).length;
+  // Override codes collected = rooms cleared (excluding fitness suite)
+  const codesCollected = completedRooms.filter((r) => r !== "Fitness Suite").length;
 
   return (
     <div className="map-page">
       {/* ── Top bar ── */}
       <div className="map-topbar">
         <div className="map-title-group">
-          <h2 className="map-title">🗺️ Campaign Map</h2>
-          <p className="map-subtitle">Pencoedtre High School — explore and conquer</p>
+          <h2 className="map-title">TACTICAL MAP</h2>
+          <p className="map-subtitle">Pencoedtre High School — TITAN Lockdown Active</p>
         </div>
         <div className="map-topbar-actions">
           <button
@@ -162,6 +164,17 @@ function Map({ gameState, setGameState, userId }) {
               <span className="item-indicator">{newItemCount}</span>
             )}
           </button>
+        </div>
+      </div>
+
+      {/* ── Override Code Counter ── */}
+      <div className="map-codes-bar">
+        <div className="map-codes-chips">
+          {[1, 2, 3].map((n) => (
+            <span key={n} className={`code-chip ${codesCollected >= n ? 'code-chip--active' : ''}`}>
+              {codesCollected >= n ? `CODE ${n}` : `LOCKED`}
+            </span>
+          ))}
         </div>
       </div>
 
@@ -256,11 +269,12 @@ function Map({ gameState, setGameState, userId }) {
                     <span className="room-icon-large">{room.icon}</span>
                     <div className="room-card-text">
                       <span className="room-card-name">{room.name}</span>
+                      <span className="room-card-desc">{room.description}</span>
                       {isClickable && (
-                        <span className="room-card-cta">▶ Enter</span>
+                        <span className="room-card-cta">Enter Room</span>
                       )}
                       {room.status === "cleared" && (
-                        <span className="room-cleared">✓ Cleared</span>
+                        <span className="room-cleared">CODE ACQUIRED</span>
                       )}
                     </div>
                     {questTargets.has(room.name) && (
@@ -292,7 +306,7 @@ function Map({ gameState, setGameState, userId }) {
 
       {/* ── Hint ── */}
       <p className="map-hint">
-        💡 Clear rooms to reveal the path forward. Complete quests to earn XP and badges.
+        Collect all 3 override codes to unlock the Fitness Suite. Complete TITAN's challenges to progress.
       </p>
 
       {/* ── Modals ── */}

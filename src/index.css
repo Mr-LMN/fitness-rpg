@@ -856,6 +856,126 @@ input, select, textarea {
   cursor: pointer;
 }
 
+/* ============================================================
+   TITAN TRANSMISSION — Typing-effect broadcast box
+   ============================================================ */
+
+.titan-transmission {
+  background: linear-gradient(135deg, rgba(10, 8, 24, 0.95), rgba(16, 12, 32, 0.95));
+  border: 1px solid rgba(220, 40, 40, 0.3);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin: 16px auto;
+  max-width: 560px;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(220, 40, 40, 0.03);
+}
+
+.titan-transmission-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.titan-transmission-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #dc2626;
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px #dc2626; }
+  50%      { opacity: 0.4; box-shadow: 0 0 8px #dc2626; }
+}
+
+.titan-transmission-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: rgba(220, 40, 40, 0.7);
+  text-transform: uppercase;
+}
+
+.titan-transmission-text {
+  font-size: 0.92rem;
+  color: #dc2626;
+  line-height: 1.6;
+  margin: 0 0 12px;
+  min-height: 2.5em;
+}
+
+.titan-cursor {
+  animation: cursorBlink 0.6s step-end infinite;
+  color: #dc2626;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+.titan-transmission-skip {
+  font-size: 0.8rem;
+  padding: 6px 20px;
+  font-family: inherit;
+  background: rgba(220, 40, 40, 0.15);
+  color: #dc2626;
+  border: 1px solid rgba(220, 40, 40, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.titan-transmission-skip:hover {
+  background: rgba(220, 40, 40, 0.25);
+}
+
+/* ============================================================
+   MAP — Override Code Chips
+   ============================================================ */
+
+.map-codes-bar {
+  padding: 0 20px;
+  margin-bottom: 8px;
+}
+
+.map-codes-chips {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.code-chip {
+  padding: 6px 16px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(230, 225, 255, 0.3);
+  transition: all 0.4s ease;
+}
+
+.code-chip--active {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(16, 185, 129, 0.1));
+  border-color: rgba(52, 211, 153, 0.4);
+  color: #34d399;
+  box-shadow: 0 0 12px rgba(52, 211, 153, 0.15);
+}
+
+.room-card-desc {
+  font-size: 0.7rem;
+  color: rgba(230, 225, 255, 0.45);
+  letter-spacing: 0.02em;
+  display: block;
+  margin-top: 1px;
+}
+
 /* ── Reduced motion ── */
 
 @media (prefers-reduced-motion: reduce) {
