@@ -24,14 +24,14 @@ function RoomNarrativeOverlay({
     return () => audio && audio.pause();
   }, []);
   const introImages = {
-    "Mr. Watkins' Room": "/Mr_WatkinsDoor.png",
-    "Mrs. John's Room": "/Mrs_JohnsDoor.png",
-    "Mrs. Roche's Room": "/Mrs_RochesDoor.png",
+    "Mr. Watkins' Room": "/images/Mr_WatkinsDoor.png",
+    "Mrs. John's Room": "/images/Mrs_JohnsDoor.png",
+    "Mrs. Roche's Room": "/images/Mrs_RochesDoor.png",
   };
   const roomBackgrounds = {
-    "Mr. Watkins' Room": "/Mr_WatkinsRoom.png",
-    "Mrs. John's Room": "/Mrs_JohnsRoom.png",
-    "Mrs. Roche's Room": "/Mrs_RochesRoom.png",
+    "Mr. Watkins' Room": "/images/Mr_WatkinsRoom.png",
+    "Mrs. John's Room": "/images/Mrs_JohnsRoom.png",
+    "Mrs. Roche's Room": "/images/Mrs_RochesRoom.png",
   };
   // overlayIntro[roomName] is now a tiered object { rich:[...], standard:[...], ... }
   // ScrollingNarrationBox → adaptNarrative handles tier selection via readingAge

@@ -11,7 +11,7 @@ function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = fals
   }, []);
   return (
     <div className="room-container">
-      <img src="/locker_Room.png" alt="Locker Room" className="scene-image" />
+      <img src="/images/locker_Room.png" alt="Locker Room" className="scene-image" />
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2 className="phase-heading phase-heading--danger">LOCKDOWN</h2>

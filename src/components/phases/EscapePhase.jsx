@@ -51,7 +51,7 @@ function EscapePhase({ setGameState, gameState = {}, slamBallGoal = 10, squatJum
   if (escaped) {
     return (
       <div className="room-container">
-        <img src="/Escape_route.png" alt="Escape" className="scene-image" />
+        <img src="/images/Escape_route.png" alt="Escape" className="scene-image" />
         <ParallaxDust />
         <div className="room-content rpg-text">
           <h2 className="phase-heading phase-heading--success">ESCAPED!</h2>
@@ -72,7 +72,7 @@ function EscapePhase({ setGameState, gameState = {}, slamBallGoal = 10, squatJum
     const exerciseName = route === 'slam' ? 'Slam Balls' : 'Squat Jumps';
     return (
       <div className="room-container">
-        <img src="/Escape_route.png" alt="Escape Route" className="scene-image" />
+        <img src="/images/Escape_route.png" alt="Escape Route" className="scene-image" />
         <ParallaxDust />
         <div className="room-content rpg-text">
           <h2 className="phase-heading">{exerciseName.toUpperCase()}</h2>
@@ -115,7 +115,7 @@ function EscapePhase({ setGameState, gameState = {}, slamBallGoal = 10, squatJum
   // Phase 1: Narration + route choice
   return (
     <div className="room-container">
-      <img src="/Escape_route.png" alt="Possible Escape" className="scene-image" />
+      <img src="/images/Escape_route.png" alt="Possible Escape" className="scene-image" />
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2 className="phase-heading">ESCAPE ROUTE</h2>

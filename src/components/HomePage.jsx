@@ -1,6 +1,6 @@
  import React from "react";
 import "./styles/HomePage.css";
-import logo from "/Pencoedtre_Logo.png";
+import logo from "/images/Pencoedtre_Logo.png";
 
 function HomePage({ onStart }) {
   return (

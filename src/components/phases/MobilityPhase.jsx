@@ -10,7 +10,7 @@ function MobilityPhase({ setGameState, gameState = {} }) {
 
   return (
     <div className="room-container">
-      <img src="/Shiny_Object.png" alt="Shiny Object" className="scene-image" />
+      <img src="/images/Shiny_Object.png" alt="Shiny Object" className="scene-image" />
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2 className="phase-heading">HIDDEN OBJECT</h2>

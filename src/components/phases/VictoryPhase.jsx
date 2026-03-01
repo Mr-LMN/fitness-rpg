@@ -31,7 +31,7 @@ function VictoryPhase({ gameState }) {
   if (!showStats) {
     return (
       <div className="room-container">
-        <img src="/FitnessSuite.png" alt="Victory" className="scene-image" />
+        <img src="/images/FitnessSuite.png" alt="Victory" className="scene-image" />
         <ParallaxDust />
         <div className="room-content rpg-text">
           <h2 className="phase-heading phase-heading--success">TITAN DEFEATED</h2>
@@ -49,7 +49,7 @@ function VictoryPhase({ gameState }) {
 
   return (
     <div className="room-container">
-      <img src="/FitnessSuite.png" alt="Victory" className="scene-image" />
+      <img src="/images/FitnessSuite.png" alt="Victory" className="scene-image" />
       <ParallaxDust />
       <div className="room-content rpg-text">
         <div className="victory-panel">

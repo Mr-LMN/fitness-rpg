@@ -21,10 +21,10 @@ const SCAVENGE_BOOST_LOOT = lootItems.filter(
 );
 
 const ROOM_IMAGES = {
-  [ROOMS.MR_WATKINS]: '/Mr_WatkinsRoom.png',
-  [ROOMS.MRS_JOHN]: '/Mrs_JohnsRoom.png',
-  [ROOMS.MRS_ROCHE]: '/Mrs_RochesRoom.png',
-  [ROOMS.FITNESS_SUITE]: '/FitnessSuite.png',
+  [ROOMS.MR_WATKINS]: '/images/Mr_WatkinsRoom.png',
+  [ROOMS.MRS_JOHN]: '/images/Mrs_JohnsRoom.png',
+  [ROOMS.MRS_ROCHE]: '/images/Mrs_RochesRoom.png',
+  [ROOMS.FITNESS_SUITE]: '/images/FitnessSuite.png',
 };
 
 function getLinesByKey(key) {
@@ -400,7 +400,7 @@ function RoomTemplate({
         <NarrationManager
           lines={quizIntroLines}
           onComplete={() => setStage(STAGES.QUIZ)}
-          backgroundImage="/quiz_door.png"
+          backgroundImage="/images/quiz_door.png"
           readingAge={gameState.readingAge}
         />
       );

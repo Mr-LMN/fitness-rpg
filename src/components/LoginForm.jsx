@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import "./styles/LoginForm.css";
-import logo from "/Pencoedtre_Logo.png";
+import logo from "/images/Pencoedtre_Logo.png";
 
 // Simple staff gate — in production use Firebase custom claims or a proper role system
 const SLT_PASSCODE = "PHS_SLT_2026";

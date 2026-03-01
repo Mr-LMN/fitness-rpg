@@ -195,7 +195,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
 
   return (
     <div className="final-boss-page">
-      <img src="/FitnessSuite.png" alt="Fitness Suite" className="final-boss-bg" />
+      <img src="/images/FitnessSuite.png" alt="Fitness Suite" className="final-boss-bg" />
       <ParallaxDust />
 
       <div className={`final-boss-arena ${shake ? "boss-shake" : ""}`}>

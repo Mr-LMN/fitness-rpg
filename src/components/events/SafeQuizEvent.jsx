@@ -87,7 +87,7 @@ const SafeQuizEvent = ({
 
   return (
     <div className="safe-event">
-      <img src={`${baseUrl}safe.png`} alt="Digital Safe" className="safe-image" />
+      <img src={`${baseUrl}images/safe.png`} alt="Digital Safe" className="safe-image" />
       <h2>🔐 Digital Safe - {roomName}</h2>
       <TTSLine text={`Lives: ${'❤️'.repeat(lives)} ${'🤍'.repeat(3 - lives)}`} />
       <TTSLine text={currentQuestion?.question} />
