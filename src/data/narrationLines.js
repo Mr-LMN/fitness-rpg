@@ -52,6 +52,17 @@ const narrationLines = {
       scavenge: ["With your body re-energized, you notice something odd under a pile of worksheets. You kneel to investigate..."],
       foundItem: 'You pocket the {item}. It shows another room labeled "Mrs. John\'s Room" – previously unknown. A breakthrough!',
       rest: "Feeling the fatigue set in, you choose to rest in a safe corner. Tomorrow, you'll explore the newly revealed room.",
+      explorePrompt: [
+        "The whiteboard challenge is done. Your chest is heaving but your head is clear.",
+        "Watkins kept things hidden in here. You can feel it. Every drawer, every cupboard could have something useful.",
+        "Do you dig deeper \u2014 or push on to find the others?",
+      ],
+      extraScavenge: [
+        "You pull open a desk drawer. Something useful rolls to the front.",
+        "Behind the projector screen, a shelf you nearly missed.",
+        "A locker left ajar. Inside, something worth taking.",
+        "The supply cupboard yields one more find.",
+      ],
     },
     room2: {
       intro: ["You arrive in Mrs. John's classroom. It's eerily quiet, but there's space to complete your next workout."],

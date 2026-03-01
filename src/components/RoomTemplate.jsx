@@ -6,12 +6,17 @@ import QuizPhase from './phases/QuizPhase';
 import BossFightPhase from './phases/BossFightPhase';
 import WarmupDisplay from './WarmupDisplay';
 import SafeQuizEvent from './events/SafeQuizEvent';
-import { getRandomLoot } from '../data/lootTable';
+import { getRandomLoot, lootItems } from '../data/lootTable';
+import RandomWorkoutModal from './RandomWorkoutModal';
 import FitnessSuite from './phases/FitnessSuite';
 import ParallaxDust from './ParallaxDust';
 import './styles/RoomScene.css';
 import TTSLine from './TTSLine';
 import { ROOMS, STAGES } from '../constants';
+
+const SCAVENGE_BOOST_LOOT = lootItems.filter(
+  (item) => item.type === 'boost' && (item.rarity === 'common' || item.rarity === 'uncommon')
+);
 
 const ROOM_IMAGES = {
   [ROOMS.MR_WATKINS]: '/Mr_WatkinsRoom.png',
@@ -49,6 +54,12 @@ function RoomTemplate({
   const [failureExercise, setFailureExercise] = useState(null);
   const [warmupDone, setWarmupDone] = useState(!requiresWarmup);
   const [warmupFocus, setWarmupFocus] = useState(gameState.workoutFocus || 'legs');
+
+  // Explore-prompt state (extra scavenging after story workout)
+  const [extraScavengeCount, setExtraScavengeCount] = useState(0);
+  const [showExtraWorkout, setShowExtraWorkout] = useState(false);
+  const [scavengeToast, setScavengeToast] = useState('');
+  const [lastScavengeLine, setLastScavengeLine] = useState('');
 
   const img = ROOM_IMAGES[mapMarker];
 
@@ -128,6 +139,39 @@ function RoomTemplate({
 
   const handleWorkoutComplete = () => {
     setGameState((prev) => ({ ...prev, xp: (prev.xp || 0) + 10 }));
+    setStage(STAGES.EXPLORE_PROMPT);
+  };
+
+  const getExtraScavengeXP = (count) => {
+    if (count === 0) return 10;
+    if (count === 1) return 8;
+    return 5;
+  };
+
+  const handleExtraScavengeComplete = () => {
+    const xpGain = getExtraScavengeXP(extraScavengeCount);
+    const drop = getRandomLoot(SCAVENGE_BOOST_LOOT);
+
+    setGameState((prev) => {
+      const updates = { xp: (prev.xp || 0) + xpGain };
+      if (drop) {
+        updates.inventory = [...(prev.inventory || []), { ...drop, isNew: true }];
+      }
+      return { ...prev, ...updates };
+    });
+
+    const extraLines = narrationLines.languages?.room1?.extraScavenge || [];
+    if (extraLines.length > 0) {
+      setLastScavengeLine(extraLines[extraScavengeCount % extraLines.length]);
+    }
+
+    setExtraScavengeCount((prev) => prev + 1);
+    setScavengeToast('Extra supplies found! \uD83C\uDF92');
+    setTimeout(() => setScavengeToast(''), 3000);
+    setShowExtraWorkout(false);
+  };
+
+  const handlePressOn = () => {
     setStage(nextAfterWorkout());
   };
 
@@ -403,6 +447,47 @@ function RoomTemplate({
           <button onClick={handleScavengeComplete}>Investigate</button>
         </>
       );
+
+    case STAGES.EXPLORE_PROMPT: {
+      const exploreLines = narrationLines.languages?.room1?.explorePrompt || [];
+      return roomWrapper(
+        <>
+          {exploreLines.map((line, i) => (
+            <TTSLine key={`explore-${i}`} text={line} />
+          ))}
+          {lastScavengeLine && (
+            <TTSLine text={lastScavengeLine} />
+          )}
+          {scavengeToast && (
+            <p className="scavenge-toast">{scavengeToast}</p>
+          )}
+          <div className="explore-prompt-actions">
+            <button
+              className="explore-btn scavenge-btn"
+              onClick={() => setShowExtraWorkout(true)}
+            >
+              🔍 Keep Scavenging (+XP, random loot)
+            </button>
+            <button
+              className="explore-btn press-on-btn"
+              onClick={handlePressOn}
+            >
+              ➡️ Press On (continue story)
+            </button>
+          </div>
+          {showExtraWorkout && (
+            <RandomWorkoutModal
+              onClose={handleExtraScavengeComplete}
+              setGameState={setGameState}
+              userId={userId}
+              yearGroup={gameState.yearGroup}
+              defaultFocus={workoutFocus || gameState.workoutFocus || 'strength'}
+              onQuestEvent={onQuestEvent}
+            />
+          )}
+        </>
+      );
+    }
 
     case STAGES.COMPLETE:
       return roomWrapper(
