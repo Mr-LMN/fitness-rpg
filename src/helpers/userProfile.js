@@ -10,7 +10,8 @@ export async function updateUserProfile({
   studentName,
   yearGroup,
   avatar,
-  xp = 0,
+  xp = null,
+  xpGain = 0,
   workoutData = null,
 }) {
   if (!userId) return;
@@ -22,9 +23,16 @@ export async function updateUserProfile({
     studentName: studentName || "Unknown",
     yearGroup: yearGroup || null,
     avatar: avatar || "pirate",
-    xp,
     lastActive: serverTimestamp(),
   };
+
+  // Only set xp when explicitly provided (e.g. character creation);
+  // otherwise increment by xpGain so we never overwrite the stored total.
+  if (xp !== null) {
+    baseUpdate.xp = xp;
+  } else if (xpGain > 0) {
+    baseUpdate.xp = increment(xpGain);
+  }
 
   if (workoutData) {
     baseUpdate.totalWorkouts = increment(1);

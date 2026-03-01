@@ -106,7 +106,57 @@
   background: #1aff1a;
 }
 
+.xp-gain-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 1px solid #f1c40f;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #f1c40f;
+  text-shadow: 0 0 8px rgba(241, 196, 15, 0.6);
+  animation: xpPulse 1.5s ease-in-out;
+}
+
+.xp-icon {
+  font-size: 22px;
+  animation: xpSpin 0.8s ease-out;
+}
+
+.motivational-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #aaa;
+  font-style: italic;
+  margin: 0 0 18px;
+  line-height: 1.5;
+}
+
+.trophy-icon {
+  flex-shrink: 0;
+  color: #f1c40f;
+  font-size: 18px;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes xpPulse {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes xpSpin {
+  0% { transform: rotate(0deg) scale(0.5); }
+  100% { transform: rotate(360deg) scale(1); }
 }

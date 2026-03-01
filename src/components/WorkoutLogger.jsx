@@ -71,7 +71,7 @@ function WorkoutLogger({
         { room: roomLabel, ...logEntry, timestamp: new Date().toISOString() },
       ],
     }));
-    playSound();
+    playSound("xpLevel", { volume: 0.5 });
 
     if (typeof onWorkoutLogged === "function") {
       onWorkoutLogged({ focus, metrics, entries, room: roomLabel });
@@ -115,12 +115,13 @@ function WorkoutLogger({
         yearGroup,
         workoutData: amrapWorkoutData,
       });
-      // Sync profile — increment workout count
+      // Sync profile — increment workout count and XP
       await updateUserProfile({
         userId,
         studentName,
         yearGroup,
         avatar,
+        xpGain: 10,
         workoutData: { minutesLogged: specialWorkout?.timeCapMinutes || 0 },
       });
     } catch {
@@ -164,6 +165,7 @@ function WorkoutLogger({
         },
       ]);
       setExerciseInput(EMPTY_CARDIO_INPUT);
+      playSound("correct", { volume: 0.4 });
     } else {
       const { sets, reps, weight } = exerciseInput;
       if (!name || !sets || !reps || !weight) return;
@@ -182,6 +184,7 @@ function WorkoutLogger({
         },
       ]);
       setExerciseInput(EMPTY_STRENGTH_INPUT);
+      playSound("correct", { volume: 0.4 });
     }
     setFormError("");
   };
@@ -218,12 +221,13 @@ function WorkoutLogger({
         yearGroup,
         workoutData: stdWorkoutData,
       });
-      // Sync aggregated profile data to Firestore
+      // Sync aggregated profile data and XP to Firestore
       await updateUserProfile({
         userId,
         studentName,
         yearGroup,
         avatar,
+        xpGain: 10,
         workoutData: {
           caloriesBurned: Math.round(metrics.calories),
           totalWeightLifted: metrics.totalWeight,

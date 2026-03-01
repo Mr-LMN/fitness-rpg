@@ -52,7 +52,10 @@ export function calculateWorkoutMetrics(entries = [], userWeightKg = 50, fallbac
           ? Number(entry.numericWeight) || 0
           : parseWeightInput(entry.weight, userWeightKg);
       totalWeight += sets * reps * Math.max(weight, 0);
-      minutes += (sets * reps * 3) / 60;
+      // ~4 s per rep + 45 s rest between sets (matches estimateCalories)
+      const activeTimeSec = sets * reps * 4;
+      const restTimeSec = Math.max(sets - 1, 0) * 45;
+      minutes += (activeTimeSec + restTimeSec) / 60;
       calories += estimateCalories({
         exercise: meta,
         userWeightKg,

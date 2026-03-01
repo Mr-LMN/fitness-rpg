@@ -1,10 +1,11 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 export const fetchWorkoutSummary = async (userId) => {
   try {
     if (!userId) return null;
-    const querySnapshot = await getDocs(collection(db, "students", userId, "workouts"));
+    const q = query(collection(db, "workouts"), where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
     const workouts = querySnapshot.docs.map((doc) => doc.data());
 
     const summary = workouts.reduce(

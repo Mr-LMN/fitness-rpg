@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   IoBarbell,
   IoWalk,
@@ -8,8 +8,21 @@ import {
   IoTimer,
   IoFlag,
   IoList,
+  IoTrophy,
+  IoStar,
 } from "react-icons/io5";
 import "./styles/SessionSummary.css";
+
+const MOTIVATIONAL_MESSAGES = [
+  "You crushed it! Every rep makes you stronger.",
+  "Beast mode activated! Keep pushing your limits.",
+  "That was legendary! Your future self will thank you.",
+  "Workout complete! You're levelling up in real life.",
+  "Power level increasing! Nothing can stop you now.",
+  "You showed up and gave it everything. That's what champions do.",
+  "Another session banked! You're building something amazing.",
+  "Gains unlocked! Your body is getting stronger every session.",
+];
 
 function SessionSummaryModal({
   summary,
@@ -17,6 +30,7 @@ function SessionSummaryModal({
   onViewLog,
   continueLabel = "Continue",
   variant = "standard",
+  xpGained = 10,
 }) {
   if (!summary) return null;
   const { totalWeight, distance, calories, exerciseCount } = summary;
@@ -24,10 +38,22 @@ function SessionSummaryModal({
     Array.isArray(summary?.movements) && summary.movements.length
       ? summary.movements.join(" • ")
       : null;
+
+  const motivationalMsg = useMemo(
+    () => MOTIVATIONAL_MESSAGES[Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length)],
+    []
+  );
+
   return (
     <div className="session-summary-overlay">
       <div className="session-summary-box">
         <h2 className="session-summary-header">SESSION COMPLETE</h2>
+
+        <div className="xp-gain-banner">
+          <IoStar className="xp-icon" />
+          <span>+{xpGained} XP earned!</span>
+        </div>
+
         <ul className="summary-list">
           {variant === "amrap" ? (
             <>
@@ -81,6 +107,11 @@ function SessionSummaryModal({
             </>
           )}
         </ul>
+
+        <p className="motivational-message">
+          <IoTrophy className="trophy-icon" /> {motivationalMsg}
+        </p>
+
         <div className="session-summary-actions">
           {onViewLog && (
             <button className="log-btn" onClick={onViewLog}>View My Logbook</button>
