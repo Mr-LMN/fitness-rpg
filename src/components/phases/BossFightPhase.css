@@ -1,0 +1,432 @@
+/* ============================================================
+   BOSS FIGHT PHASE — HP Bars, Phases, Animations
+   ============================================================ */
+
+.boss-fight-page {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at top, #1a0808, #0a0010);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Poppins', 'Open Sans', sans-serif;
+}
+
+.boss-arena {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Shake animation when boss takes damage */
+.boss-shake {
+  animation: arenaShake 0.5s ease;
+}
+
+@keyframes arenaShake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px) rotate(-1deg); }
+  40%       { transform: translateX(6px) rotate(1deg); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+/* Boss Portrait */
+.boss-portrait {
+  text-align: center;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(120, 0, 0, 0.2);
+  border: 2px solid rgba(200, 0, 0, 0.3);
+  transition: background 0.3s;
+}
+
+.boss-portrait.boss-hit {
+  background: rgba(239, 68, 68, 0.35);
+  border-color: rgba(239, 68, 68, 0.7);
+  animation: hitFlash 0.5s ease;
+}
+
+@keyframes hitFlash {
+  0%   { filter: brightness(1); }
+  25%  { filter: brightness(2.5) saturate(2); }
+  100% { filter: brightness(1); }
+}
+
+.boss-portrait-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.boss-emoji {
+  font-size: 4rem;
+  animation: bossBob 2s ease-in-out infinite;
+}
+
+@keyframes bossBob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+.boss-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fca5a5;
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+}
+
+/* HP Section */
+.boss-hp-section {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.boss-hp-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #d1d5db;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.boss-hp-num {
+  color: #fca5a5;
+}
+
+.boss-hp-track {
+  height: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.boss-hp-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.4s ease;
+  box-shadow: 0 0 12px currentColor;
+  position: relative;
+}
+
+.boss-hp-fill::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  right: 5%;
+  height: 30%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.boss-phase-pips {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.phase-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s;
+}
+
+.phase-pip.active {
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+.phase-pip.done {
+  background: #6b7280;
+}
+
+/* Phase Card */
+.boss-phase-card {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 14px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid #ef4444;
+}
+
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.phase-badge {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.phase-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f9fafb;
+  margin: 0;
+}
+
+.phase-description {
+  color: #d1d5db;
+  font-size: 0.9rem;
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+.phase-exercise {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.exercise-label {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+.exercise-name {
+  font-size: 0.9rem;
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.reps-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reps-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.reps-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a4c639, #ffd166);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.reps-label {
+  font-size: 0.78rem;
+  color: #9ca3af;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* Input */
+.boss-input-row {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 14px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.boss-input-label {
+  font-size: 0.9rem;
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+.boss-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.boss-reps-input {
+  flex: 1;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #f9fafb;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: border-color 0.2s;
+  -moz-appearance: textfield;
+}
+
+.boss-reps-input::-webkit-outer-spin-button,
+.boss-reps-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.boss-reps-input:focus {
+  outline: none;
+  border-color: #ef4444;
+}
+
+.boss-hit-btn {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.boss-hit-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+}
+
+.boss-hit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.boss-done-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #9ca3af;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.boss-done-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d1d5db;
+}
+
+/* Victory Panel */
+.boss-victory-panel {
+  background: rgba(0, 20, 0, 0.6);
+  border-radius: 16px;
+  padding: 30px 24px;
+  border: 2px solid rgba(164, 198, 57, 0.5);
+  text-align: center;
+  box-shadow: 0 0 40px rgba(164, 198, 57, 0.15);
+}
+
+.victory-burst {
+  font-size: 3rem;
+  animation: victoryPulse 0.8s ease-in-out 3;
+}
+
+@keyframes victoryPulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.3); }
+}
+
+.victory-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #a4c639;
+  margin: 8px 0;
+  text-shadow: 0 0 20px rgba(164, 198, 57, 0.4);
+}
+
+.victory-desc {
+  color: #d1d5db;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.victory-xp {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffd166;
+  margin: 0 0 16px;
+}
+
+.boss-continue-btn {
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #a4c639, #7ea82a);
+  border: none;
+  border-radius: 10px;
+  color: #111;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.boss-continue-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(164, 198, 57, 0.35);
+}
+
+/* Battle Log */
+.battle-log {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.battle-log-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #6b7280;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.battle-log-empty {
+  font-size: 0.82rem;
+  color: #4b5563;
+  margin: 0;
+}
+
+.battle-log-line {
+  font-size: 0.82rem;
+  color: #d1d5db;
+  margin: 3px 0;
+  animation: logFadeIn 0.3s ease;
+}
+
+@keyframes logFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

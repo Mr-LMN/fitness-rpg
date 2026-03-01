@@ -1,33 +1,135 @@
-.xpbar-container {
+/* ============================================================
+   XP BAR — Fixed top HUD element
+   ============================================================ */
+
+.xpbar-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
-  background: #222;
-  color: #fff;
-  padding: 5px 10px;
-  border-bottom: 2px solid #333;
+  gap: 10px;
+  padding: 8px 16px;
+  background: rgba(10, 12, 24, 0.88);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(164, 198, 57, 0.2);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
 }
 
 .xpbar-avatar {
-  font-size: 2rem;
-  margin-right: 10px;
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
-.xpbar-info {
+.xpbar-body {
   flex: 1;
+  min-width: 0;
 }
 
-.xpbar-text {
+.xpbar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
   margin-bottom: 4px;
 }
 
-.xpbar-progress {
-  height: 10px;
-  background: #555;
-  border-radius: 5px;
+.xpbar-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f9fafb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.xpbar-level {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.xpbar-level-num {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #a4c639;
+}
+
+.xpbar-title {
+  font-size: 0.72rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.xpbar-track {
+  position: relative;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .xpbar-fill {
   height: 100%;
-  background: #4caf50;
+  background: linear-gradient(90deg, #7ea82a, #a4c639, #ffd166);
+  border-radius: 4px;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.xpbar-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.xpbar-xp-label {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.xpbar-badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #ffd166;
+  font-weight: 700;
+  flex-shrink: 0;
+  background: rgba(255, 209, 102, 0.1);
+  border: 1px solid rgba(255, 209, 102, 0.2);
+  border-radius: 20px;
+  padding: 4px 10px;
+}
+
+@media (max-width: 480px) {
+  .xpbar-name {
+    max-width: 100px;
+  }
+
+  .xpbar-title {
+    display: none;
+  }
+
+  .xpbar-badges {
+    padding: 4px 8px;
+    font-size: 0.78rem;
+  }
 }

@@ -1,19 +1,62 @@
 import React, { useState, useEffect, useMemo } from "react";
 import BadgeCase from "./BadgeCase";
-import { GiBackpack } from "react-icons/gi";
 import InventoryModal from "./InventoryModal";
+import Leaderboard from "./Leaderboard";
+import { GiBackpack } from "react-icons/gi";
+import { FaTrophy } from "react-icons/fa";
 import "./styles/Map.css";
 import { questById } from "../data/questDeck";
 
-const allRooms = [
-  // Coordinates are relative to the map container (offset corrected)
-  { name: "Mr. Watkins' Room", x: 196, y: 139 },
-  { name: "Mrs. John's Room", x: 394, y: 115 },
-  { name: "Mrs. Roche's Room", x: 399, y: 229 },
-  { name: "Fitness Suite", x: 395, y: 307 },
+const ALL_ROOMS = [
+  {
+    name: "Mr. Watkins' Room",
+    id: "watkins",
+    xPct: 20,
+    yPct: 28,
+    icon: "🏫",
+    description: "Strength and knowledge await",
+  },
+  {
+    name: "Mrs. John's Room",
+    id: "john",
+    xPct: 58,
+    yPct: 18,
+    icon: "📚",
+    description: "Languages and mental fortitude",
+  },
+  {
+    name: "Mrs. Roche's Room",
+    id: "roche",
+    xPct: 58,
+    yPct: 50,
+    icon: "🧪",
+    description: "The boss chamber — prepare yourself",
+  },
+  {
+    name: "Fitness Suite",
+    id: "fitness",
+    xPct: 58,
+    yPct: 74,
+    icon: "🏋️",
+    description: "Final Boss: Operation Slamstorm",
+  },
 ];
 
-function Map({ gameState, setGameState }) {
+// Connections between rooms [fromId, toId]
+const PATHS = [
+  ["watkins", "john"],
+  ["john", "roche"],
+  ["roche", "fitness"],
+];
+
+function getRoomStatus(roomName, currentRoom, completedRooms, visibleRooms) {
+  if (completedRooms.includes(roomName)) return "cleared";
+  if (roomName === currentRoom) return "current";
+  if (visibleRooms.includes(roomName)) return "visible";
+  return "fogged";
+}
+
+function Map({ gameState, setGameState, userId }) {
   const {
     currentRoom = "",
     completedRooms = [],
@@ -21,37 +64,43 @@ function Map({ gameState, setGameState }) {
     annotations = [],
   } = gameState;
 
-  const [dynamicRooms, setDynamicRooms] = useState([]);
   const [showBadges, setShowBadges] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [revealAnim, setRevealAnim] = useState(new Set());
 
   const questTargets = useMemo(() => {
     const active = new Set();
     (gameState.activeQuests || []).forEach((id) => {
       const room = questById[id]?.criteria?.room;
-      if (room) {
-        active.add(room);
-      }
+      if (room) active.add(room);
     });
     return active;
   }, [gameState.activeQuests]);
 
+  // Trigger reveal animation for newly visible rooms
   useEffect(() => {
-    const updatedRooms = allRooms.map((room) => {
-      let status = "fogged";
-      if (completedRooms.includes(room.name)) status = "cleared";
-      else if (room.name === currentRoom) status = "current";
-      else if (visibleRooms.includes(room.name)) status = "visible";
-      return { ...room, status };
+    ALL_ROOMS.forEach((room) => {
+      const status = getRoomStatus(room.name, currentRoom, completedRooms, visibleRooms);
+      if (status !== "fogged" && !revealAnim.has(room.name)) {
+        setTimeout(() => {
+          setRevealAnim((prev) => new Set([...prev, room.name]));
+        }, 200);
+      }
     });
-    setDynamicRooms(updatedRooms);
-  }, [currentRoom, completedRooms, visibleRooms]);
+  }, [visibleRooms, completedRooms, currentRoom]);
 
-  const handleRoomClick = (roomName) => {
-    if (visibleRooms.includes(roomName)) {
+  const rooms = ALL_ROOMS.map((room) => ({
+    ...room,
+    status: getRoomStatus(room.name, currentRoom, completedRooms, visibleRooms),
+    freshReveal: !revealAnim.has(room.name),
+  }));
+
+  const handleRoomClick = (room) => {
+    if (room.status === "visible") {
       setGameState((prev) => ({
         ...prev,
-        currentRoom: roomName,
+        currentRoom: room.name,
         introStage: 6,
         showOverlay: true,
       }));
@@ -75,59 +124,178 @@ function Map({ gameState, setGameState }) {
     }));
   };
 
-  return (
-    <div className="map-container">
-      <h2 className="map-title">🗺️ School Map</h2>
-      <div className="map">
-        <img src="/Pamphletmap.png" alt="School Map Pamphlet" className="map-background" />
-        {dynamicRooms.map((room, index) => (
-          <div
-            key={index}
-            className={`room ${room.status} ${
-              room.status === "fogged" ? "flicker" : ""
-            } ${questTargets.has(room.name) ? "quest-target" : ""}`}
-            style={{ top: `${room.y}px`, left: `${room.x}px` }}
-            onClick={() => handleRoomClick(room.name)}
-          >
-            {room.status !== "fogged" ? (
-              <>
-                <span>{room.name}</span>
-                {questTargets.has(room.name) && (
-                  <span className="quest-icon" aria-label="Quest objective">
-                    ⭐ Quest Objective
-                  </span>
-                )}
-              </>
-            ) : (
-              "?"
-            )}
-          </div>
-        ))}
+  const clearedCount = completedRooms.length;
+  const totalCount = ALL_ROOMS.length;
+  const progressPct = Math.round((clearedCount / totalCount) * 100);
+  const newItemCount = (gameState.inventory || []).filter((i) => i.isNew).length;
 
-        {(annotations || []).map((annotation, index) => (
-          <div
-            key={index}
-            className="annotation"
-            style={{ top: `${annotation.y}px`, left: `${annotation.x}px` }}
+  return (
+    <div className="map-page">
+      {/* ── Top bar ── */}
+      <div className="map-topbar">
+        <div className="map-title-group">
+          <h2 className="map-title">🗺️ Campaign Map</h2>
+          <p className="map-subtitle">Pencoedtre High School — explore and conquer</p>
+        </div>
+        <div className="map-topbar-actions">
+          <button
+            className="map-action-btn"
+            onClick={() => setShowLeaderboard(true)}
+            aria-label="View leaderboard"
           >
-            {annotation.text}
-          </div>
-        ))}
+            <FaTrophy /> Leaderboard
+          </button>
+          <button
+            className="map-action-btn"
+            onClick={() => setShowBadges(true)}
+            aria-label="View badges"
+          >
+            🏅 Badges
+          </button>
+          <button
+            className="map-action-btn has-indicator"
+            onClick={() => setShowInventory(true)}
+            aria-label="Open inventory"
+          >
+            <GiBackpack /> Inventory
+            {newItemCount > 0 && (
+              <span className="item-indicator">{newItemCount}</span>
+            )}
+          </button>
+        </div>
       </div>
-      <p className="map-instructions">
-        🔍 Click on any visible room to investigate. Rooms will reveal themselves as you explore!
-        Quest icons highlight tabletop encounters that advance your campaign.
+
+      {/* ── Campaign Progress ── */}
+      <div className="map-progress-bar-wrap">
+        <div className="map-progress-bar">
+          <div
+            className="map-progress-fill"
+            style={{ width: `${progressPct}%` }}
+          />
+        </div>
+        <span className="map-progress-label">
+          {clearedCount}/{totalCount} areas cleared ({progressPct}%)
+        </span>
+      </div>
+
+      {/* ── Map Canvas ── */}
+      <div className="map-canvas-wrap">
+        <div className="map-canvas">
+          {/* Background */}
+          <img
+            src="/Pamphletmap.png"
+            alt="Pencoedtre school map"
+            className="map-bg"
+            draggable={false}
+          />
+
+          {/* Animated fog overlay */}
+          <div className="map-fog" aria-hidden="true">
+            <div className="fog-cloud fog-cloud-a" />
+            <div className="fog-cloud fog-cloud-b" />
+            <div className="fog-cloud fog-cloud-c" />
+          </div>
+
+          {/* SVG connection paths */}
+          <svg className="map-svg" aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none">
+            {PATHS.map(([fromId, toId]) => {
+              const from = ALL_ROOMS.find((r) => r.id === fromId);
+              const to = ALL_ROOMS.find((r) => r.id === toId);
+              if (!from || !to) return null;
+              const fromRoom = rooms.find((r) => r.id === fromId);
+              const toRoom = rooms.find((r) => r.id === toId);
+              const revealed =
+                fromRoom?.status !== "fogged" && toRoom?.status !== "fogged";
+              return (
+                <line
+                  key={`${fromId}-${toId}`}
+                  x1={from.xPct + 6}
+                  y1={from.yPct + 4}
+                  x2={to.xPct + 6}
+                  y2={to.yPct + 4}
+                  className={`map-path ${revealed ? "path-revealed" : "path-hidden"}`}
+                />
+              );
+            })}
+          </svg>
+
+          {/* Room nodes */}
+          {rooms.map((room) => {
+            const isClickable = room.status === "visible";
+            return (
+              <div
+                key={room.id}
+                className={[
+                  "map-room",
+                  `room-${room.status}`,
+                  room.freshReveal && room.status !== "fogged" ? "room-pop" : "",
+                  questTargets.has(room.name) ? "room-quest" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                style={{ left: `${room.xPct}%`, top: `${room.yPct}%` }}
+                onClick={() => handleRoomClick(room)}
+                role={isClickable ? "button" : undefined}
+                tabIndex={isClickable ? 0 : undefined}
+                aria-label={
+                  room.status === "fogged"
+                    ? "Unknown area — keep exploring to reveal"
+                    : `${room.name} (${room.status})`
+                }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") handleRoomClick(room);
+                }}
+              >
+                {room.status === "fogged" ? (
+                  <div className="fog-node">
+                    <div className="fog-puff" />
+                    <span className="fog-q">?</span>
+                  </div>
+                ) : (
+                  <div className="room-card">
+                    <span className="room-icon-large">{room.icon}</span>
+                    <div className="room-card-text">
+                      <span className="room-card-name">{room.name}</span>
+                      {isClickable && (
+                        <span className="room-card-cta">▶ Enter</span>
+                      )}
+                      {room.status === "cleared" && (
+                        <span className="room-cleared">✓ Cleared</span>
+                      )}
+                    </div>
+                    {questTargets.has(room.name) && (
+                      <span className="quest-pip">⭐</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── Map Legend ── */}
+      <div className="map-legend">
+        <div className="legend-item">
+          <span className="ls ls-visible" />Available
+        </div>
+        <div className="legend-item">
+          <span className="ls ls-cleared" />Cleared
+        </div>
+        <div className="legend-item">
+          <span className="ls ls-fogged" />Unknown
+        </div>
+        <div className="legend-item">
+          <span className="ls ls-quest" />Quest
+        </div>
+      </div>
+
+      {/* ── Hint ── */}
+      <p className="map-hint">
+        💡 Clear rooms to reveal the path forward. Complete quests to earn XP and badges.
       </p>
-      <button className="badge-button" onClick={() => setShowBadges(true)}>
-        View Badges
-      </button>
-      <button
-        className="inventory-button"
-        aria-label="Open Inventory"
-        onClick={() => setShowInventory(true)}
-      >
-        <GiBackpack />
-      </button>
+
+      {/* ── Modals ── */}
       {showBadges && (
         <BadgeCase badges={gameState.badges} onClose={() => setShowBadges(false)} />
       )}
@@ -137,6 +305,29 @@ function Map({ gameState, setGameState }) {
           onUse={handleUseItem}
           onClose={handleCloseInventory}
         />
+      )}
+      {showLeaderboard && (
+        <div
+          className="map-modal-bg"
+          onClick={() => setShowLeaderboard(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Leaderboard"
+        >
+          <div
+            className="map-modal-box"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="map-modal-close"
+              onClick={() => setShowLeaderboard(false)}
+              aria-label="Close leaderboard"
+            >
+              ×
+            </button>
+            <Leaderboard currentUserId={userId} />
+          </div>
+        </div>
       )}
     </div>
   );

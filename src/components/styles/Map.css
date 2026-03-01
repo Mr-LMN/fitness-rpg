@@ -1,161 +1,531 @@
-.map-container {
-  position: relative;
-  width: 800px;
-  height: 500px;
-  margin: 0 auto;
-  background-color: #1b1b1b;
-  background-image: url('/PamphletMap.png');
-  background-size: cover;
-  background-position: center;
-  background-blend-mode: multiply;
-  border: 4px solid #222;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-  padding: 20px;     /* if you need inner padding */
-  color: #ddd;
-  font-family: 'Segoe UI', sans-serif;
+/* ============================================================
+   CAMPAIGN MAP — Fog of War + Exploration
+   KS3 ASD friendly: clear states, animations, obvious affordances
+   ============================================================ */
+
+.map-page {
+  min-height: 100vh;
+  background: #0a0c18;
+  color: #e5e7eb;
+  font-family: 'Poppins', 'Open Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 40px;
 }
 
-
-/* Map image and container */
-.map {
-  position: relative;
+/* ── Top Bar ── */
+.map-topbar {
   width: 100%;
-  height: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 0;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.map-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  z-index: 0;
+.map-title-group {
+  display: flex;
+  flex-direction: column;
 }
 
-/* Title Styling */
 .map-title {
-  font-size: 22px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 12px;
-  color: #a4c639;
-  letter-spacing: 1px;
-  text-shadow: 0 0 5px #000;
-  text-transform: uppercase;
-}
-
-/* Individual Room Styling */
-.room {
-  position: absolute;
-  z-index: 1;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  width: 140px;
-  text-align: center;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.room.fogged {
-  background-color: #444;
-  color: transparent;
-  border: 2px solid #333;
-  pointer-events: none;
-}
-
-.room.fogged.flicker {
-  animation: flickerAnimation 1.5s infinite;
-}
-
-@keyframes flickerAnimation {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-  75% {
-    opacity: 0.6;
-  }
-}
-
-.room.visible {
-  background-color: #6c757d;
-  color: #fff;
-  border: 2px solid #888;
-}
-
-.room.current {
-  background-color: #a4c639;
-  color: #111;
-  font-weight: bold;
-  border: 2px solid #d4ff00;
-  transform: scale(1.1);
-  z-index: 10;
-  box-shadow: 0 0 15px #d4ff00;
-}
-
-.room.cleared {
-  background-color: #2e2e2e;
-  color: #888;
-  text-decoration: line-through;
-  border: 2px solid #555;
-}
-
-.room.quest-target {
-  border-color: #ffd166;
-  box-shadow: 0 0 12px rgba(255, 209, 102, 0.85);
-}
-
-.quest-icon {
-  display: block;
-  margin-top: 4px;
-  font-size: 0.75rem;
+  font-size: 1.6rem;
+  font-weight: 800;
   color: #ffd166;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 20px rgba(255, 209, 102, 0.3);
 }
 
-/* Annotation Styling */
-.annotation {
+.map-subtitle {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin: 3px 0 0;
+}
+
+.map-topbar-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.map-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #d1d5db;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.map-action-btn:hover:not(:disabled) {
+  background: rgba(164, 198, 57, 0.15);
+  border-color: rgba(164, 198, 57, 0.5);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.item-indicator {
   position: absolute;
-  z-index: 1;
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 6px;
-  border-radius: 3px;
-  font-size: 12px;
-  color: #ddd;
-}
-
-/* Instructions Styling */
-.map-instructions {
-  text-align: center;
-  margin-top: 15px;
-  color: #bbb;
-  font-size: 14px;
-  font-style: italic;
-}
-
-.badge-button {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
-
-.inventory-button {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background: #444;
-  color: #eee;
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
+  color: #fff;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 18px;
+  height: 18px;
+  font-size: 0.65rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* ── Progress Bar ── */
+.map-progress-bar-wrap {
+  width: 100%;
+  max-width: 900px;
+  padding: 16px 24px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.map-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.map-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a4c639, #ffd166);
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.map-progress-label {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+/* ── Map Canvas ── */
+.map-canvas-wrap {
+  width: 100%;
+  max-width: 900px;
+  padding: 20px 24px 0;
+}
+
+.map-canvas {
+  position: relative;
+  width: 100%;
+  padding-top: 62%; /* 16:10 aspect ratio roughly */
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+              inset 0 0 60px rgba(0, 0, 0, 0.3);
+}
+
+.map-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.45) saturate(0.6);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Fog of War ── */
+.map-fog {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.fog-cloud {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(10, 12, 30, 0.92) 0%,
+    rgba(10, 12, 30, 0.7) 40%,
+    rgba(10, 12, 30, 0) 100%
+  );
+  animation: fogDrift 20s ease-in-out infinite alternate;
+}
+
+.fog-cloud-a {
+  width: 80%;
+  height: 80%;
+  top: -10%;
+  left: -10%;
+  animation-duration: 25s;
+  opacity: 0.7;
+}
+
+.fog-cloud-b {
+  width: 70%;
+  height: 70%;
+  top: 30%;
+  right: -15%;
+  animation-duration: 18s;
+  animation-delay: -8s;
+  opacity: 0.6;
+}
+
+.fog-cloud-c {
+  width: 60%;
+  height: 60%;
+  bottom: -10%;
+  left: 20%;
+  animation-duration: 22s;
+  animation-delay: -12s;
+  opacity: 0.5;
+}
+
+@keyframes fogDrift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(4%, 6%) scale(1.08); }
+}
+
+/* ── SVG Paths ── */
+.map-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.map-path {
+  stroke-width: 0.8;
+  stroke-dasharray: 4 3;
+  transition: opacity 0.5s ease;
+}
+
+.path-revealed {
+  stroke: rgba(164, 198, 57, 0.6);
+  opacity: 1;
+}
+
+.path-hidden {
+  stroke: rgba(255, 255, 255, 0.12);
+  opacity: 0.3;
+  stroke-dasharray: 2 4;
+}
+
+/* ── Room Nodes ── */
+.map-room {
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  cursor: default;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Fog state */
+.room-fogged {
+  cursor: not-allowed;
+}
+
+.fog-node {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fog-puff {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(30, 35, 60, 0.9), rgba(20, 24, 45, 0.7));
+  border: 2px dashed rgba(255, 255, 255, 0.12);
+  animation: fogPulse 3s ease-in-out infinite;
+}
+
+.fog-q {
+  position: relative;
+  z-index: 1;
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.2);
+  font-weight: 700;
+}
+
+@keyframes fogPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.08); }
+}
+
+/* Room card (visible/cleared) */
+.room-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(10, 12, 30, 0.88);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  min-width: 150px;
+  max-width: 190px;
+  transition: all 0.2s ease;
+}
+
+.room-visible .room-card {
+  border-color: rgba(164, 198, 57, 0.6);
+  background: rgba(12, 20, 8, 0.92);
+  box-shadow: 0 0 20px rgba(164, 198, 57, 0.2),
+              inset 0 0 12px rgba(164, 198, 57, 0.04);
+  cursor: pointer;
+}
+
+.room-visible:hover .room-card,
+.room-visible:focus .room-card {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(164, 198, 57, 0.35),
+              0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.room-cleared .room-card {
+  border-color: rgba(107, 114, 128, 0.4);
+  background: rgba(10, 12, 30, 0.7);
+  opacity: 0.75;
+}
+
+.room-current .room-card {
+  border-color: #ffd166;
+  background: rgba(20, 18, 8, 0.95);
+  box-shadow: 0 0 25px rgba(255, 209, 102, 0.3);
+}
+
+.room-icon-large {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.room-card-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.room-card-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #f9fafb;
+  line-height: 1.2;
+}
+
+.room-card-cta {
+  font-size: 0.7rem;
+  color: #a4c639;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.room-cleared-txt {
+  font-size: 0.68rem;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.room-cleared .room-card-name {
+  color: #9ca3af;
+  text-decoration: line-through;
+  text-decoration-color: rgba(107, 114, 128, 0.5);
+}
+
+.room-cleared span.room-cleared {
+  display: inline-block;
+  font-size: 0.7rem;
+  color: #4ade80;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+/* Quest pip badge */
+.quest-pip {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 1rem;
+  animation: questBounce 1.5s ease-in-out infinite;
+}
+
+@keyframes questBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Quest glow */
+.room-quest .room-card {
+  border-color: rgba(255, 209, 102, 0.7) !important;
+  box-shadow: 0 0 20px rgba(255, 209, 102, 0.25) !important;
+}
+
+/* Reveal pop animation */
+.room-pop .room-card {
+  animation: roomReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes roomReveal {
+  0% { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Legend ── */
+.map-legend {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 0 24px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.ls {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.ls-visible {
+  background: rgba(164, 198, 57, 0.7);
+  border: 1px solid #a4c639;
+  box-shadow: 0 0 6px rgba(164, 198, 57, 0.4);
+}
+
+.ls-cleared {
+  background: rgba(107, 114, 128, 0.4);
+  border: 1px solid #6b7280;
+}
+
+.ls-fogged {
+  background: rgba(30, 35, 60, 0.8);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.ls-quest {
+  background: rgba(255, 209, 102, 0.3);
+  border: 1px solid #ffd166;
+}
+
+/* ── Hint ── */
+.map-hint {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin: 12px 0 0;
+  padding: 0 24px;
+}
+
+/* ── Modal ── */
+.map-modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.map-modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #0f1120;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
+  padding: 24px;
+}
+
+.map-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.6rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.2s;
+}
+
+.map-modal-close:hover:not(:disabled) {
+  color: #f9fafb;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .map-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .map-topbar-actions {
+    width: 100%;
+  }
+
+  .map-action-btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 0.78rem;
+    padding: 8px 10px;
+  }
+
+  .room-card {
+    min-width: 110px;
+    max-width: 140px;
+    padding: 7px 9px;
+  }
+
+  .room-icon-large {
+    font-size: 1.1rem;
+  }
+
+  .room-card-name {
+    font-size: 0.68rem;
+  }
 }

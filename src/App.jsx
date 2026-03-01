@@ -22,7 +22,9 @@ import StartScreen from "./components/StartScreen";
 import QuestTracker from "./components/QuestTracker";
 import questDeck from "./data/questDeck";
 import GameMenu from "./components/GameMenu";
+import SLTDashboard from "./components/SLTDashboard";
 import { ROOMS } from "./constants";
+import { updateUserProfile, syncUserXP } from "./helpers/userProfile";
 
 const INITIAL_STATE = {
   characterCreated: false,
@@ -57,7 +59,6 @@ const INITIAL_STATE = {
 };
 
 const CHECKPOINT_PREFIX = "checkpoint_";
-
 const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
 // Maps a quest event + payload to a boolean indicating whether criteria match.
@@ -80,7 +81,6 @@ const matchesQuestCriteria = (quest, payload) => {
   }
 };
 
-// Maps each room name to its component so App doesn't grow a new if-block per room.
 const ROOM_COMPONENTS = {
   [ROOMS.MR_WATKINS]: Room1,
   [ROOMS.MRS_JOHN]: Room2,
@@ -95,12 +95,14 @@ function App() {
   const [recentBadge, setRecentBadge] = useState(null);
   const [muted, setMutedState] = useState(false);
   const [showHome, setShowHome] = useState(true);
+  const [showSLT, setShowSLT] = useState(false);
 
   const ambientRef = useRef(null);
   const prevXpLevel = useRef(0);
   const prevBadgesRef = useRef([]);
+  const profileSyncedRef = useRef(false);
 
-  // Load checkpoint when a user logs in
+  // Load checkpoint when user logs in
   useEffect(() => {
     if (!user) return;
     const saved = localStorage.getItem(`${CHECKPOINT_PREFIX}${user.uid}`);
@@ -150,7 +152,7 @@ function App() {
     localStorage.setItem("weekData", JSON.stringify(week));
   }, []);
 
-  // Play a level-up sound when the XP level increases
+  // Play level-up sound when XP level increases
   useEffect(() => {
     const level = Math.floor(gameState.xp / 100);
     if (level > prevXpLevel.current) {
@@ -170,7 +172,7 @@ function App() {
     prevBadgesRef.current = gameState.badges;
   }, [gameState.badges]);
 
-  // Ambient audio — play on home/start screen, stop once logged in
+  // Ambient audio
   useEffect(() => {
     const shouldPlayAmbient = !muted && (!user || gameState.introStage === 0);
     if (shouldPlayAmbient) {
@@ -187,6 +189,35 @@ function App() {
     setTtsEnabled(gameState.textToSpeech);
   }, [gameState.textToSpeech]);
 
+  // Sync user profile to Firestore when character is created or XP/badges change
+  useEffect(() => {
+    if (!user || !gameState.characterCreated) return;
+
+    const syncProfile = async () => {
+      if (!profileSyncedRef.current) {
+        // Full sync on first character creation
+        await updateUserProfile({
+          userId: user.uid,
+          studentName: gameState.studentName,
+          yearGroup: gameState.yearGroup,
+          avatar: gameState.avatar,
+          xp: gameState.xp,
+        });
+        profileSyncedRef.current = true;
+      } else {
+        // Lightweight XP/badge sync on change
+        await syncUserXP({
+          userId: user.uid,
+          xp: gameState.xp,
+          avatar: gameState.avatar,
+          badges: gameState.badges,
+        });
+      }
+    };
+
+    syncProfile();
+  }, [gameState.xp, gameState.badges, gameState.avatar, gameState.characterCreated, user]);
+
   const handleQuestEvent = useCallback(
     (eventType, payload = {}) => {
       setGameState((prev) => {
@@ -200,7 +231,6 @@ function App() {
         let xpBonus = 0;
         let changed = false;
 
-        // Auto-unlock quests on init
         if (isInit) {
           questDeck.forEach((quest) => {
             if (quest.autoUnlock && !activeSet.has(quest.id) && !completedSet.has(quest.id)) {
@@ -210,7 +240,6 @@ function App() {
           });
         }
 
-        // Progress active quests that match this event
         if (!isInit) {
           questDeck.forEach((quest) => {
             if (!activeSet.has(quest.id)) return;
@@ -235,7 +264,6 @@ function App() {
           });
         }
 
-        // Unlock quests whose prerequisites are now met
         questDeck.forEach((quest) => {
           if (activeSet.has(quest.id) || completedSet.has(quest.id)) return;
           const prerequisites = quest.prerequisites || [];
@@ -261,7 +289,6 @@ function App() {
     [setGameState]
   );
 
-  // Initialise quests once the character is created
   useEffect(() => {
     if (gameState.characterCreated && !gameState.questInitialised) {
       handleQuestEvent("init");
@@ -271,7 +298,7 @@ function App() {
 
   const handleResetProgress = useCallback(() => {
     const confirmed = window.confirm(
-      "This will erase your current character and local progress. Are you sure you want to continue?"
+      "This will erase your current character and local progress. Are you sure?"
     );
     if (!confirmed) return;
 
@@ -282,6 +309,7 @@ function App() {
     localStorage.removeItem("weekData");
     localStorage.removeItem("lastOpenDate");
 
+    profileSyncedRef.current = false;
     setGameState({ ...INITIAL_STATE });
     setPopupMessage(null);
     setRecentBadge(null);
@@ -290,15 +318,31 @@ function App() {
     prevBadgesRef.current = [];
   }, [user]);
 
+  // SLT Dashboard — no auth required, just passcode gated
+  if (showSLT) {
+    return <SLTDashboard onBack={() => setShowSLT(false)} />;
+  }
+
   const renderPhase = () => {
     if (!user) {
       return showHome
         ? <StartScreen onStart={() => setShowHome(false)} />
-        : <LoginForm onLogin={(u) => setUser(u)} />;
+        : (
+          <LoginForm
+            onLogin={(u) => setUser(u)}
+            onSLTAccess={() => setShowSLT(true)}
+          />
+        );
     }
 
     if (!gameState.characterCreated) {
-      return <CharacterCreation gameState={gameState} setGameState={setGameState} />;
+      return (
+        <CharacterCreation
+          gameState={gameState}
+          setGameState={setGameState}
+          userId={user.uid}
+        />
+      );
     }
 
     const sharedRoomProps = {
@@ -332,7 +376,13 @@ function App() {
           />
         );
       case 5:
-        return <Map gameState={gameState} setGameState={setGameState} />;
+        return (
+          <Map
+            gameState={gameState}
+            setGameState={setGameState}
+            userId={user?.uid}
+          />
+        );
       case 6: {
         if (gameState.showOverlay) {
           return (
@@ -366,6 +416,7 @@ function App() {
             avatar={gameState.avatar}
             xp={gameState.xp}
             playerName={gameState.studentName}
+            badges={gameState.badges}
           />
           <QuestTracker
             activeQuests={gameState.activeQuests}

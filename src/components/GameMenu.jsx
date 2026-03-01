@@ -110,6 +110,8 @@ function GameMenu({
               workoutFocus={manualFocus}
               userId={userId}
               yearGroup={gameState.yearGroup}
+              studentName={gameState.studentName}
+              avatar={gameState.avatar}
               onWorkoutLogged={({ focus }) => {
                 onQuestEvent("workoutLogged", {
                   room: "Free Log",
@@ -144,6 +146,8 @@ function GameMenu({
               workoutFocus="benchmark-amrap"
               userId={userId}
               yearGroup={gameState.yearGroup}
+              studentName={gameState.studentName}
+              avatar={gameState.avatar}
               specialWorkout={benchmarkAmrap}
               onWorkoutLogged={({ focus }) => {
                 onQuestEvent("workoutLogged", {
