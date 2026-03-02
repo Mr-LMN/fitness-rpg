@@ -40,7 +40,7 @@ function TTSLine({ text, autoRead, className = '' }) {
         className="tts-play"
         disabled={!ttsEnabled}
       >
-        🔊
+        Play
       </button>
     </p>
   );

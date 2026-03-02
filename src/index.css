@@ -1,9 +1,18 @@
 /* ============================================================
    GLOBAL STYLES — Fitness RPG: Pencoedtre High School
-   ASD-friendly: clear hierarchy, consistent spacing, reduced noise
+   Design System Overhaul — Gold & Dark cinematic palette
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Open+Sans:wght@400;600&display=swap');
+:root {
+  --color-bg:        #0a0a0f;
+  --color-surface:   #12121a;
+  --color-border:    #2a2a3a;
+  --color-accent:    #c8a84b;
+  --color-danger:    #b91c1c;
+  --color-success:   #16a34a;
+  --color-text:      #e8e8f0;
+  --color-muted:     #6b6b80;
+}
 
 * {
   box-sizing: border-box;
@@ -14,11 +23,11 @@ html {
 }
 
 body {
-  font-family: 'Poppins', 'Open Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #0a0c18;
-  color: #e5e7eb;
+  background: var(--color-bg);
+  color: var(--color-text);
   min-height: 100vh;
   font-size: 16px;
   line-height: 1.6;
@@ -26,27 +35,107 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Heading class ── */
+.heading {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Utility classes ── */
+.surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.accent {
+  color: var(--color-accent);
+}
+
+.danger {
+  color: var(--color-danger);
+}
+
+/* ── Button system ── */
+.btn-primary {
+  background: var(--color-accent);
+  color: #0a0a0f;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  text-transform: uppercase;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.btn-primary:active:not(:disabled) {
+  opacity: 0.75;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  padding: 14px 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  opacity: 0.85;
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: white;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-danger:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
 /* ── Reset / Base ── */
 
 button {
   padding: 10px 20px;
   font-size: 0.9rem;
-  font-family: inherit;
-  background-color: #374151;
-  color: #f9fafb;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 4px;
   transition:
     background-color 0.2s ease,
     box-shadow 0.2s ease,
     transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  font-weight: 600;
+  font-weight: 500;
   -webkit-tap-highlight-color: transparent;
 }
 
 button:hover:not(:disabled) {
-  background-color: #4b5563;
+  background-color: #1a1a28;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   transform: translateY(-1px);
 }
@@ -62,17 +151,17 @@ button:disabled {
   transform: none;
 }
 
-/* Focus ring for keyboard navigation (important for ASD users) */
+/* Focus ring for keyboard navigation */
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 a:focus-visible {
-  outline: 3px solid rgba(164, 198, 57, 0.8);
+  outline: 3px solid rgba(200, 168, 75, 0.8);
   outline-offset: 2px;
 }
 
 input, select, textarea {
-  font-family: inherit;
+  font-family: 'Inter', sans-serif;
   font-size: inherit;
 }
 
@@ -101,9 +190,9 @@ input, select, textarea {
 /* ── Rarity Colours ── */
 
 .rarity-common    { color: #9ca3af; }
-.rarity-uncommon  { color: #34d399; }
+.rarity-uncommon  { color: var(--color-success); }
 .rarity-rare      { color: #60a5fa; }
-.rarity-legendary { color: #f59e0b; font-weight: 700; }
+.rarity-legendary { color: var(--color-accent); font-weight: 700; }
 
 .loot-new {
   animation: pulse 1.2s ease-in-out infinite;
@@ -139,37 +228,37 @@ input, select, textarea {
 /* ── Shared Button Themes ── */
 
 .primary-btn {
-  background: linear-gradient(135deg, #a4c639, #7ea82a);
-  color: #111;
-  border-radius: 10px;
+  background: var(--color-accent);
+  color: #0a0a0f;
+  border-radius: 4px;
   font-weight: 700;
   border: none;
-  box-shadow: 0 2px 8px rgba(164, 198, 57, 0.15);
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.1em;
 }
 
 .primary-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #b6d73a, #8fc030);
-  box-shadow: 0 6px 20px rgba(164, 198, 57, 0.3);
+  opacity: 0.85;
 }
 
 .primary-btn:active:not(:disabled) {
-  box-shadow: 0 2px 6px rgba(164, 198, 57, 0.2);
+  opacity: 0.75;
 }
 
 .add-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  color: #d1d5db;
+  color: var(--color-text);
 }
 
 .add-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-accent);
 }
 
 /* ── Narration Manager ── */
@@ -186,14 +275,15 @@ input, select, textarea {
   background-size: cover;
   background-position: center;
   background-blend-mode: multiply;
-  background-color: rgba(0, 0, 0, 0.65);
-  color: #fff;
+  background-color: rgba(10, 10, 15, 0.65);
+  color: var(--color-text);
 }
 
 .continue-hint {
   font-size: 0.82rem;
   opacity: 0.65;
   letter-spacing: 0.5px;
+  color: var(--color-muted);
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -229,11 +319,10 @@ input, select, textarea {
   display: flex;
   gap: 8px;
   padding: 8px 12px;
-  background: linear-gradient(135deg, rgba(10, 10, 24, 0.82), rgba(16, 14, 32, 0.78));
-  border: 1px solid rgba(164, 198, 57, 0.2);
-  border-radius: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(12px);
   z-index: 1000;
 }
 
@@ -241,10 +330,10 @@ input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(30, 28, 58, 0.7);
-  border: 1px solid rgba(164, 198, 57, 0.25);
-  border-radius: 999px;
-  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text);
   font-size: 0.8rem;
   font-weight: 600;
   padding: 6px 12px;
@@ -257,9 +346,9 @@ input, select, textarea {
 }
 
 .audio-toggle.is-on {
-  background: linear-gradient(120deg, rgba(164, 198, 57, 0.8), rgba(100, 200, 140, 0.6));
-  color: #0b0a19;
-  border-color: rgba(255, 255, 255, 0.3);
+  background: var(--color-accent);
+  color: #0a0a0f;
+  border-color: var(--color-accent);
   font-weight: 700;
 }
 
@@ -268,13 +357,12 @@ input, select, textarea {
 }
 
 .audio-toggle:focus-visible {
-  outline: 2px solid rgba(255, 184, 108, 0.9);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
 .audio-toggle:hover:not(:disabled) {
-  background: rgba(70, 58, 102, 0.8);
-  color: #fff;
+  border-color: var(--color-accent);
 }
 
 /* ── Scrollbar ── */
@@ -289,12 +377,12 @@ input, select, textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(147, 92, 255, 0.25);
+  background: rgba(200, 168, 75, 0.25);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(147, 92, 255, 0.4);
+  background: rgba(200, 168, 75, 0.4);
 }
 
 /* ── Utility ── */
@@ -318,10 +406,9 @@ input, select, textarea {
 .room-container,
 .character-creation-container,
 .login-screen {
-  padding-top: 56px; /* height of XP bar */
+  padding-top: 56px;
 }
 
-/* Skip XP bar padding on screens that don't have it */
 .login-screen {
   padding-top: 0;
 }
@@ -332,7 +419,7 @@ input, select, textarea {
   min-height: 56px;
   min-width: 120px;
   font-size: 1.2rem;
-  border-radius: 12px;
+  border-radius: 4px;
   padding: 12px 24px;
 }
 
@@ -349,58 +436,56 @@ input, select, textarea {
   min-height: 48px;
   min-width: 100px;
   font-size: 1.1rem;
-  border-radius: 12px;
+  border-radius: 4px;
   padding: 10px 20px;
 }
 
 /* ── Survivor / Injured Status ── */
 
 @keyframes injuredPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-  50%       { box-shadow: 0 0 0 5px rgba(239, 68, 68, 0.35); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0); }
+  50%       { box-shadow: 0 0 0 5px rgba(185, 28, 28, 0.35); }
 }
 
 .xpbar-injured {
   animation: injuredPulse 2s ease-in-out infinite;
-  border-bottom-color: rgba(239, 68, 68, 0.4);
+  border-bottom-color: rgba(185, 28, 28, 0.4);
 }
 
 .xpbar-injured-notice {
   font-size: 0.72rem;
-  color: #f87171;
+  color: var(--color-danger);
   font-weight: 600;
   margin-top: 3px;
   letter-spacing: 0.2px;
 }
 
 /* ============================================================
-   PHASE HEADINGS — Cinematic chapter/section titles
+   PHASE HEADINGS
    ============================================================ */
 
 .phase-heading {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Bebas Neue', sans-serif;
   font-size: 1.6rem;
-  font-weight: 800;
+  font-weight: 400;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #e5e7eb;
+  color: var(--color-text);
   text-align: center;
   margin: 0 0 16px;
   padding-bottom: 10px;
-  border-bottom: 2px solid rgba(147, 92, 255, 0.2);
+  border-bottom: 2px solid rgba(200, 168, 75, 0.2);
   animation: headingFadeIn 0.6s ease-out both;
 }
 
 .phase-heading--danger {
-  color: #ef4444;
-  border-bottom-color: rgba(239, 68, 68, 0.3);
-  text-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+  color: var(--color-danger);
+  border-bottom-color: rgba(185, 28, 28, 0.3);
 }
 
 .phase-heading--success {
-  color: #34d399;
-  border-bottom-color: rgba(52, 211, 153, 0.3);
-  text-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+  color: var(--color-success);
+  border-bottom-color: rgba(22, 163, 74, 0.3);
 }
 
 @keyframes headingFadeIn {
@@ -409,9 +494,8 @@ input, select, textarea {
 }
 
 /* ============================================================
-   ESCAPE PHASE — Route choice, progress bars, rep buttons
+   ESCAPE PHASE
    ============================================================ */
-
 
 .escape-choice {
   animation: fadeIn 0.5s ease-out both;
@@ -422,7 +506,7 @@ input, select, textarea {
   font-weight: 600;
   text-align: center;
   margin-bottom: 20px;
-  color: #e5e7eb;
+  color: var(--color-text);
 }
 
 .escape-choice-buttons {
@@ -439,27 +523,25 @@ input, select, textarea {
   gap: 8px;
   padding: 20px 24px;
   min-width: 180px;
-  border-radius: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(135deg, rgba(30, 28, 58, 0.8), rgba(20, 18, 40, 0.9));
-  color: #e5e7eb;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .escape-option-btn:hover {
-  border-color: rgba(164, 198, 57, 0.5);
-  background: linear-gradient(135deg, rgba(40, 38, 70, 0.9), rgba(30, 28, 58, 0.95));
+  border-color: var(--color-accent);
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .escape-option-icon {
   font-size: 0.8rem;
-  color: rgba(164, 198, 57, 0.5);
-  display: block;
-  height: 60px;
+  color: var(--color-accent);
   display: flex;
+  height: 60px;
   align-items: center;
   justify-content: center;
 }
@@ -471,14 +553,14 @@ input, select, textarea {
 
 .escape-option-target {
   font-size: 0.82rem;
-  color: rgba(230, 225, 255, 0.5);
+  color: var(--color-muted);
 }
 
 .escape-instruction {
   text-align: center;
   font-size: 1.05rem;
   margin-bottom: 20px;
-  color: rgba(230, 225, 255, 0.8);
+  color: var(--color-muted);
 }
 
 .escape-progress-wrap {
@@ -489,29 +571,30 @@ input, select, textarea {
 
 .escape-progress-track {
   height: 16px;
-  border-radius: 8px;
+  border-radius: 4px;
   background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
 }
 
 .escape-progress-fill {
   height: 100%;
-  border-radius: 8px;
-  background: linear-gradient(90deg, #dc2626, #ef4444);
+  border-radius: 4px;
+  background: var(--color-danger);
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .escape-progress-done {
-  background: linear-gradient(90deg, #34d399, #10b981) !important;
+  background: var(--color-success) !important;
 }
 
 .escape-progress-label {
   display: block;
   margin-top: 8px;
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0.05em;
+  font-family: 'Bebas Neue', sans-serif;
 }
 
 .escape-actions {
@@ -524,20 +607,19 @@ input, select, textarea {
 .escape-rep-btn {
   padding: 18px 48px;
   font-size: 1.3rem;
-  font-weight: 800;
+  font-weight: 400;
   letter-spacing: 0.1em;
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  background: var(--color-danger);
   color: #fff;
   border: none;
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(220, 40, 40, 0.3);
+  border-radius: 4px;
+  font-family: 'Bebas Neue', sans-serif;
   transition: all 0.15s ease;
   text-transform: uppercase;
 }
 
 .escape-rep-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  box-shadow: 0 6px 24px rgba(220, 40, 40, 0.45);
+  opacity: 0.85;
   transform: scale(1.03);
 }
 
@@ -552,7 +634,7 @@ input, select, textarea {
 }
 
 /* ============================================================
-   WARMUP PHASE — Target display
+   WARMUP PHASE
    ============================================================ */
 
 .warmup-action-panel {
@@ -562,7 +644,7 @@ input, select, textarea {
 
 .warmup-instruction {
   font-size: 1rem;
-  color: rgba(230, 225, 255, 0.8);
+  color: var(--color-muted);
   margin-bottom: 20px;
 }
 
@@ -576,15 +658,14 @@ input, select, textarea {
 
 .warmup-target-number {
   font-size: 3rem;
-  font-weight: 800;
-  color: #a4c639;
-  letter-spacing: -0.02em;
-  text-shadow: 0 0 20px rgba(164, 198, 57, 0.3);
+  font-weight: 400;
+  color: var(--color-accent);
+  font-family: 'Bebas Neue', sans-serif;
 }
 
 .warmup-target-label {
   font-size: 0.85rem;
-  color: rgba(230, 225, 255, 0.5);
+  color: var(--color-muted);
   text-transform: uppercase;
   letter-spacing: 0.15em;
 }
@@ -595,7 +676,7 @@ input, select, textarea {
 }
 
 /* ============================================================
-   VICTORY PHASE — End-game stats panel
+   VICTORY PHASE
    ============================================================ */
 
 .victory-panel {
@@ -607,15 +688,14 @@ input, select, textarea {
 
 .victory-title {
   font-size: 2rem;
-  font-weight: 800;
-  color: #34d399;
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--color-success);
   letter-spacing: 0.1em;
   margin: 0 0 4px;
-  text-shadow: 0 0 30px rgba(52, 211, 153, 0.4);
 }
 
 .victory-subtitle {
-  color: rgba(230, 225, 255, 0.5);
+  color: var(--color-muted);
   font-size: 0.9rem;
   margin: 0 0 24px;
 }
@@ -632,20 +712,20 @@ input, select, textarea {
   flex-direction: column;
   align-items: center;
   padding: 16px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-surface);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
 }
 
 .victory-stat-val {
   font-size: 1.8rem;
-  font-weight: 800;
-  color: #e5e7eb;
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--color-text);
 }
 
 .victory-stat-lbl {
   font-size: 0.75rem;
-  color: rgba(230, 225, 255, 0.5);
+  color: var(--color-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-top: 4px;
@@ -658,13 +738,13 @@ input, select, textarea {
 
 .victory-section-title {
   font-size: 0.9rem;
-  font-weight: 700;
-  color: rgba(230, 225, 255, 0.6);
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--color-muted);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin: 0 0 10px;
   padding-bottom: 6px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .victory-badge-list {
@@ -677,10 +757,10 @@ input, select, textarea {
   padding: 6px 14px;
   font-size: 0.8rem;
   font-weight: 600;
-  background: linear-gradient(135deg, rgba(147, 92, 255, 0.2), rgba(108, 63, 212, 0.15));
-  border: 1px solid rgba(147, 92, 255, 0.3);
-  border-radius: 20px;
-  color: #c4b5fd;
+  background: rgba(200, 168, 75, 0.12);
+  border: 1px solid rgba(200, 168, 75, 0.3);
+  border-radius: 4px;
+  color: var(--color-accent);
 }
 
 .victory-quest-list {
@@ -692,36 +772,33 @@ input, select, textarea {
 .victory-quest-list li {
   padding: 6px 0;
   font-size: 0.9rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  color: rgba(230, 225, 255, 0.75);
-}
-
-.victory-quest-list li::before {
-  content: "\2713 ";
-  color: #34d399;
-  font-weight: 700;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Chapter 2 teaser */
 .victory-teaser {
   margin: 28px 0 24px;
   padding: 2px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(220, 40, 40, 0.4), rgba(147, 92, 255, 0.3));
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(185, 28, 28, 0.4), rgba(200, 168, 75, 0.3));
 }
 
 .victory-teaser-inner {
-  background: rgba(10, 8, 24, 0.95);
-  border-radius: 12px;
+  background: var(--color-bg);
+  border-radius: 6px;
   padding: 20px;
   text-align: center;
 }
 
 .victory-teaser-label {
   font-size: 0.72rem;
-  font-weight: 700;
+  font-family: 'Bebas Neue', sans-serif;
   letter-spacing: 0.3em;
-  color: #dc2626;
+  color: var(--color-danger);
   margin: 0 0 8px;
   animation: titanBlink 2s step-end infinite;
 }
@@ -734,14 +811,14 @@ input, select, textarea {
 .victory-teaser-text {
   font-family: 'Courier New', monospace;
   font-size: 0.95rem;
-  color: #dc2626;
+  color: var(--color-danger);
   margin: 0 0 8px;
   line-height: 1.5;
 }
 
 .victory-teaser-hint {
   font-size: 0.82rem;
-  color: rgba(230, 225, 255, 0.4);
+  color: var(--color-muted);
   margin: 0;
 }
 
@@ -750,7 +827,7 @@ input, select, textarea {
 }
 
 /* ============================================================
-   FITNESS SUITE — Exercise preview cards
+   FITNESS SUITE
    ============================================================ */
 
 .fitness-suite-preview {
@@ -768,27 +845,26 @@ input, select, textarea {
   gap: 4px;
   padding: 18px 24px;
   min-width: 120px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 14px;
-  border: 1px solid rgba(220, 40, 40, 0.2);
+  background: var(--color-surface);
+  border-radius: 8px;
+  border: 1px solid rgba(185, 28, 28, 0.2);
 }
 
 .fse-target {
   font-size: 2.4rem;
-  font-weight: 800;
-  color: #ef4444;
-  text-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--color-danger);
 }
 
 .fse-name {
   font-size: 0.82rem;
-  color: rgba(230, 225, 255, 0.6);
+  color: var(--color-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 /* ============================================================
-   STREAK BANNER — Daily login celebration
+   STREAK BANNER
    ============================================================ */
 
 .streak-banner {
@@ -804,9 +880,9 @@ input, select, textarea {
 }
 
 .streak-banner-inner {
-  background: linear-gradient(135deg, rgba(16, 12, 32, 0.95), rgba(24, 18, 48, 0.95));
-  border: 1px solid rgba(164, 198, 57, 0.2);
-  border-radius: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
   padding: 32px 40px;
   text-align: center;
   max-width: 420px;
@@ -816,8 +892,8 @@ input, select, textarea {
 }
 
 .streak-milestone .streak-banner-inner {
-  border-color: rgba(245, 158, 11, 0.4);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(245, 158, 11, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(200, 168, 75, 0.1);
 }
 
 .streak-flame-count {
@@ -834,14 +910,13 @@ input, select, textarea {
 
 .streak-number {
   font-size: 1.3rem;
-  font-weight: 800;
-  color: #f59e0b;
-  letter-spacing: 0.02em;
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--color-accent);
 }
 
 .streak-message {
   font-size: 0.95rem;
-  color: rgba(230, 225, 255, 0.8);
+  color: var(--color-muted);
   line-height: 1.6;
   margin: 0 0 20px;
 }
@@ -849,27 +924,27 @@ input, select, textarea {
 .streak-dismiss {
   padding: 10px 32px;
   font-size: 0.9rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #a4c639, #7ea82a);
-  color: #111;
+  background: var(--color-accent);
+  color: #0a0a0f;
   border: none;
-  border-radius: 10px;
+  border-radius: 4px;
   cursor: pointer;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.1em;
 }
 
 /* ============================================================
-   TITAN TRANSMISSION — Typing-effect broadcast box
+   TITAN TRANSMISSION
    ============================================================ */
 
 .titan-transmission {
-  background: linear-gradient(135deg, rgba(10, 8, 24, 0.95), rgba(16, 12, 32, 0.95));
-  border: 1px solid rgba(220, 40, 40, 0.3);
-  border-radius: 14px;
+  background: var(--color-surface);
+  border: 1px solid rgba(185, 28, 28, 0.3);
+  border-radius: 8px;
   padding: 20px 24px;
   margin: 16px auto;
   max-width: 560px;
   font-family: 'Courier New', monospace;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(220, 40, 40, 0.03);
 }
 
 .titan-transmission-header {
@@ -883,26 +958,26 @@ input, select, textarea {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #dc2626;
+  background: var(--color-danger);
   animation: dotPulse 1.5s ease-in-out infinite;
 }
 
 @keyframes dotPulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 4px #dc2626; }
-  50%      { opacity: 0.4; box-shadow: 0 0 8px #dc2626; }
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--color-danger); }
+  50%      { opacity: 0.4; box-shadow: 0 0 8px var(--color-danger); }
 }
 
 .titan-transmission-label {
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.25em;
-  color: rgba(220, 40, 40, 0.7);
+  color: var(--color-danger);
   text-transform: uppercase;
 }
 
 .titan-transmission-text {
   font-size: 0.92rem;
-  color: #dc2626;
+  color: var(--color-danger);
   line-height: 1.6;
   margin: 0 0 12px;
   min-height: 2.5em;
@@ -910,7 +985,7 @@ input, select, textarea {
 
 .titan-cursor {
   animation: cursorBlink 0.6s step-end infinite;
-  color: #dc2626;
+  color: var(--color-danger);
 }
 
 @keyframes cursorBlink {
@@ -922,16 +997,16 @@ input, select, textarea {
   font-size: 0.8rem;
   padding: 6px 20px;
   font-family: inherit;
-  background: rgba(220, 40, 40, 0.15);
-  color: #dc2626;
-  border: 1px solid rgba(220, 40, 40, 0.3);
-  border-radius: 6px;
+  background: rgba(185, 28, 28, 0.15);
+  color: var(--color-danger);
+  border: 1px solid rgba(185, 28, 28, 0.3);
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .titan-transmission-skip:hover {
-  background: rgba(220, 40, 40, 0.25);
+  background: rgba(185, 28, 28, 0.25);
 }
 
 /* ============================================================
@@ -955,23 +1030,24 @@ input, select, textarea {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(230, 225, 255, 0.3);
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-muted);
   transition: all 0.4s ease;
+  font-family: 'Bebas Neue', sans-serif;
 }
 
 .code-chip--active {
-  background: linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(16, 185, 129, 0.1));
-  border-color: rgba(52, 211, 153, 0.4);
-  color: #34d399;
-  box-shadow: 0 0 12px rgba(52, 211, 153, 0.15);
+  background: rgba(22, 163, 74, 0.12);
+  border-color: var(--color-success);
+  color: var(--color-success);
+  box-shadow: 0 0 12px rgba(22, 163, 74, 0.15);
 }
 
 .room-card-desc {
   font-size: 0.7rem;
-  color: rgba(230, 225, 255, 0.45);
+  color: var(--color-muted);
   letter-spacing: 0.02em;
   display: block;
   margin-top: 1px;

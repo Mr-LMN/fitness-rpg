@@ -12,10 +12,9 @@ import "./styles/SLTDashboard.css";
 
 const YEAR_GROUPS = ["Year 7", "Year 8", "Year 9", "Year 10", "Year 11"];
 
-function StatCard({ icon, label, value, sub, highlight }) {
+function StatCard({ label, value, sub, highlight }) {
   return (
     <div className={`slt-stat-card ${highlight ? "highlight" : ""}`}>
-      <span className="stat-card-icon">{icon}</span>
       <div className="stat-card-body">
         <span className="stat-card-value">{value}</span>
         <span className="stat-card-label">{label}</span>
@@ -95,7 +94,7 @@ function SLTDashboard({ onBack }) {
       {/* Header */}
       <div className="slt-header">
         <div className="slt-header-left">
-          <h1 className="slt-title">📊 SLT Dashboard</h1>
+          <h1 className="slt-title">SLT Dashboard</h1>
           <p className="slt-subtitle">Pencoedtre High School — Fitness RPG</p>
         </div>
         <button className="slt-back-btn" onClick={onBack}>
@@ -106,10 +105,10 @@ function SLTDashboard({ onBack }) {
       {/* Tab navigation */}
       <div className="slt-tabs">
         {[
-          { id: "overview", label: "📈 Overview" },
-          { id: "leaderboard", label: "🏆 Leaderboard" },
-          { id: "year-groups", label: "🎓 Year Groups" },
-          { id: "recent", label: "⚡ Recent Activity" },
+          { id: "overview", label: "Overview" },
+          { id: "leaderboard", label: "Leaderboard" },
+          { id: "year-groups", label: "Year Groups" },
+          { id: "recent", label: "Recent Activity" },
         ].map((t) => (
           <button
             key={t.id}
@@ -134,39 +133,33 @@ function SLTDashboard({ onBack }) {
             <div className="slt-section">
               <div className="slt-stats-grid">
                 <StatCard
-                  icon="🏫"
                   label="Active Students"
                   value={totalStudents}
                   sub="have registered"
                   highlight
                 />
                 <StatCard
-                  icon="🏋️"
                   label="Total Workouts"
                   value={totalWorkouts}
                   sub="logged across all students"
                 />
                 <StatCard
-                  icon="🔥"
                   label="Calories Burned"
                   value={`${Math.round(totalCalories).toLocaleString()} kcal`}
                   sub="combined effort"
                 />
                 <StatCard
-                  icon="⏱️"
                   label="Total Active Time"
                   value={formatMins(totalMinutes)}
                   sub="school-wide"
                 />
                 <StatCard
-                  icon="⚡"
                   label="Total XP Earned"
                   value={totalXP.toLocaleString()}
                   sub="across all heroes"
                   highlight
                 />
                 <StatCard
-                  icon="📈"
                   label="Average Level"
                   value={`Level ${avgLevel}`}
                   sub="school average"
@@ -194,7 +187,7 @@ function SLTDashboard({ onBack }) {
                     </div>
                     {yr.topStudent && (
                       <p className="year-top-student">
-                        🥇 Top: {yr.topStudent.studentName || "Unknown"}
+                        Top: {yr.topStudent.studentName || "Unknown"}
                         {" "}(Level {Math.floor((yr.topStudent.xp || 0) / 100)})
                       </p>
                     )}
@@ -255,7 +248,7 @@ function SLTDashboard({ onBack }) {
                           <td>{Math.round(p.totalCalories || 0)} kcal</td>
                           <td>{Math.round(p.totalWeightLifted || 0)} kg</td>
                           <td>{formatMins(p.totalMinutes)}</td>
-                          <td>{p.badgeCount || 0} 🏅</td>
+                          <td>{p.badgeCount || 0}</td>
                           <td>{formatDate(p.lastActive)}</td>
                         </tr>
                       ))}
@@ -284,8 +277,8 @@ function SLTDashboard({ onBack }) {
                       <span className="recent-meta">{p.yearGroup || "—"} · Level {Math.floor((p.xp || 0) / 100)}</span>
                     </div>
                     <div className="recent-card-right">
-                      <span className="recent-stat">🏋️ {p.totalWorkouts || 0} workouts</span>
-                      <span className="recent-stat">🔥 {Math.round(p.totalCalories || 0)} kcal</span>
+                      <span className="recent-stat">{p.totalWorkouts || 0} workouts</span>
+                      <span className="recent-stat">{Math.round(p.totalCalories || 0)} kcal</span>
                       <span className="recent-date">{formatDate(p.lastActive)}</span>
                     </div>
                   </div>

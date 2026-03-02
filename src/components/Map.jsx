@@ -13,7 +13,7 @@ const ALL_ROOMS = [
     id: "watkins",
     xPct: 20,
     yPct: 28,
-    icon: "🏫",
+    icon: "W",
     description: "Override Code #1 — Physical Assessment",
   },
   {
@@ -21,7 +21,7 @@ const ALL_ROOMS = [
     id: "john",
     xPct: 58,
     yPct: 18,
-    icon: "📚",
+    icon: "J",
     description: "Override Code #2 — Language Cipher",
   },
   {
@@ -29,7 +29,7 @@ const ALL_ROOMS = [
     id: "roche",
     xPct: 58,
     yPct: 50,
-    icon: "❄️",
+    icon: "R",
     description: "Override Code #3 — Neural Interface",
   },
   {
@@ -37,7 +37,7 @@ const ALL_ROOMS = [
     id: "fitness",
     xPct: 58,
     yPct: 74,
-    icon: "🏋️",
+    icon: "F",
     description: "TITAN Mainframe — Operation Slamstorm",
   },
 ];
@@ -152,7 +152,7 @@ function Map({ gameState, setGameState, userId }) {
             onClick={() => setShowBadges(true)}
             aria-label="View badges"
           >
-            🏅 Badges
+            Badges
           </button>
           <button
             className="map-action-btn has-indicator"
@@ -278,7 +278,7 @@ function Map({ gameState, setGameState, userId }) {
                       )}
                     </div>
                     {questTargets.has(room.name) && (
-                      <span className="quest-pip">⭐</span>
+                      <span className="quest-pip">\u2605</span>
                     )}
                   </div>
                 )}

@@ -24,7 +24,7 @@ function WarmupDisplay({ focus = "full", onComplete }) {
         </ol>
         <div className="warmup-actions">
           <button className="complete-btn" onClick={onComplete}>
-            ✅ I’ve Completed This
+            I’ve Completed This
           </button>
           <button className="tips-btn" disabled>
             Show Movement Tips
