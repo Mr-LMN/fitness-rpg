@@ -11,7 +11,7 @@ useEffect(() => {
     const rect = container.getBoundingClientRect();
     const x = Math.round(e.clientX - rect.left);
     const y = Math.round(e.clientY - rect.top);
-    console.log(`📍 clicked at: { x: ${x}, y: ${y} }`);
+    console.log(`clicked at: { x: ${x}, y: ${y} }`);
   };
   container.addEventListener('click', onClick);
   return () => container.removeEventListener('click', onClick);
@@ -74,7 +74,7 @@ const [showInventory, setShowInventory] = useState(false);
   return (
     <div className="map-container">
 
-      <h2 className="map-title">🗺️ School Map</h2>
+      <h2 className="map-title">School Map</h2>
       <div className="map">
         {dynamicRooms.map((room, index) => (
           <div
@@ -98,7 +98,7 @@ const [showInventory, setShowInventory] = useState(false);
         ))}
       </div>
       <p className="map-instructions">
-        🔍 Click on any visible room to investigate. Rooms will reveal themselves as you explore!
+        Click on any visible room to investigate. Rooms will reveal themselves as you explore!
       </p>
       <button className="badge-button" onClick={() => setShowBadges(true)}>
         View Badges

@@ -235,7 +235,7 @@ function WorkoutLogger({
     };
 
     if (activeBoost) {
-      setBoostToast(`✨ ${activeBoost.name} used — boost applied this session!`);
+      setBoostToast(`${activeBoost.name} used — boost applied this session!`);
       setTimeout(() => setBoostToast(""), 4000);
     }
 

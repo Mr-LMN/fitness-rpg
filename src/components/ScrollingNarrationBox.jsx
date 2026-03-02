@@ -63,7 +63,7 @@ function ScrollingNarrationBox({
         aria-label="Continue"
         style={isEntryOrSimple ? { minHeight: '56px' } : undefined}
       >
-        {finished ? '✅ Done' : '▶️ Continue'}
+        {finished ? 'Done' : 'Continue'}
       </button>
     </div>
   );

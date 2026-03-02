@@ -52,7 +52,7 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
 
     const cap = Math.min(n, repsLeft);
     const damage = Math.round(cap * hpPerRep);
-    addLog(`⚔️ ${phase?.exercise || "Exercise"}: ${cap} reps → ${damage} damage!`);
+    addLog(`${phase?.exercise || "Exercise"}: ${cap} reps → ${damage} damage!`);
     triggerHit(damage);
 
     const newLeft = repsLeft - cap;
@@ -61,7 +61,7 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
     if (newLeft <= 0) {
       const next = currentPhase + 1;
       if (next < phases.length) {
-        addLog(`✨ Phase ${currentPhase + 1} complete! Next: ${phases[next].title}`);
+        addLog(`Phase ${currentPhase + 1} complete! Next: ${phases[next].title}`);
         setCurrentPhase(next);
         setRepsLeft(phases[next].reps || 10);
       }
@@ -73,13 +73,13 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
   const handleAllDone = () => {
     const remaining = repsLeft + phases.slice(currentPhase + 1).reduce((s, p) => s + (p.reps || 0), 0);
     const damage = Math.round(remaining * hpPerRep) + bossHp;
-    addLog(`🏁 All exercises done! Final burst — boss defeated!`);
+    addLog(`All exercises done! Final burst — boss defeated!`);
     triggerHit(damage);
   };
 
   const handleVictory = () => {
     setDefeated(true);
-    addLog(`🎉 ${bossName} has been defeated!`);
+    addLog(`${bossName} has been defeated!`);
     playSound("alarm");
     setGameState((prev) => ({ ...prev, xp: (prev.xp || 0) + 30 }));
   };
@@ -94,7 +94,7 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
         {/* Boss Portrait */}
         <div className={`boss-portrait ${hitFlash ? "boss-hit" : ""}`}>
           <div className="boss-portrait-inner">
-            <span className="boss-emoji">👹</span>
+            <span className="boss-emoji" aria-hidden="true"></span>
             <h2 className="boss-name">{bossName}</h2>
           </div>
         </div>
@@ -173,7 +173,7 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
                   onClick={handleSubmitReps}
                   disabled={!repsInput}
                 >
-                  ⚔️ Attack!
+                  Attack!
                 </button>
               </div>
               <button className="boss-done-btn" onClick={handleAllDone}>
@@ -183,14 +183,14 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
           </>
         ) : (
           <div className="boss-victory-panel">
-            <div className="victory-burst">🎉</div>
+            <div className="victory-burst"></div>
             <h3 className="victory-title">Victory!</h3>
             <p className="victory-desc">
               {bossName} has been defeated! Your strength and determination won the day.
             </p>
             <p className="victory-xp">+30 XP earned!</p>
             <button className="boss-continue-btn" onClick={onComplete}>
-              Continue Adventure →
+              Continue Adventure
             </button>
           </div>
         )}

@@ -14,7 +14,6 @@ const WORKOUT_PHASES = [
   {
     id: "bike",
     label: "Assault Bike",
-    icon: "🚴",
     target: 21,
     unit: "Calories",
     hpChunk: 34,
@@ -23,7 +22,6 @@ const WORKOUT_PHASES = [
   {
     id: "slam",
     label: "Slam Balls",
-    icon: "🏐",
     target: 15,
     unit: "Reps",
     hpChunk: 33,
@@ -32,7 +30,6 @@ const WORKOUT_PHASES = [
   {
     id: "burpee",
     label: "Burpees",
-    icon: "🤸",
     target: 9,
     unit: "Reps",
     hpChunk: 33,
@@ -103,7 +100,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
     const newHp = Math.max(0, bossHp - dmg);
 
     addLog(
-      `${currentPhase.icon} ${currentPhase.label}: ${actual}/${currentPhase.target} ${currentPhase.unit} — ${dmg} damage dealt!`
+      `${currentPhase.label}: ${actual}/${currentPhase.target} ${currentPhase.unit} — ${dmg} damage dealt!`
     );
     triggerHit(newHp);
 
@@ -115,7 +112,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
     if (nextIdx < WORKOUT_PHASES.length) {
       setCurrentPhaseIdx(nextIdx);
       setTimeout(() => {
-        addLog(`⚡ Phase ${currentPhaseIdx + 1} done! Next: ${WORKOUT_PHASES[nextIdx].label}`);
+        addLog(`Phase ${currentPhaseIdx + 1} done! Next: ${WORKOUT_PHASES[nextIdx].label}`);
       }, 300);
     } else {
       // All phases complete
@@ -206,10 +203,10 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
           <div className="final-boss-timer">
             {battleStarted ? (
               <span className={`timer-value ${!battleFinished ? "timer-ticking" : "timer-done"}`}>
-                ⏱️ {formattedTime}
+                {formattedTime}
               </span>
             ) : (
-              <span className="timer-standby">⏱️ Ready to start</span>
+              <span className="timer-standby">Ready to start</span>
             )}
           </div>
         </div>
@@ -239,7 +236,6 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
                     : ""
                 }`}
               >
-                <span className="dot-ico">{ph.icon}</span>
                 <span className="dot-nm">{ph.target} {ph.unit}</span>
               </div>
             ))}
@@ -259,7 +255,6 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
             <div className="final-workout-preview">
               {WORKOUT_PHASES.map((ph) => (
                 <div key={ph.id} className="preview-row">
-                  <span className="preview-ico">{ph.icon}</span>
                   <span className="preview-txt">
                     <strong>{ph.target}</strong> {ph.label} ({ph.unit})
                   </span>
@@ -268,7 +263,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
             </div>
             <TTSLine text="Mrs. Roche reels, the Blaze Pods primed around you. Strap in and start the finisher before she rallies." />
             <button className="final-start-btn" onClick={handleStart}>
-              ⚡ Start Boss Battle
+              Start Boss Battle
             </button>
           </div>
         )}
@@ -282,7 +277,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
                   Exercise {currentPhaseIdx + 1} / {WORKOUT_PHASES.length}
                 </span>
                 <h3 className="final-phase-name">
-                  {currentPhase.icon} {currentPhase.label}
+                  {currentPhase.label}
                 </h3>
               </div>
               <p className="final-phase-tip">{currentPhase.tip}</p>
@@ -315,7 +310,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
                   onClick={handlePhaseSubmit}
                   disabled={!phaseInput}
                 >
-                  ⚔️ Attack!
+                  Attack!
                 </button>
               </div>
             </div>
@@ -327,9 +322,9 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
         {/* MANUAL FINISH */}
         {battleStarted && !battleFinished && allPhasesComplete && (
           <div className="final-wrap-up">
-            <p className="wrap-up-msg">✅ All exercises done! You've destroyed the boss!</p>
+            <p className="wrap-up-msg">All exercises done! You've destroyed the boss!</p>
             <button className="final-finish-btn" onClick={handleManualFinish}>
-              🏁 Finish Battle
+              Finish Battle
             </button>
           </div>
         )}
@@ -337,7 +332,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
         {/* VICTORY */}
         {battleFinished && (
           <div className="final-victory-panel">
-            <div className="fv-burst">🎉</div>
+            <div className="fv-burst"></div>
             <h2 className="fv-title">VICTORY!</h2>
             <p className="fv-sub">
               TITAN's systems collapse. The red lights shift to green. Every door in the school unlocks.
@@ -359,7 +354,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
             <TTSLine text={`You completed Operation Slamstorm in ${formattedTime}!`} />
             <TTSLine text="Your heroic effort has been recorded on the school leaderboard." />
             <p className="fv-loot">
-              🗺️ Found: <strong>Map Piece #2 — Maths Department</strong> (added to backpack)
+              Found: <strong>Map Piece #2 — Maths Department</strong> (added to backpack)
             </p>
           </div>
         )}
@@ -372,7 +367,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
           aria-live="polite"
           aria-label="Battle log"
         >
-          <p className="fbl-hdr">⚔️ Battle Log</p>
+          <p className="fbl-hdr">Battle Log</p>
           {battleLog.length === 0 && (
             <p className="fbl-empty">Start the battle to see the action!</p>
           )}

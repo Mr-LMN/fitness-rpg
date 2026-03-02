@@ -10,66 +10,59 @@
   z-index: 100;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 16px;
-  background: linear-gradient(180deg, rgba(10, 12, 24, 0.92), rgba(10, 12, 24, 0.85));
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(164, 198, 57, 0.15);
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+  gap: 12px;
+  padding: 0 16px;
+  height: 56px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Left section: avatar + name */
+.xpbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .xpbar-avatar {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   line-height: 1;
   flex-shrink: 0;
-}
-
-.xpbar-body {
-  flex: 1;
-  min-width: 0;
-}
-
-.xpbar-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 4px;
+  color: var(--color-text);
 }
 
 .xpbar-name {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #f9fafb;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
+  max-width: 140px;
 }
 
-.xpbar-level {
+/* Centre section: XP progress bar */
+.xpbar-centre {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  flex-shrink: 0;
+  gap: 8px;
+  min-width: 0;
 }
 
 .xpbar-level-num {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #a4c639;
-}
-
-.xpbar-title {
-  font-size: 0.72rem;
-  color: #6b7280;
-  font-style: italic;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .xpbar-track {
   position: relative;
-  height: 8px;
+  flex: 1;
+  height: 6px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   overflow: hidden;
@@ -77,59 +70,89 @@
 
 .xpbar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #7ea82a, #a4c639, #ffd166);
+  background: var(--color-accent);
   border-radius: 999px;
   transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
 }
 
-.xpbar-fill::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 40%;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 999px;
+.xpbar-xp-count {
+  font-size: 12px;
+  color: var(--color-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.xpbar-xp-label {
-  position: absolute;
-  right: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.5);
-  line-height: 1;
-  pointer-events: none;
+/* Right section: badges, inventory, injury status */
+.xpbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .xpbar-badges {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.85rem;
-  color: #ffd166;
+  font-size: 0.82rem;
+  color: var(--color-accent);
   font-weight: 700;
   flex-shrink: 0;
-  background: rgba(255, 209, 102, 0.08);
-  border: 1px solid rgba(255, 209, 102, 0.18);
-  border-radius: 20px;
-  padding: 4px 10px;
+}
+
+.xpbar-inventory-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text);
+  padding: 4px 6px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.xpbar-inventory-btn:hover {
+  border-color: var(--color-accent);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Injured status */
+.xpbar-injured-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.xpbar-injured-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-danger);
+  animation: injuredDotPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes injuredDotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.xpbar-injured-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-danger);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 480px) {
   .xpbar-name {
-    max-width: 100px;
+    max-width: 80px;
   }
 
-  .xpbar-title {
+  .xpbar-xp-count {
     display: none;
-  }
-
-  .xpbar-badges {
-    padding: 4px 8px;
-    font-size: 0.78rem;
   }
 }

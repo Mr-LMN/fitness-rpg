@@ -1,23 +1,20 @@
 /* ============================================================
-   SCROLLING NARRATION BOX — Immersive text display
+   SCROLLING NARRATION BOX — Floating text over scene
+   Clean, cinematic — no card borders
    ============================================================ */
 
 .box {
-  background: linear-gradient(170deg, rgba(10, 8, 24, 0.85), rgba(16, 12, 32, 0.78));
-  color: #efe8ff;
+  background: transparent;
+  color: var(--color-text);
   padding: 28px 24px 20px;
   margin: 20px auto;
-  border-radius: 16px;
-  width: min(920px, 92%);
+  width: min(680px, 92%);
   max-width: 100%;
   text-align: left;
+  font-family: 'Inter', sans-serif;
   font-size: 1.05rem;
-  line-height: 1.65;
-  border: 1px solid rgba(147, 92, 255, 0.15);
-  box-shadow:
-    0 16px 40px rgba(3, 2, 18, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(10px);
+  font-weight: 400;
+  line-height: 1.8;
   max-height: min(58vh, 460px);
   display: flex;
   flex-direction: column;
@@ -30,12 +27,19 @@
   font-size: 1.35rem;
   line-height: 1.85;
   font-family: 'OpenDyslexic', Arial, sans-serif;
-  border-color: rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .enhanced * {
   color: #1c1917;
+}
+
+/* Entry reading level (under 9) */
+.entry {
+  font-size: 1.3rem;
+  line-height: 2;
 }
 
 .lineContainer {
@@ -71,28 +75,25 @@
 .continueButton {
   align-self: center;
   margin-top: auto;
-  padding: 10px 28px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  font-family: inherit;
-  background: linear-gradient(135deg, rgba(147, 92, 255, 0.8), rgba(108, 63, 212, 0.85));
-  color: #fff;
+  padding: 14px 32px;
+  font-size: 1.1rem;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.1em;
+  background: var(--color-accent);
+  color: #0a0a0f;
   border: none;
-  border-radius: 10px;
+  border-radius: 4px;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(147, 92, 255, 0.25);
-  transition: all 0.2s ease;
+  transition: opacity 0.2s;
+  text-transform: uppercase;
 }
 
 .continueButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, rgba(160, 111, 255, 0.9), rgba(126, 78, 232, 0.92));
-  box-shadow: 0 6px 22px rgba(147, 92, 255, 0.35);
-  transform: translateY(-1px);
+  opacity: 0.85;
 }
 
 .continueButton:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(147, 92, 255, 0.2);
+  opacity: 0.75;
 }
 
 .continueButton:disabled {
@@ -118,15 +119,13 @@
 
 /* Enhanced mode button overrides */
 .enhanced .continueButton {
-  background: linear-gradient(135deg, #2d7d32, #388e3c);
+  background: #2d7d32;
   color: #fff;
   border: 2px solid rgba(0, 0, 0, 0.12);
-  box-shadow: 0 4px 12px rgba(45, 125, 50, 0.25);
 }
 
 .enhanced .continueButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #388e3c, #43a047);
-  box-shadow: 0 6px 18px rgba(45, 125, 50, 0.35);
+  opacity: 0.85;
 }
 
 

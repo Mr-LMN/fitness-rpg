@@ -146,7 +146,7 @@ export default function LoginForm({ onLogin, onSLTAccess }) {
         {tab === "register" && (
           <form onSubmit={handleStudentAuth} className="login-form-inner" noValidate>
             <p className="login-note">
-              👋 Welcome! Create your account with your school email address.
+              Welcome! Create your account with your school email address.
             </p>
             <label className="login-label" htmlFor="reg-email">School Email</label>
             <input
@@ -182,7 +182,7 @@ export default function LoginForm({ onLogin, onSLTAccess }) {
         {tab === "slt" && (
           <form onSubmit={handleSLTAccess} className="login-form-inner" noValidate>
             <p className="slt-note">
-              📊 Senior Leadership and PE staff access only.
+              Senior Leadership and PE staff access only.
               Enter the staff passcode to view the school dashboard and class data.
             </p>
             <label className="login-label" htmlFor="slt-pass">Staff Passcode</label>

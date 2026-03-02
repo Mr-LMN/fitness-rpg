@@ -473,13 +473,13 @@ function RoomTemplate({
               className="explore-btn scavenge-btn"
               onClick={() => setShowExtraWorkout(true)}
             >
-              🔍 Keep Scavenging (+XP, random loot)
+              Keep Scavenging (+XP, random loot)
             </button>
             <button
               className="explore-btn press-on-btn"
               onClick={handlePressOn}
             >
-              ➡️ Press On (continue story)
+              Press On (continue story)
             </button>
           </div>
           {showExtraWorkout && (

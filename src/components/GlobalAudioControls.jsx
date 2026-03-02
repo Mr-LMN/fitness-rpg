@@ -1,4 +1,5 @@
 import React from 'react';
+import { Volume2, VolumeX, Mic, MicOff } from 'lucide-react';
 
 function GlobalAudioControls({ muted, toggleMute, tts, toggleTts }) {
   return (
@@ -10,7 +11,7 @@ function GlobalAudioControls({ muted, toggleMute, tts, toggleTts }) {
         className={`audio-toggle ${muted ? 'is-off' : 'is-on'}`}
       >
         <span className="audio-icon" aria-hidden="true">
-          {muted ? '🔇' : '🔊'}
+          {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
         </span>
         <span className="audio-label">{muted ? 'Sound Off' : 'Sound On'}</span>
       </button>
@@ -21,7 +22,7 @@ function GlobalAudioControls({ muted, toggleMute, tts, toggleTts }) {
         className={`audio-toggle ${tts ? 'is-on' : 'is-off'}`}
       >
         <span className="audio-icon" aria-hidden="true">
-          {tts ? '🗣️' : '💬'}
+          {tts ? <Mic size={16} /> : <MicOff size={16} />}
         </span>
         <span className="audio-label">{tts ? 'Narrator On' : 'Narrator Off'}</span>
       </button>

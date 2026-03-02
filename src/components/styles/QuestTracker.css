@@ -1,143 +1,70 @@
 /* ============================================================
-   QUEST TRACKER — Toggle button + slide-down panel
-   Premium glassmorphic design with grind roadmap
+   QUEST TRACKER — Slide-in panel from the LEFT
+   Vertical timeline with Lucide icons
    ============================================================ */
 
-/* ── Toggle wrapper ── */
-
-.quest-toggle-wrap {
+/* Trigger button — fixed top-left below XPBar */
+.quest-trigger {
   position: fixed;
-  top: 56px;
-  right: 16px;
-  z-index: 800;
-}
-
-/* ── Toggle button (always visible) ── */
-
-.quest-toggle-btn {
+  top: 64px;
+  left: 16px;
+  z-index: 900;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 14px 7px 10px;
-  background: linear-gradient(135deg, rgba(18, 14, 38, 0.92), rgba(26, 20, 52, 0.88));
-  border: 1px solid rgba(147, 92, 255, 0.35);
-  border-radius: 999px;
-  color: #efe8ff;
-  font-size: 0.82rem;
-  font-weight: 600;
-  font-family: inherit;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text);
   cursor: pointer;
-  backdrop-filter: blur(14px);
-  box-shadow:
-    0 4px 20px rgba(3, 2, 18, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  white-space: nowrap;
-  margin-top: 8px;
+  transition: border-color 0.2s;
 }
 
-.quest-toggle-btn:hover {
-  border-color: rgba(147, 92, 255, 0.6);
-  box-shadow:
-    0 6px 28px rgba(147, 92, 255, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transform: translateY(-1px);
-  background: linear-gradient(135deg, rgba(24, 18, 48, 0.95), rgba(32, 24, 62, 0.92));
+.quest-trigger:hover {
+  border-color: var(--color-accent);
+  transform: none;
+  box-shadow: none;
 }
 
-.quest-toggle-btn:active {
-  transform: translateY(0);
+/* Backdrop */
+.quest-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
-.quest-toggle-open {
-  border-color: rgba(147, 92, 255, 0.7);
-  background: linear-gradient(135deg, rgba(30, 22, 58, 0.95), rgba(38, 28, 72, 0.92));
-}
-
-.quest-toggle-icon {
-  display: flex;
-  align-items: center;
-  color: #b78aff;
-  flex-shrink: 0;
-}
-
-.quest-toggle-title {
-  max-width: 140px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.quest-toggle-done {
-  color: rgba(158, 255, 203, 0.9);
-}
-
-.quest-toggle-pct {
-  color: rgba(255, 219, 180, 0.95);
-  font-size: 0.75rem;
-  font-weight: 700;
-  background: rgba(255, 206, 170, 0.12);
-  border: 1px solid rgba(255, 206, 170, 0.25);
-  border-radius: 999px;
-  padding: 2px 8px;
-}
-
-.quest-toggle-ring {
-  display: flex;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-}
-
-.quest-ring-svg {
-  width: 100%;
-  height: 100%;
-}
-
-.quest-ring-progress {
-  transition: stroke-dasharray 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* ── Expanded panel ── */
-
+/* ── Slide-in panel ── */
 .quest-panel {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: min(420px, calc(100vw - 32px));
-  max-height: calc(100vh - 120px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 300px;
+  max-width: 85vw;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
   overflow-y: auto;
-  background: linear-gradient(170deg, rgba(12, 10, 28, 0.96), rgba(18, 14, 36, 0.94));
-  border: 1px solid rgba(147, 92, 255, 0.3);
-  border-radius: 20px;
-  box-shadow:
-    0 24px 64px rgba(3, 2, 18, 0.7),
-    0 0 0 1px rgba(255, 255, 255, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(20px);
-  color: #efe8ff;
-  animation: questPanelIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@keyframes questPanelIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.quest-panel-open {
+  transform: translateX(0);
 }
 
 .quest-panel-inner {
-  padding: 18px 20px 20px;
+  padding: 72px 20px 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
-/* Panel scrollbar */
+/* Scrollbar */
 .quest-panel::-webkit-scrollbar {
   width: 5px;
 }
@@ -145,12 +72,11 @@
   background: transparent;
 }
 .quest-panel::-webkit-scrollbar-thumb {
-  background: rgba(147, 92, 255, 0.3);
+  background: rgba(200, 168, 75, 0.25);
   border-radius: 999px;
 }
 
 /* ── Panel header ── */
-
 .quest-panel-header {
   display: flex;
   align-items: center;
@@ -166,18 +92,19 @@
 .quest-panel-heading h3 {
   margin: 0;
   font-size: 1.05rem;
+  font-family: 'Bebas Neue', sans-serif;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #f9f5ff;
+  color: var(--color-text);
 }
 
 .quest-panel-count {
   font-size: 0.72rem;
   font-weight: 700;
-  color: rgba(158, 255, 203, 0.85);
-  background: rgba(158, 255, 203, 0.1);
-  border: 1px solid rgba(158, 255, 203, 0.2);
-  border-radius: 999px;
+  color: var(--color-accent);
+  background: rgba(200, 168, 75, 0.1);
+  border: 1px solid rgba(200, 168, 75, 0.2);
+  border-radius: 4px;
   padding: 2px 8px;
 }
 
@@ -189,109 +116,55 @@
   height: 28px;
   padding: 0;
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-muted);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .quest-panel-close:hover {
   background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-text);
   transform: none;
 }
 
 /* ── Active quest card ── */
-
 .quest-active-card {
-  background: linear-gradient(150deg, rgba(30, 22, 56, 0.7), rgba(16, 12, 32, 0.8));
-  border: 1px solid rgba(147, 92, 255, 0.2);
-  border-radius: 14px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  position: relative;
-  overflow: hidden;
-}
-
-.quest-active-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(147, 92, 255, 0.4), transparent);
+  gap: 8px;
 }
 
 .quest-active-label {
   font-size: 0.65rem;
+  font-family: 'Bebas Neue', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: rgba(183, 138, 255, 0.7);
-  font-weight: 600;
-}
-
-.quest-active-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.quest-active-info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  color: var(--color-muted);
 }
 
 .quest-active-name {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #f7efff;
-  line-height: 1.2;
-}
-
-.quest-badge {
-  align-self: flex-start;
-  font-size: 0.62rem;
-  padding: 3px 8px;
-  border-radius: 999px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.quest-badge-fitness {
-  background: rgba(96, 230, 168, 0.12);
-  border: 1px solid rgba(96, 230, 168, 0.35);
-  color: #9effcb;
-}
-
-.quest-badge-knowledge {
-  background: rgba(157, 132, 255, 0.12);
-  border: 1px solid rgba(157, 132, 255, 0.3);
-  color: #d0c3ff;
-}
-
-.quest-active-pct {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: rgba(255, 219, 180, 0.95);
-  white-space: nowrap;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--color-text);
+  margin: 0;
+  letter-spacing: 0.03em;
 }
 
 .quest-active-desc {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: 14px;
   line-height: 1.4;
-  color: rgba(220, 215, 255, 0.8);
+  color: var(--color-muted);
 }
 
 /* ── Progress bar ── */
-
 .quest-active-progress {
   display: flex;
   flex-direction: column;
@@ -311,29 +184,8 @@
   inset: 0;
   width: 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, #935cff, #42e9bb);
-  box-shadow: 0 0 10px rgba(147, 92, 255, 0.5);
+  background: var(--color-accent);
   transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.quest-progress-shimmer {
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.15) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2.5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
 }
 
 .quest-progress-sm {
@@ -344,127 +196,117 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.72rem;
-  color: rgba(201, 195, 255, 0.7);
+  color: var(--color-muted);
 }
 
 .quest-reward-inline {
-  color: rgba(255, 219, 140, 0.9);
+  color: var(--color-accent);
   font-weight: 600;
 }
 
-/* ── Grind Roadmap ── */
-
-.quest-roadmap {
+/* ── Vertical Timeline ── */
+.quest-timeline {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.quest-roadmap-label,
+.quest-timeline-label,
 .quest-side-label,
 .quest-history-label {
-  font-size: 0.65rem;
+  font-size: 13px;
+  font-family: 'Bebas Neue', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: rgba(183, 138, 255, 0.6);
-  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
 }
 
-.quest-roadmap-track {
-  display: flex;
-  align-items: flex-start;
-  gap: 0;
-  padding: 6px 0 2px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.quest-roadmap-track::-webkit-scrollbar {
-  display: none;
-}
-
-.quest-node {
+.quest-timeline-track {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: relative;
-  flex: 1;
-  min-width: 52px;
+  gap: 0;
+  padding-left: 4px;
 }
 
-.quest-node-pip {
-  width: 28px;
-  height: 28px;
+.quest-tl-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  position: relative;
+}
+
+/* Vertical line connecting nodes */
+.quest-tl-item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 32px;
+  bottom: -8px;
+  width: 1px;
+  background: var(--color-border);
+}
+
+.quest-tl-done:not(:last-child)::before {
+  background: var(--color-success);
+}
+
+/* Node pip */
+.quest-tl-pip {
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(30, 24, 56, 0.9);
-  border: 2px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.35);
-  font-size: 0.65rem;
-  font-weight: 700;
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  color: var(--color-muted);
+  flex-shrink: 0;
   position: relative;
   z-index: 2;
-  transition: all 0.3s ease;
 }
 
-.quest-node-goal {
-  font-size: 0.6rem;
-}
-
-.quest-node-done .quest-node-pip {
-  background: linear-gradient(135deg, #935cff, #42e9bb);
-  border-color: rgba(147, 92, 255, 0.6);
+.quest-tl-done .quest-tl-pip {
+  background: var(--color-success);
+  border-color: var(--color-success);
   color: #fff;
-  box-shadow: 0 0 12px rgba(147, 92, 255, 0.4);
 }
 
-.quest-node-active .quest-node-pip {
-  border-color: rgba(147, 92, 255, 0.6);
-  color: #b78aff;
-  animation: nodePulse 2s ease-in-out infinite;
+.quest-tl-active .quest-tl-pip {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
-@keyframes nodePulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(147, 92, 255, 0); }
-  50% { box-shadow: 0 0 0 6px rgba(147, 92, 255, 0.15); }
+/* Node info */
+.quest-tl-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
 }
 
-.quest-node-line {
-  position: absolute;
-  top: 14px;
-  left: calc(50% + 14px);
-  right: calc(-50% + 14px);
-  height: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  z-index: 1;
+.quest-tl-title {
+  font-size: 0.82rem;
+  color: var(--color-muted);
 }
 
-.quest-node-line-done {
-  background: linear-gradient(90deg, rgba(147, 92, 255, 0.6), rgba(66, 233, 187, 0.4));
+.quest-tl-done .quest-tl-title {
+  color: var(--color-success);
 }
 
-.quest-node-label {
-  margin-top: 6px;
-  font-size: 0.58rem;
-  color: rgba(200, 195, 255, 0.55);
-  text-align: center;
-  line-height: 1.2;
-  max-width: 60px;
+.quest-tl-active .quest-tl-title {
+  color: var(--color-text);
+  font-weight: 600;
 }
 
-.quest-node-done .quest-node-label {
-  color: rgba(158, 255, 203, 0.7);
-}
-
-.quest-node-active .quest-node-label {
-  color: rgba(220, 200, 255, 0.85);
+.quest-tl-pct {
+  font-size: 0.72rem;
+  color: var(--color-accent);
   font-weight: 600;
 }
 
 /* ── Side quests ── */
-
 .quest-side {
   display: flex;
   flex-direction: column;
@@ -476,9 +318,9 @@
   flex-direction: column;
   gap: 6px;
   padding: 10px 12px;
-  background: rgba(20, 16, 38, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
 }
 
 .quest-side-row {
@@ -490,23 +332,22 @@
 .quest-side-name {
   font-size: 0.78rem;
   font-weight: 600;
-  color: #e8e2ff;
+  color: var(--color-text);
 }
 
 .quest-side-pct {
   font-size: 0.7rem;
-  color: rgba(255, 206, 170, 0.85);
+  color: var(--color-accent);
   font-weight: 600;
 }
 
 /* ── Completed history ── */
-
 .quest-history {
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--color-border);
 }
 
 .quest-history-list {
@@ -520,12 +361,12 @@
   align-items: center;
   gap: 8px;
   font-size: 0.75rem;
-  color: rgba(210, 205, 255, 0.7);
+  color: var(--color-muted);
   padding: 4px 0;
 }
 
 .quest-check-icon {
-  color: #9effcb;
+  color: var(--color-success);
   flex-shrink: 0;
 }
 
@@ -535,53 +376,22 @@
 
 .quest-history-xp {
   font-size: 0.68rem;
-  color: rgba(255, 219, 140, 0.7);
+  color: var(--color-accent);
   font-weight: 600;
 }
 
 /* ── Responsive ── */
-
 @media (max-width: 600px) {
-  .quest-toggle-wrap {
-    right: 12px;
-    top: 52px;
-  }
-
-  .quest-toggle-btn {
-    padding: 6px 10px 6px 8px;
-    font-size: 0.75rem;
-    gap: 6px;
-  }
-
-  .quest-toggle-title {
-    max-width: 100px;
+  .quest-trigger {
+    top: 60px;
+    left: 12px;
   }
 
   .quest-panel {
-    width: calc(100vw - 24px);
-    right: -4px;
+    width: calc(100vw - 48px);
   }
 
   .quest-panel-inner {
-    padding: 14px 16px 16px;
-  }
-
-  .quest-roadmap-track {
-    gap: 0;
-  }
-
-  .quest-node {
-    min-width: 44px;
-  }
-
-  .quest-node-pip {
-    width: 24px;
-    height: 24px;
-  }
-
-  .quest-node-line {
-    top: 12px;
-    left: calc(50% + 12px);
-    right: calc(-50% + 12px);
+    padding: 64px 16px 16px;
   }
 }

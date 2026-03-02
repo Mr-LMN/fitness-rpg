@@ -111,7 +111,7 @@ function BenchmarkAmrapTracker({ config = {}, onSubmit, error }) {
             className="timer-start-btn"
             onClick={handleStartWorkout}
           >
-            ▶️ Start Workout
+            Start Workout
           </button>
         )}
         {timerState === "running" && (
@@ -124,7 +124,7 @@ function BenchmarkAmrapTracker({ config = {}, onSubmit, error }) {
               className="timer-end-btn"
               onClick={handleEndWorkout}
             >
-              ⏹ End Workout
+              End Workout
             </button>
           </div>
         )}
@@ -153,7 +153,7 @@ function BenchmarkAmrapTracker({ config = {}, onSubmit, error }) {
             className="simplify-toggle-btn"
             onClick={() => setSimplified((prev) => !prev)}
           >
-            {simplified ? "💪 Show Original Movements" : "🔄 Simplify Movements"}
+            {simplified ? "Show Original Movements" : "Simplify Movements"}
           </button>
           {simplified && simplifyNote && (
             <div className="simplify-note">

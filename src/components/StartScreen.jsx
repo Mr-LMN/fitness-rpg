@@ -1,58 +1,50 @@
 import React, { useEffect, useState } from "react";
 import styles from "./StartScreen.module.css";
-import logo from "/images/Pencoedtre_Logo.png";
 
-export default function StartScreen({ onStart }) {
-  const [phase, setPhase] = useState(0);
+export default function StartScreen({ onStart, onSLTAccess }) {
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const timers = [
-      setTimeout(() => setPhase(1), 1200),
-      setTimeout(() => setPhase(2), 2400),
-      setTimeout(() => setPhase(3), 4000),
-    ];
-    document.body.classList.add(styles.loaded);
-    return () => timers.forEach(clearTimeout);
+    const timer = setTimeout(() => setVisible(true), 300);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className={styles.container}>
       <div className={styles.overlay} />
-      <div className={styles.scanlines} />
 
-      <div className={styles.content}>
-        <img
-          src={logo}
-          alt="Pencoedtre High Logo"
-          className={`${styles.badge} ${phase >= 1 ? styles.badgeGlitch : ""}`}
-        />
+      <img
+        src="/pencoedtre_high_logo.svg"
+        alt="Pencoedtre High Logo"
+        className={styles.logo}
+      />
 
-        <h1 className={styles.title}>
-          <span className={styles.titleSub}>The</span>
-          <span className={styles.titleMain}>Pencoedtre</span>
-          <span className={styles.titleSub}>Protocol</span>
-        </h1>
+      <div className={`${styles.content} ${visible ? styles.visible : ""}`}>
+        <h1 className={styles.title}>PENCOEDTRE</h1>
+        <h2 className={styles.subtitle}>SURVIVAL</h2>
+        <p className={styles.chapter}>Chapter 1: The Languages Wing</p>
 
-        {phase >= 2 && (
-          <div className={styles.titanMessage} aria-live="assertive">
-            <span className={styles.titanBracket}>[</span>
-            <span className={styles.titanText}>TITAN SYSTEMS ONLINE</span>
-            <span className={styles.titanBracket}>]</span>
-          </div>
-        )}
-
-        <p className={styles.subtitle}>Chapter 1: Lockdown</p>
-
-        {phase >= 3 && (
+        <div className={styles.actions}>
           <button
-            className={styles.startButton}
+            className="btn-primary"
             onClick={onStart}
             aria-label="Begin the mission"
           >
-            Begin Mission
+            Begin Survival
           </button>
-        )}
+          {onSLTAccess && (
+            <button
+              className="btn-secondary"
+              onClick={onSLTAccess}
+              style={{ padding: "10px 24px", fontSize: "0.9rem" }}
+            >
+              SLT Access
+            </button>
+          )}
+        </div>
       </div>
+
+      <span className={styles.version}>v0.1 — Early Access</span>
     </div>
   );
 }

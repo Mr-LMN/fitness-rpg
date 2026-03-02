@@ -1,5 +1,6 @@
 import React from "react";
 import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi";
+import { Trophy, Backpack, AlertTriangle } from "lucide-react";
 import "./styles/XPBar.css";
 
 const AVATAR_ICONS = {
@@ -19,7 +20,7 @@ const LEVEL_TITLES = [
   "Legend",
 ];
 
-function XPBar({ avatar, xp, playerName, badges = [], survivorStatus, recoveryWorkoutsCompleted = 0, recoveryWorkoutsNeeded = 2 }) {
+function XPBar({ avatar, xp, playerName, badges = [], survivorStatus, recoveryWorkoutsCompleted = 0, recoveryWorkoutsNeeded = 2, onOpenInventory }) {
   const level = Math.floor((xp || 0) / 100);
   const xpInLevel = (xp || 0) % 100;
   const title = LEVEL_TITLES[Math.min(level, LEVEL_TITLES.length - 1)];
@@ -27,17 +28,17 @@ function XPBar({ avatar, xp, playerName, badges = [], survivorStatus, recoveryWo
 
   return (
     <div className={`xpbar-wrap ${isInjured ? 'xpbar-injured' : ''}`}>
-      <div className="xpbar-avatar" aria-hidden="true">
-        {AVATAR_ICONS[avatar] || AVATAR_ICONS.pirate}
-      </div>
-      <div className="xpbar-body">
-        <div className="xpbar-top">
-          <span className="xpbar-name">{playerName || "Hero"}</span>
-          <span className="xpbar-level">
-            <span className="xpbar-level-num">Lvl {level}</span>
-            <span className="xpbar-title">{title}</span>
-          </span>
+      {/* Left: avatar + name */}
+      <div className="xpbar-left">
+        <div className="xpbar-avatar" aria-hidden="true">
+          {AVATAR_ICONS[avatar] || AVATAR_ICONS.pirate}
         </div>
+        <span className="xpbar-name">{playerName || "Hero"}</span>
+      </div>
+
+      {/* Centre: XP bar */}
+      <div className="xpbar-centre">
+        <span className="xpbar-level-num">Lvl {level}</span>
         <div
           className="xpbar-track"
           role="progressbar"
@@ -50,19 +51,29 @@ function XPBar({ avatar, xp, playerName, badges = [], survivorStatus, recoveryWo
             className="xpbar-fill"
             style={{ width: `${xpInLevel}%` }}
           />
-          <span className="xpbar-xp-label">{xp} XP</span>
         </div>
+        <span className="xpbar-xp-count">{xp} XP</span>
+      </div>
+
+      {/* Right: badges + inventory + injury */}
+      <div className="xpbar-right">
         {isInjured && (
-          <div className="xpbar-injured-notice" role="alert" aria-live="polite">
-            ⚠️ Weakened — complete {recoveryWorkoutsNeeded - recoveryWorkoutsCompleted} workout{recoveryWorkoutsNeeded - recoveryWorkoutsCompleted !== 1 ? 's' : ''} to recover
+          <div className="xpbar-injured-badge" role="alert" aria-live="polite">
+            <span className="xpbar-injured-dot" />
+            <span className="xpbar-injured-text">WEAKENED</span>
           </div>
         )}
+        {badges.length > 0 && (
+          <div className="xpbar-badges" aria-label={`${badges.length} badges earned`}>
+            <Trophy size={14} /> <span>{badges.length}</span>
+          </div>
+        )}
+        {onOpenInventory && (
+          <button className="xpbar-inventory-btn" onClick={onOpenInventory} aria-label="Open inventory">
+            <Backpack size={16} />
+          </button>
+        )}
       </div>
-      {badges.length > 0 && (
-        <div className="xpbar-badges" aria-label={`${badges.length} badges earned`}>
-          🏅 <span>{badges.length}</span>
-        </div>
-      )}
     </div>
   );
 }

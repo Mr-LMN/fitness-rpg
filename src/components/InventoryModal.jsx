@@ -6,7 +6,7 @@ function InventoryModal({ items = [], onUse, onClose }) {
   return (
     <div className="overlay-bg">
       <div className="inventory-modal">
-        <h2>🎒 Inventory</h2>
+        <h2>Inventory</h2>
         {items.length === 0 && <p>No items found.</p>}
         <ul>
           {items.map((item) => (

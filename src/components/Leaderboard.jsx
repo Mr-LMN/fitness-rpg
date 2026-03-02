@@ -19,13 +19,13 @@ const AVATAR_ICONS = {
   ninja: <GiNinjaHead />,
 };
 
-const MEDAL = ["🥇", "🥈", "🥉"];
+const MEDAL = ["1st", "2nd", "3rd"];
 
 const SORT_MODES = [
-  { key: "xp", label: "⚡ XP" },
-  { key: "totalWorkouts", label: "🏋️ Workouts" },
-  { key: "totalCalories", label: "🔥 Calories" },
-  { key: "totalWeightLifted", label: "💪 Weight" },
+  { key: "xp", label: "XP" },
+  { key: "totalWorkouts", label: "Workouts" },
+  { key: "totalCalories", label: "Calories" },
+  { key: "totalWeightLifted", label: "Weight" },
 ];
 
 function Leaderboard({ currentUserId, compact = false, showTitle = true }) {
@@ -76,7 +76,7 @@ function Leaderboard({ currentUserId, compact = false, showTitle = true }) {
     <div className={`leaderboard-wrapper ${compact ? "compact" : ""}`}>
       {showTitle && (
         <div className="leaderboard-header">
-          <h2 className="leaderboard-title">🏆 Hall of Champions</h2>
+          <h2 className="leaderboard-title">Hall of Champions</h2>
           <p className="leaderboard-subtitle">Pencoedtre High School — Fitness RPG</p>
         </div>
       )}
@@ -117,7 +117,7 @@ function Leaderboard({ currentUserId, compact = false, showTitle = true }) {
         </div>
       ) : profiles.length === 0 ? (
         <div className="leaderboard-empty">
-          <p>🏋️ No heroes yet — be the first to log a workout!</p>
+          <p>No heroes yet — be the first to log a workout!</p>
         </div>
       ) : (
         <ol className="leaderboard-list">
@@ -152,16 +152,16 @@ function Leaderboard({ currentUserId, compact = false, showTitle = true }) {
                 </div>
               </div>
               <div className="player-stats">
-                <span className="stat">⚡ <strong>{p.xp || 0}</strong></span>
-                <span className="stat">🏋️ <strong>{p.totalWorkouts || 0}</strong></span>
+                <span className="stat">XP <strong>{p.xp || 0}</strong></span>
+                <span className="stat">WO <strong>{p.totalWorkouts || 0}</strong></span>
                 {!compact && (
                   <>
-                    <span className="stat">🔥 <strong>{Math.round(p.totalCalories || 0)}</strong></span>
-                    <span className="stat">💪 <strong>{Math.round(p.totalWeightLifted || 0)}kg</strong></span>
+                    <span className="stat">Cal <strong>{Math.round(p.totalCalories || 0)}</strong></span>
+                    <span className="stat">Kg <strong>{Math.round(p.totalWeightLifted || 0)}kg</strong></span>
                   </>
                 )}
                 {(p.badgeCount || 0) > 0 && (
-                  <span className="stat">🏅 <strong>{p.badgeCount}</strong></span>
+                  <span className="stat">Bdg <strong>{p.badgeCount}</strong></span>
                 )}
               </div>
             </li>

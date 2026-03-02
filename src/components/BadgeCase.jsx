@@ -93,7 +93,7 @@ function BadgeCase({ badges = [], onClose }) {
   return (
     <div className="badge-overlay">
       <div className="badge-case">
-        <h2>🏆 Badge Case</h2>
+        <h2>Badge Case</h2>
         {badges.length === 0 && <p>No badges earned yet.</p>}
         <ul>
           {badges.map((id) => {

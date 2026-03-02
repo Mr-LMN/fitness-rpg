@@ -284,7 +284,7 @@ function QuizPhase({
     // Passed quiz — normal completion
     return (
       <div className="quiz-container">
-        <h2>🎉 Quiz Complete</h2>
+        <h2>Quiz Complete</h2>
         <p>
           You answered {correctAnswers} out of {totalQuestions} correctly.
         </p>
@@ -313,7 +313,7 @@ function QuizPhase({
   return (
     <div className="quiz-container">
       <div className="quiz-header-row">
-        <h2>📖 The Quiz</h2>
+        <h2>The Quiz</h2>
         <span className="quiz-level-badge">Level: {levelLabel}</span>
         <span className="quiz-progress">
           {questionNumber} / {totalQuestions}

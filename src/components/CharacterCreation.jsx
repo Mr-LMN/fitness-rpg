@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { setUserWeight } from "../utils";
 import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi";
-import { FaBrain, FaVolumeUp } from "react-icons/fa";
+import { Brain, Volume2 } from "lucide-react";
 import { updateUserProfile } from "../helpers/userProfile";
 import "./styles/CharacterCreation.css";
 
@@ -12,24 +12,20 @@ const AVATARS = [
 ];
 
 const STEPS = [
-  { id: "identity", label: "Your Name", emoji: "👤" },
-  { id: "details", label: "About You", emoji: "📋" },
-  { id: "avatar", label: "Choose Hero", emoji: "🦸" },
-  { id: "settings", label: "Accessibility", emoji: "⚙️" },
+  { id: "identity", label: "Your Name" },
+  { id: "details", label: "About You" },
+  { id: "avatar", label: "Choose Hero" },
+  { id: "settings", label: "Accessibility" },
 ];
 
-function StepDots({ currentStep, total }) {
+function StepProgress({ currentStep, total }) {
+  const pct = ((currentStep + 1) / total) * 100;
   return (
-    <div className="cc-step-dots" role="progressbar" aria-valuenow={currentStep + 1} aria-valuemax={total}>
-      {STEPS.map((s, i) => (
-        <div
-          key={s.id}
-          className={`cc-dot ${i < currentStep ? "done" : i === currentStep ? "active" : ""}`}
-          title={s.label}
-        >
-          <span className="cc-dot-emoji">{s.emoji}</span>
-        </div>
-      ))}
+    <div className="cc-progress-wrap">
+      <div className="cc-progress-track">
+        <div className="cc-progress-fill" style={{ width: `${pct}%` }} />
+      </div>
+      <span className="cc-progress-label">Step {currentStep + 1} of {total}</span>
     </div>
   );
 }
@@ -125,16 +121,15 @@ function CharacterCreation({ gameState, setGameState, userId }) {
           <p className="cc-subtitle">Pencoedtre High School — Fitness RPG</p>
         </div>
 
-        {/* Step progress dots */}
-        <StepDots currentStep={step} total={STEPS.length} />
+        {/* Step progress bar */}
+        <StepProgress currentStep={step} total={STEPS.length} />
 
         {/* Step label */}
         <div className="cc-step-label">
-          <span className="cc-step-emoji">{STEPS[step].emoji}</span>
           <span className="cc-step-name">Step {step + 1}: {STEPS[step].label}</span>
         </div>
 
-        {/* ── STEP 0: Name ── */}
+        {/* STEP 0: Name */}
         {step === 0 && (
           <div className="cc-step-content">
             <div className="cc-field">
@@ -157,7 +152,7 @@ function CharacterCreation({ gameState, setGameState, userId }) {
           </div>
         )}
 
-        {/* ── STEP 1: Details ── */}
+        {/* STEP 1: Details */}
         {step === 1 && (
           <div className="cc-step-content">
             <div className="cc-field">
@@ -244,7 +239,7 @@ function CharacterCreation({ gameState, setGameState, userId }) {
           </div>
         )}
 
-        {/* ── STEP 2: Avatar ── */}
+        {/* STEP 2: Avatar */}
         {step === 2 && (
           <div className="cc-step-content">
             <p className="cc-step-intro">Choose the hero that represents you on this adventure.</p>
@@ -267,7 +262,7 @@ function CharacterCreation({ gameState, setGameState, userId }) {
           </div>
         )}
 
-        {/* ── STEP 3: Accessibility ── */}
+        {/* STEP 3: Accessibility */}
         {step === 3 && (
           <div className="cc-step-content">
             <p className="cc-step-intro">
@@ -289,7 +284,7 @@ function CharacterCreation({ gameState, setGameState, userId }) {
                     }));
                   }}
                 />
-                <FaBrain aria-hidden="true" />
+                <Brain size={16} aria-hidden="true" />
                 Enhanced Reading — larger text on a cream background
               </label>
               <label className="cc-toggle">
@@ -303,12 +298,12 @@ function CharacterCreation({ gameState, setGameState, userId }) {
                     }))
                   }
                 />
-                <FaVolumeUp aria-hidden="true" />
+                <Volume2 size={16} aria-hidden="true" />
                 Text-to-Speech — the game reads the story out loud
               </label>
             </div>
             <p className="cc-step-intro" style={{ marginTop: 12 }}>
-              🎉 You're all set, <strong>{gameState.studentName}</strong>! Press Start to begin your adventure.
+              You're all set, <strong>{gameState.studentName}</strong>! Press Start to begin your adventure.
             </p>
           </div>
         )}
@@ -316,7 +311,7 @@ function CharacterCreation({ gameState, setGameState, userId }) {
         {/* Error message */}
         {error && (
           <p className="cc-error" role="alert">
-            ❗ {error}
+            {error}
           </p>
         )}
 
@@ -324,12 +319,12 @@ function CharacterCreation({ gameState, setGameState, userId }) {
         <div className="cc-nav">
           {step > 0 && (
             <button className="cc-back-btn" onClick={handleBack} type="button">
-              ← Back
+              Back
             </button>
           )}
           {step < STEPS.length - 1 ? (
             <button className="cc-next-btn" onClick={handleNext} type="button">
-              Next →
+              Next
             </button>
           ) : (
             <button
@@ -337,7 +332,7 @@ function CharacterCreation({ gameState, setGameState, userId }) {
               onClick={handleStart}
               type="button"
             >
-              ⚡ Start Adventure
+              Start Adventure
             </button>
           )}
         </div>

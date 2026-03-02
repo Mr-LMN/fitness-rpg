@@ -37,7 +37,7 @@ const SafeQuizEvent = ({
     if (isCorrect) {
       if (currentQuestionIndex + 1 < questionPool.length) {
         setCurrentQuestionIndex((prev) => prev + 1);
-        setFeedback("Correct! ✅");
+        setFeedback("Correct!");
         playSound('correct');
       } else {
         const reward = {
@@ -54,7 +54,7 @@ const SafeQuizEvent = ({
     } else {
       setLives((prev) => prev - 1);
       setMistakes((m) => m + 1);
-      setFeedback("Incorrect ❌");
+      setFeedback("Incorrect");
 
       if (lives - 1 === 0) {
         const exercise = FAILURE_EXERCISES[Math.floor(Math.random() * FAILURE_EXERCISES.length)];
@@ -88,8 +88,8 @@ const SafeQuizEvent = ({
   return (
     <div className="safe-event">
       <img src={`${baseUrl}images/safe.png`} alt="Digital Safe" className="safe-image" />
-      <h2>🔐 Digital Safe - {roomName}</h2>
-      <TTSLine text={`Lives: ${'❤️'.repeat(lives)} ${'🤍'.repeat(3 - lives)}`} />
+      <h2>Digital Safe - {roomName}</h2>
+      <TTSLine text={`Lives: ${lives} / 3`} />
       <TTSLine text={currentQuestion?.question} />
       {currentQuestion?.options.map((option, index) => (
         <button key={index} onClick={() => handleAnswer(option.correct)}>

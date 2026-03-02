@@ -65,8 +65,8 @@ function StreakBanner({ streak, readingAge = 'not-sure', onDismiss }) {
     <div className={`streak-banner ${isMilestone ? 'streak-milestone' : ''}`}>
       <div className="streak-banner-inner">
         <div className="streak-flame-count">
-          <span className="streak-flame" role="img" aria-label="streak">
-            {streak >= 7 ? '\u{1F525}' : '\u{2B50}'}
+          <span className="streak-flame" aria-hidden="true">
+            {streak >= 7 ? '\u{2605}' : '\u{2605}'}
           </span>
           <span className="streak-number">{streak}-Day Streak</span>
         </div>
