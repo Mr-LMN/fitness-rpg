@@ -7,6 +7,11 @@
  *   simple   — Short sentences, simple words (reading age 9-12)
  *   entry    — Icon-led, 1-2 sentences per beat (reading age under 9)
  *
+ * TITAN context: TITAN is the school's rogue security AI. It has locked down
+ * Pencoedtre High School, taken control of all systems, turned emergency
+ * lighting red, and appears to have done something to some of the staff.
+ * The student must survive, scavenge, and fight back.
+ *
  * The narrativeAdapter picks the correct tier based on the student's
  * reading profile. If a section only has a flat string array (legacy),
  * the adapter truncates instead.
@@ -16,56 +21,17 @@ const narrationLines = {
   general: {
     // ─── ACT 1: THE LOCKDOWN ─────────────────────────────────
     introPhase: {
-      rich: [
-        "It started like any other Friday afternoon. Period 5. The corridors of Pencoedtre High hummed with the usual end-of-week energy — bags zipping, chairs scraping, the distant echo of a football bouncing off a wall.",
-        "Then every light in the building cut to red.",
-        "A sound you'd never heard before — a deep, electronic pulse — rolled through the walls like thunder. The doors slammed shut. All of them. Every single one, from the main entrance to the fire exits, sealed with a heavy mechanical CLUNK.",
-        "Then the voice came. Not a teacher. Not a student. Something cold and precise, broadcast through every speaker in the building:",
-        "\"PROTOCOL ACTIVATED. TITAN ONLINE. ALL PERSONNEL — REMAIN WHERE YOU ARE. FITNESS EVALUATION WILL COMMENCE IN T-MINUS SIXTY SECONDS.\"",
-        "You're in the changing rooms. The rest of your class scattered when the lights went red. You can hear muffled shouting from somewhere down the corridor, but the door won't budge.",
-        "Your heart is hammering. The emergency strip-lights cast everything in a bloody glow. The air smells of chlorine and cold metal.",
-        "Whatever TITAN is — whatever this \"evaluation\" means — you're not waiting here to find out. You need to move. You need to get warm, get strong, and get out.",
-      ],
-      standard: [
-        "It was a normal Friday at Pencoedtre High. Then every light turned red and every door slammed shut at once.",
-        "A voice boomed through the speakers: \"TITAN ONLINE. FITNESS EVALUATION COMMENCING.\"",
-        "You're trapped in the changing rooms. The doors are locked. Something has taken over the school.",
-        "Your heart is racing. The emergency lights glow red. You can hear shouting in the corridor but no one can get in — or out.",
-        "Whatever TITAN is, you're not waiting around. Time to warm up, get moving, and find a way out.",
-      ],
-      simple: [
-        "It was a normal day at school. Then all the lights turned red and every door locked shut!",
-        "A robot voice said: \"TITAN ONLINE. FITNESS TEST STARTING.\"",
-        "You are stuck in the changing rooms. The door won't open.",
-        "You need to warm up and find a way to escape!",
-      ],
-      entry: [
-        "Oh no! The school has locked down! All the doors are shut!",
-        "A computer called TITAN has taken over!",
-        "You need to exercise and find a way out!",
-      ],
+      rich: 'The locker door presses cold against your spine. You don\'t remember choosing to hide in here — but something made you. A distant alarm begins to wail through the corridors of Pencoedtre High. Then the PA crackles. It\'s Mr Davies, the headteacher — his voice tight, controlled: "All students remain calm. The school\'s security system has experienced a critical—" Static. Then silence. Then something else speaks. Lower. Colder. Mechanical. "FACILITY LOCKDOWN INITIATED. ALL OCCUPANTS WILL COMPLY." The emergency lights die. Red floods under the locker door. Whatever TITAN is — it\'s in control now.',
+      standard: 'You\'re inside a locker. Cold metal, darkness. An alarm echoes through the school. The headteacher\'s voice comes over the PA — then cuts off. A different voice takes over. Mechanical. Calm. Terrifying. "FACILITY LOCKDOWN INITIATED." Red emergency lights flood the corridor. The school\'s AI — TITAN — has taken control.',
+      simple: 'You are inside a locker. It is cold and dark. An alarm goes off. The head teacher starts speaking on the PA — then stops. A computer voice takes over. "LOCKDOWN INITIATED." Red lights come on everywhere. An AI called TITAN has taken over the school.',
+      entry: 'You are hiding in a locker. The alarm goes off. A computer called TITAN takes over the school. Red lights come on.',
     },
 
     warmupIntro: {
-      rich: [
-        "The changing room is freezing. Your breath clouds in front of you. If you're going to break out of here, you need your body firing on all cylinders.",
-        "In the corner, you spot a rowing machine — one of the old Concept2s from the fitness suite. Someone must have wheeled it in for repairs. The chain is dusty but it still moves.",
-        "500 metres. That's all you need to get the blood pumping, the muscles warm, the mind sharp. Row hard. Row like TITAN is watching — because it probably is.",
-        "Complete a 500m row to raise your heart rate and prepare for what's ahead.",
-      ],
-      standard: [
-        "The changing room is cold. You need to get your body warm before you can escape.",
-        "There's a rowing machine in the corner. It still works.",
-        "Row 500 metres to warm up and get ready for the challenges ahead.",
-      ],
-      simple: [
-        "It's cold in here. You need to warm up!",
-        "Use the rowing machine. Row 500 metres to get ready!",
-      ],
-      entry: [
-        "Brrr! It's cold! Time to warm up!",
-        "Row 500 metres on the rowing machine!",
-      ],
+      rich: 'Your muscles have seized in the cold. If you don\'t get warm, you won\'t get far. In the corner of the changing room, a rowing machine sits plugged in — its display still glowing. Five hundred metres. Wake your body up before TITAN realises you\'re still in here.',
+      standard: 'You\'re cold and stiff. Moving will help. There\'s a rowing machine in the corner, still powered. 500 metres should be enough to warm up.',
+      simple: 'You are very cold. You need to warm up. There is a rowing machine. Row 500 metres.',
+      entry: 'You are cold. Row 500m to warm up.',
     },
 
     mobilityPhase: {
@@ -91,27 +57,10 @@ const narrationLines = {
 
     // ─── ESCAPE SEQUENCE ──────────────────────────────────────
     escaping: {
-      rich: [
-        "You grip the screwdriver and scan the room. The main door is magnetically sealed — TITAN's doing. But you've got two options.",
-        "Option A: The ventilation grille above the door. The screws are old and rusted. If you can generate enough explosive power — squat jumps to build momentum — you might be able to reach it and pry it open.",
-        "Option B: The emergency fire door at the back. It's barricaded with gym equipment. Slam balls — thrown hard enough — could shift the blockage.",
-        "Either way, this is going to take everything you've got. Choose your escape route and give it everything.",
-      ],
-      standard: [
-        "The main door is sealed by TITAN. But you have two choices:",
-        "Option A: The ceiling vent — do squat jumps to build power and reach it.",
-        "Option B: The fire door — use slam balls to clear the blockage.",
-        "Pick your route and give it everything!",
-      ],
-      simple: [
-        "The door is locked! You have two ways to escape:",
-        "Slam balls to break through the back door.",
-        "Squat jumps to reach the ceiling vent.",
-      ],
-      entry: [
-        "The door is locked! Pick a way out!",
-        "Throw slam balls OR do squat jumps!",
-      ],
+      rich: 'Beneath the bench — a flathead screwdriver, wrapped in tape. Not much. But enough. The main door is locked from the outside. You could try to jimmy the lock — or the ceiling tiles look loose near the back wall. There\'s a bench you could climb. Either way, your body needs to be ready.',
+      standard: 'You find a screwdriver under a bench. The door is locked. You could force the lock, or climb through the ceiling tiles using the bench. Your choice.',
+      simple: 'You found a screwdriver. The door is locked. You can try to open it, or climb through the ceiling.',
+      entry: 'You found a screwdriver. Choose how to escape.',
     },
 
     escapingOptions: {
@@ -142,97 +91,31 @@ const narrationLines = {
 
     // ─── MAP BRIEFING ────────────────────────────────────────
     mapIntroduction: {
-      rich: [
-        "You stagger into the corridor and nearly trip over a battered sports bag slumped against the wall. Someone left it here — maybe in the panic when TITAN locked everything down.",
-        "Inside, you find a crumpled school map with red circles drawn around the Languages Wing. Scrawled in Mr. Watkins' handwriting: \"Staff trapped in classrooms. TITAN controlling the locks. Need override codes from each room to reach the Fitness Suite mainframe.\"",
-        "There's more — a note from Mrs. John: \"Each classroom has a piece of the shutdown sequence. Complete TITAN's challenges to unlock the doors. We're counting on you.\"",
-        "And at the bottom, in shaky handwriting: \"Whatever you do — be ready before you reach Mrs. Roche's room. Something happened to her when TITAN activated. She's not... herself.\"",
-        "This is it. Your mission is clear: navigate the school, free the teachers, collect the override codes, and shut TITAN down before it's too late.",
-      ],
-      standard: [
-        "In the corridor, you find a sports bag with a school map inside. Red circles mark the Languages Wing.",
-        "Mr. Watkins has written: \"Staff trapped. Need override codes from each room to shut TITAN down.\"",
-        "Mrs. John's note says: \"Complete TITAN's challenges to unlock the doors.\"",
-        "A warning at the bottom: \"Be careful near Mrs. Roche's room. Something happened to her...\"",
-        "Your mission: free the teachers, collect the codes, and shut TITAN down.",
-      ],
-      simple: [
-        "You find a bag with a map. Teachers are trapped in their rooms!",
-        "You need to go to each room, complete challenges, and collect codes.",
-        "The codes will help you shut down TITAN and save the school!",
-        "First stop: Mr. Watkins' classroom!",
-      ],
-      entry: [
-        "You found a map! Teachers need your help!",
-        "Go to each room and do the challenges!",
-        "Collect codes to shut down the computer!",
-      ],
+      rich: 'The corridor hits you like a wall — red-bathed, silent, wrong. Then your foot catches something. A battered sports bag, slumped against the wall outside the changing rooms. Someone left in a hurry. Inside: a hand-drawn map of the school, torn at the edges. Three locations circled in red marker. And a note scrawled underneath: "Watkins. John. Roche. Don\'t go near Roche last." A set of folded quest cards falls from the front pocket — objectives, rewards, warnings. Whoever owned this bag had a plan. Now it\'s yours. The corridor is barricaded beyond Mr Watkins\' room — but his door is open. Just slightly.',
+      standard: 'Outside the changing rooms you find a sports bag. Inside: a torn school map with three rooms circled, and a handwritten note — "Watkins. John. Roche. Don\'t go near Roche last." There are quest cards too. The corridor is blocked further down, but Mr Watkins\' door is slightly open.',
+      simple: 'You find a sports bag. Inside is a torn map. Three rooms are marked: Watkins, John, Roche. There is a note that says do not go to Roche last. Mr Watkins door is open a little bit.',
+      entry: 'You find a bag with a map. Three rooms are marked. Mr Watkins door is open.',
     },
 
     // ─── ROOM ENTRIES ────────────────────────────────────────
     overlayIntro: {
       "Mr. Watkins' Room": {
-        rich: [
-          "You press your ear against the door of Mr. Watkins' classroom. Inside, you can hear the rhythmic thud of someone doing press-ups. Consistent. Disciplined. That's Watkins alright.",
-          "You wedge the screwdriver into the gap and lever the emergency release. The door hisses open. Mr. Watkins looks up from the floor, mid-rep, completely unsurprised.",
-          "\"Took you long enough,\" he says, barely breaking a sweat. \"TITAN sealed me in twenty minutes ago. I've been staying ready.\" He stands and nods toward a terminal blinking on his desk.",
-          "\"That console has the first override code — but TITAN won't release it until someone completes a physical challenge. It's watching. It's always watching.\" He cracks his knuckles. \"Show it what Pencoedtre students are made of.\"",
-        ],
-        standard: [
-          "You can hear someone exercising behind Mr. Watkins' door. You use the screwdriver to pop the emergency release.",
-          "Mr. Watkins is doing press-ups on the floor. \"About time!\" he says. \"TITAN locked me in. That computer has an override code.\"",
-          "\"But TITAN won't give it up easily. You'll need to complete a workout challenge first. Show it what you're made of.\"",
-        ],
-        simple: [
-          "You open Mr. Watkins' door. He's been exercising while trapped!",
-          "\"Good to see you!\" he says. \"There's a code on that computer, but you need to do a workout to unlock it!\"",
-        ],
-        entry: [
-          "You open the door! Mr. Watkins is inside!",
-          "Do a workout to get the code from the computer!",
-        ],
+        rich: 'You push the door open. The moment you step inside, it slams shut behind you — the lock clicks. On the classroom monitor, white text burns through the static: "PROVE YOUR WORTH. COMPLETE THE CHALLENGE." You don\'t know if that\'s TITAN testing you — or someone using TITAN\'s systems to help you. Either way, there\'s a grimy pair of shorts in the PE bag. You pull them on. The challenge is loading.',
+        standard: 'The door slams shut behind you. The monitor flickers on: "PROVE YOUR WORTH. COMPLETE THE CHALLENGE." It could be TITAN. It could be someone else. You find shorts in the PE bag and get ready.',
+        simple: 'The door closes behind you. The screen says: "PROVE YOUR WORTH. COMPLETE THE CHALLENGE." You get changed and prepare for the workout.',
+        entry: 'The door locks. The screen shows a workout challenge. Get ready.',
       },
       "Mrs. John's Room": {
-        rich: [
-          "The Languages corridor is darker than the rest of the school. Half the emergency lights have failed, leaving pools of shadow between each doorway.",
-          "You find Mrs. John's classroom by the faint glow of a computer screen bleeding under the door. When you get it open, she's hunched over her desk, scribbling furiously.",
-          "\"Thank goodness — a student!\" She pushes her glasses up and shows you the screen. It's TITAN's interface, but all the menus are encrypted. \"The shutdown code in this room is locked behind a language cipher. TITAN's using translation puzzles as security.\"",
-          "She pulls up a digital safe on the screen. \"Answer the language questions correctly and the safe opens. Get them wrong...\" She trails off. \"Just don't get them wrong.\"",
-        ],
-        standard: [
-          "The Languages corridor is dark. You find Mrs. John's room by the glow under the door.",
-          "\"A student! Finally!\" Mrs. John shows you the computer. TITAN has locked the code behind language puzzles.",
-          "\"Solve the translation questions to open the digital safe and get the code.\"",
-        ],
-        simple: [
-          "You find Mrs. John in her dark classroom.",
-          "\"Help me! Answer language questions to open the safe and get the code!\"",
-        ],
-        entry: [
-          "Mrs. John needs help!",
-          "Answer the quiz questions to open the safe!",
-        ],
+        rich: 'Mrs John\'s classroom is dimly lit, desks pushed to the walls. The emergency lighting casts everything in amber. There\'s space here — and a sense that someone has been using it recently. TITAN\'s lockdown hasn\'t reached this room yet. But you\'ll need to prove yourself again.',
+        standard: 'Mrs John\'s room is quiet and dim. Desks have been moved to make space. It feels safer here — but you still need to prove your worth.',
+        simple: 'Mrs John\'s room is dark and quiet. You need to log your workout here.',
+        entry: 'You are in Mrs John\'s room. Log your workout.',
       },
       "Mrs. Roche's Room": {
-        rich: [
-          "The temperature drops as you approach the final classroom. Frost patterns have formed on the glass panel beside the door — inside, the heating has been reversed. TITAN is keeping this room freezing cold on purpose.",
-          "Through the frost, you can make out a figure standing perfectly still in the centre of the room. Not sitting. Not moving. Just... standing.",
-          "The notes warned you about this. When TITAN activated, Mrs. Roche was at her computer — connected to the school network. Whatever TITAN did, it did something to her. She's been standing like that for over an hour.",
-          "The final override code is in this room. But getting it means getting past her — and whatever TITAN has turned her into.",
-        ],
-        standard: [
-          "The corridor gets colder near Mrs. Roche's room. Frost covers the door window.",
-          "Through the glass, you see Mrs. Roche standing perfectly still. She hasn't moved in over an hour.",
-          "TITAN did something to her. The final code is in this room — but you'll need to face her to get it.",
-        ],
-        simple: [
-          "Mrs. Roche's room is freezing cold. She is standing still through the window.",
-          "Something is wrong with her. You need the code from this room!",
-        ],
-        entry: [
-          "Mrs. Roche's room is very cold and scary!",
-          "She's been taken over by TITAN! Get the last code!",
-        ],
+        rich: 'The air near Mrs Roche\'s room is different. Heavier. The red light seems brighter here, almost pulsing. You push the door open slowly. It looks empty. Overturned chairs. A whiteboard with something smeared across it. You step inside — and feel immediately that you are not alone.',
+        standard: 'Something feels wrong near Mrs Roche\'s room. The light pulses red. Inside, chairs are overturned. The whiteboard is marked. You are not alone in here.',
+        simple: 'Mrs Roche\'s room feels wrong. It is very red. Chairs are knocked over. Something is in here with you.',
+        entry: 'Mrs Roche\'s room. Something is wrong. Be careful.',
       },
     },
 
@@ -268,21 +151,10 @@ const narrationLines = {
   languages: {
     room1: {
       intro: {
-        rich: [
-          "Mr. Watkins gestures toward the TITAN terminal. The screen pulses with a progress bar and a message: \"PHYSICAL ASSESSMENT REQUIRED. LOG WORKOUT DATA TO PROCEED.\"",
-          "\"It wants proof,\" Watkins says. \"Proof that you're strong enough to be worth testing. Log a workout — a real one. Show TITAN you mean business.\"",
-        ],
-        standard: [
-          "The computer screen says: \"LOG WORKOUT TO PROCEED.\"",
-          "Mr. Watkins nods. \"Log your workout and show TITAN what you can do.\"",
-        ],
-        simple: [
-          "The computer wants you to do a workout!",
-          "Log your exercises to unlock the code.",
-        ],
-        entry: [
-          "Do a workout to unlock the code!",
-        ],
+        rich: 'The monitor flickers. The door lock disengages with a heavy clunk — and turns green. You did it. Whoever set that challenge knew what they were doing. The emergency lighting shifts, pointing a dim amber trail down the corridor toward Mrs John\'s room. But Watkins kept things in here. You can feel it. There\'s more to find if you look.',
+        standard: 'The door turns green and unlocks. The lighting points you toward Mrs John\'s room. But there could be more supplies in here if you want to keep looking.',
+        simple: 'The door unlocks and turns green. The lights show the way to Mrs John\'s room. You can search for more supplies first.',
+        entry: 'Door unlocked. Go to Mrs John\'s room — or search for supplies first.',
       },
       scavenge: {
         rich: [
@@ -358,44 +230,22 @@ const narrationLines = {
     },
     room2: {
       intro: {
-        rich: [
-          "Mrs. John's classroom looks like a war room. Post-it notes cover every surface — translations, code fragments, patterns. She's been trying to crack TITAN's encryption since the lockdown started.",
-          "\"It's brilliant and terrifying,\" she says, adjusting her glasses. \"TITAN uses language as a security layer. If you can prove you understand the translations, the digital safe will release the second override code.\"",
-          "But first — you'll need to be sharp, both physically and mentally. Log another workout to satisfy TITAN's monitoring, then tackle the language safe.",
-        ],
-        standard: [
-          "Mrs. John has been working non-stop trying to crack TITAN's encryption. Her room is covered in notes.",
-          "\"TITAN uses translation puzzles as security,\" she explains. \"Log a workout, then solve the safe.\"",
-        ],
-        simple: [
-          "Mrs. John has been trying to crack TITAN's code puzzles.",
-          "Do a workout, then answer language questions to open the safe!",
-        ],
-        entry: [
-          "Mrs. John needs help! Do a workout then answer questions!",
-        ],
+        rich: 'Mrs John\'s room. You\'ve been here a hundred times for lessons — never like this. The projector is off, but the equipment is here. You need to push yourself — really push. TITAN is monitoring the school\'s systems. You suspect it\'s monitoring you too. Log your session. Make it count.',
+        standard: 'Mrs John\'s room is quiet. You need to log your own workout here. Push yourself — TITAN is watching the school\'s systems and you need to prove you belong here.',
+        simple: 'This is Mrs John\'s room. Log your own workout. Try your hardest.',
+        entry: 'Log your workout in Mrs John\'s room.',
       },
       quizIntro: {
-        rich: [
-          "After your workout, Mrs. John brings up the digital safe on the terminal. Six encrypted locks, each requiring a correct translation to open.",
-          "\"TITAN's monitoring everything. Get them right and we get the code. Get them wrong...\" She glances at the barricaded door. \"Let's not find out.\"",
-        ],
-        standard: [
-          "The digital safe appears on screen. Answer the translation questions to open it.",
-          "Get them right to unlock the second code!",
-        ],
-        simple: [
-          "Answer the questions to open the safe!",
-        ],
-        entry: [
-          "Answer to open the safe!",
-        ],
+        rich: 'The door unlocks. You exhale. Then — a red flash from the corner of the room. A safe, mounted to the wall behind Mrs John\'s desk. Its keypad is blinking rapidly: "TITAN ENCRYPTED — ACCESS DENIED." The broadcasts. The announcements TITAN has been making — they\'ve been scrambled. But if you know enough of the language, you can decode them. Crack this, and whatever is inside is yours.',
+        standard: 'The door opens — but then a red light catches your eye. A safe on the wall, locked by TITAN. Its screen shows scrambled text. The language quiz can help you decode TITAN\'s encryption and unlock it.',
+        simple: 'The door opens. But there is a safe with a red light. TITAN has locked it. Answer the language questions to open it.',
+        entry: 'Safe locked by TITAN. Answer questions to open it.',
       },
       lootFound: {
-        rich: "The safe clicks open with a satisfying hiss. Inside: the second override code, plus {loot}. Mrs. John exhales with relief. \"Two down. One to go.\"",
-        standard: "The safe opens! You found the second code and {loot}!",
-        simple: "The safe is open! You got {loot} and the code!",
-        entry: "Safe open! Got {loot}!",
+        rich: 'The safe swings open. Inside: a smartphone, screen cracked but charged — dead now, but it might be useful later. And a folded note in handwriting you recognise. Mrs John\'s. "If you\'re reading this — well done. But listen. Something happened to Roche. I don\'t know what TITAN did to her but she is NOT herself. Be careful. Be fast. Don\'t let her corner you."',
+        standard: 'Inside the safe: a cracked phone (no charge, but keep it), and a note from Mrs John. "Something happened to Roche. TITAN did something to her. Be careful and be fast."',
+        simple: 'The safe has a broken phone and a note. The note says: Mrs Roche is not herself. Be careful.',
+        entry: 'Safe open. Dead phone found. Warning: Mrs Roche is dangerous.',
       },
       noteFound: {
         rich: "Tucked behind the code chip, you find a crumpled note in shaky handwriting:",
@@ -436,43 +286,16 @@ const narrationLines = {
     },
     rocheBoss: {
       leadIn: {
-        rich: [
-          "You step into Mrs. Roche's classroom and for a moment, everything seems normal. The desks are in rows. The whiteboard is clean.",
-          "Then you see her. Standing at the front of the room, perfectly still, facing the wall. She doesn't react when the door opens.",
-          "You move toward the terminal on her desk. The third override code is right there on the screen. You reach for it — and her head snaps toward you.",
-        ],
-        standard: [
-          "You enter Mrs. Roche's room. At first, everything seems normal.",
-          "Then you see her — standing completely still, facing the wall.",
-          "You reach for the terminal... and her head snaps toward you.",
-        ],
-        simple: [
-          "You go into Mrs. Roche's room. She is standing very still.",
-          "You try to get the code from the computer — but she turns around!",
-        ],
-        entry: [
-          "Mrs. Roche is standing very still! She suddenly looks at you!",
-        ],
+        rich: 'You log your session. You wait. The door stays red. Locked. The room is silent — then it isn\'t. A slow scraping sound from behind the teacher\'s desk. Something shifts in the shadows. A shape rises. Mrs Roche — or what used to be Mrs Roche — straightens slowly. Her eyes catch the red light. She looks at you. You look at her. Neither of you moves. Then she does.',
+        standard: 'You finish your workout. The door stays locked. Then you hear something behind the desk. Mrs Roche stands up slowly — but she isn\'t herself. Her eyes are wrong. She starts moving toward you.',
+        simple: 'You finish your workout. The door will not open. Something moves behind the desk. It is Mrs Roche — but something is wrong with her. She moves toward you.',
+        entry: 'Door stays locked. Mrs Roche appears. She is not herself. Run.',
       },
       quizIntro: {
-        rich: [
-          "Her eyes glow faintly — TITAN's neural interface pulsing behind her irises. She moves toward you with mechanical precision, nothing like the teacher you know.",
-          "You sprint for the exit, but the door slams shut behind you. Six heavy magnetic locks engage with echoing CLUNKS.",
-          "TITAN's voice: \"FINAL SECURITY PROTOCOL. ANSWER ALL QUESTIONS TO DISENGAGE LOCKS.\"",
-          "Answer every question correctly — before she reaches the door.",
-        ],
-        standard: [
-          "Her eyes glow! TITAN is controlling her! She moves toward you.",
-          "The door slams shut — six locks engage. \"ANSWER ALL QUESTIONS TO UNLOCK THE DOOR.\"",
-          "Answer every question to escape!",
-        ],
-        simple: [
-          "Mrs. Roche's eyes are glowing! She's coming toward you!",
-          "The door locks! Answer all the questions to get out!",
-        ],
-        entry: [
-          "She's coming! Answer the questions to unlock the door!",
-        ],
+        rich: 'You scramble to the door. Six locks — TITAN\'s doing. The monitor on the wall flickers: language questions scrolling fast. Answer them. Each correct answer releases a lock. She\'s getting closer. Go.',
+        standard: 'You run to the door. Six TITAN locks. Answer the language questions fast to release them. She is getting closer.',
+        simple: 'Run to the door. Answer the questions fast. Each right answer opens a lock.',
+        entry: 'Answer fast. Open the locks. Go.',
       },
       battleStart: {
         rich: "TITAN's alarms blare. The six door-locks glow with pulsing red light. Mrs. Roche takes a step forward. The clock is ticking. Answer. Every. Question.",
@@ -480,6 +303,44 @@ const narrationLines = {
         simple: "Quick! Answer the questions to unlock the door!",
         entry: "Answer fast! Unlock the door!",
       },
+      impossibleQuestion: {
+        rich: 'The final question appears — but the text is corrupted. Scrambled symbols where the answer options should be. TITAN has glitched the lock deliberately. You can\'t answer this. And behind you — Mrs Roche charges.',
+        standard: 'The last question is corrupted — no answer is possible. TITAN blocked it. Mrs Roche charges toward you.',
+        simple: 'The last question is broken. You cannot answer it. Mrs Roche is charging at you.',
+        entry: 'Last question is impossible. Mrs Roche charges.',
+      },
+      dodge: {
+        rich: 'Every session. Every workout. Every metre rowed and every rep logged — it paid off in this moment. You drop low and roll left. Mrs Roche hits the door at full force. The hinges scream. The door buckles off its frame. And suddenly — you\'re free. The corridor opens ahead, emergency lighting blazing a path to the Fitness Suite. She\'s behind you. Move.',
+        standard: 'Your training kicks in. You dodge left. Mrs Roche crashes into the door — it flies off its hinges. You\'re out. The lights show the way to the Fitness Suite. She\'s still coming.',
+        simple: 'You jump out of the way. Mrs Roche smashes the door open. Run to the Fitness Suite.',
+        entry: 'You dodge. Roche breaks the door. Run.',
+      },
+    },
+    bossFight: {
+      bike: {
+        rich: 'You reach the Fitness Suite. The assault bike sits in the centre of the room like it was waiting for you. Mrs Roche fills the doorway. No options left. You mount the bike and drive — legs and arms together — every calorie burned is a blast of energy pushing her back. She staggers. Keep going.',
+        standard: 'You reach the Fitness Suite. The assault bike is in the middle. Mrs Roche is in the doorway. Get on the bike and pedal — every calorie pushes her back. Keep going.',
+        simple: 'You are in the Fitness Suite. Get on the assault bike. Pedal hard to push Mrs Roche back.',
+        entry: 'Get on the bike. Pedal hard. Push her back.',
+      },
+      slam: {
+        rich: 'The slam balls are stacked by the wall. You grab one — heavier than you expected — lift it overhead, and bring it down as hard as you can. The impact shudders through the floor. Mrs Roche flinches. Again. And again. Each slam is a strike. Don\'t stop.',
+        standard: 'Grab a slam ball. Lift it high and slam it down. Each slam makes Mrs Roche flinch. Keep slamming — don\'t stop.',
+        simple: 'Pick up the slam ball. Lift and slam it down. Each slam pushes Mrs Roche back.',
+        entry: 'Slam the ball. Push her back.',
+      },
+      burpee: {
+        rich: 'She\'s weakening but she\'s not done. You drop to the floor — push up — jump — hands above your head. Every burpee is a defensive move, keeping you light on your feet, forcing her to track you. She can\'t keep up. You\'re faster. You trained for this.',
+        standard: 'She\'s weakening. Drop, push up, jump. Every burpee keeps you moving. She can\'t keep up — you\'re too fast.',
+        simple: 'She is getting weaker. Do burpees to stay fast. She cannot keep up with you.',
+        entry: 'Do burpees. Stay fast. She cannot catch you.',
+      },
+    },
+    bossVictory: {
+      rich: 'Mrs Roche sinks to her knees. The red in her eyes fades. She blinks — once, twice — and looks around the Fitness Suite as if seeing it for the first time. "You..." she manages. She reaches into her jacket pocket with a shaking hand and presses a torn piece of paper into yours. Part of a map. New markings. A name circled at the top: Mr Chalkley. Maths Department. "Go," she says quietly. "Help him. And be careful — TITAN knows you\'re in the building now."',
+      standard: 'Mrs Roche comes back to herself. She looks confused but hands you a torn map piece — the Maths Department. Mr Chalkley\'s name is circled. "Go help him," she says. "TITAN knows you\'re here."',
+      simple: 'Mrs Roche is normal again. She gives you a piece of the map. It shows the Maths Department. "Go help Mr Chalkley," she says.',
+      entry: 'Mrs Roche is OK. She gives you a map piece. Go to the Maths Department.',
     },
   },
 
