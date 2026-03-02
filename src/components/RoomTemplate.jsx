@@ -421,8 +421,9 @@ function RoomTemplate({
     case STAGES.SAFE_PENALTY:
       return roomWrapper(
         <>
-          <TTSLine text={`To force the safe open, complete ${failureExercise}.`} />
-          <button onClick={handlePenaltyDone}>I've done it</button>
+          <h2>📡 TITAN Override</h2>
+          <TTSLine text={`TITAN: "Complete ${failureExercise} and I'll force the safe open for you."`} />
+          <button onClick={handlePenaltyDone}>I've done it!</button>
         </>
       );
 

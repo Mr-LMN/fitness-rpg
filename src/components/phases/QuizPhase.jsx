@@ -28,6 +28,18 @@ const IMPOSSIBLE_FINAL_QUESTION = {
   ],
 };
 
+// Exercise challenges TITAN can assign when a quiz is failed
+const FALLBACK_EXERCISES = [
+  "30 squats",
+  "20 press-ups",
+  "15 burpees",
+  "40 jumping jacks",
+  "20 lunges (10 each leg)",
+  "30-second wall sit",
+  "15 tuck jumps",
+  "20 mountain climbers",
+];
+
 function lowerLevel(level) {
   const idx = LEVELS.indexOf(level);
   return LEVELS[Math.max(0, idx - 1)];
@@ -102,6 +114,12 @@ function QuizPhase({
   const [levelNotice, setLevelNotice] = useState("");
   const [finalWrong, setFinalWrong] = useState(false);
   const [finalLevel, setFinalLevel] = useState(studentLevel);
+
+  // TITAN exercise fallback state
+  const [fallbackExercise] = useState(
+    () => FALLBACK_EXERCISES[Math.floor(Math.random() * FALLBACK_EXERCISES.length)]
+  );
+  const [exerciseDone, setExerciseDone] = useState(false);
 
   const isOnImpossibleFinal =
     showImpossibleFinal && questionNumber === MIN_QUESTIONS + 1;
@@ -199,6 +217,7 @@ function QuizPhase({
     setFeedback("");
     setLevelNotice("");
     setFinalWrong(false);
+    setExerciseDone(false);
   };
 
   const levelLabel =
@@ -209,6 +228,60 @@ function QuizPhase({
       : "KS4";
 
   if (quizComplete) {
+    // Don't count the impossible final question toward pass/fail
+    const answerableTotal = showImpossibleFinal ? MIN_QUESTIONS : totalQuestions;
+    const passed = correctAnswers >= Math.ceil(answerableTotal / 2);
+
+    // Failed quiz — TITAN offers an exercise challenge to force the door open
+    if (!passed && !exerciseDone) {
+      return (
+        <div className="quiz-container">
+          <h2>📡 TITAN Transmission</h2>
+          <p>
+            You answered {correctAnswers} out of {answerableTotal} correctly.
+          </p>
+          <p className="quiz-titan-msg">
+            "You didn't crack the code this time, but I can override the lock.
+            Complete this challenge to prove your strength, and I'll force the
+            door open for you."
+          </p>
+          <p className="quiz-fallback-exercise">{fallbackExercise}</p>
+          <button
+            className="quiz-fallback-done-btn"
+            onClick={() => setExerciseDone(true)}
+          >
+            I've done it!
+          </button>
+          <button className="quiz-option-btn retry" onClick={handleReset}>
+            Retry Quiz Instead
+          </button>
+        </div>
+      );
+    }
+
+    // Exercise done — TITAN override success
+    if (!passed && exerciseDone) {
+      return (
+        <div className="quiz-container">
+          <h2>📡 TITAN Override</h2>
+          <p className="quiz-titan-msg">
+            "Override successful. You've earned your way through — the door is
+            open. Keep moving."
+          </p>
+          {finalWrong && (
+            <p>
+              A mutated figure charges at you! You dive aside as it smashes the
+              door open.
+            </p>
+          )}
+          <button onClick={() => onComplete(correctAnswers, totalQuestions, finalLevel)}>
+            Continue
+          </button>
+        </div>
+      );
+    }
+
+    // Passed quiz — normal completion
     return (
       <div className="quiz-container">
         <h2>🎉 Quiz Complete</h2>

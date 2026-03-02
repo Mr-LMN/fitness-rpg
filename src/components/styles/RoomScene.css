@@ -22,7 +22,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 24px 24px 84px;
+  padding: 68px 24px 84px;
   background: linear-gradient(180deg, rgba(6, 10, 22, 0.75), rgba(6, 10, 22, 0.55));
   backdrop-filter: blur(6px);
   text-align: center;
@@ -103,7 +103,7 @@
 
 @media (max-width: 768px) {
   .room-content {
-    padding: 16px;
+    padding: 68px 16px 16px;
   }
 
   .explore-prompt-actions {
