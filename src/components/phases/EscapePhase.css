@@ -1,0 +1,245 @@
+/* ============================================================
+   ESCAPE PHASE — Slam Ball / Squat Jump exercise challenge
+   ============================================================ */
+
+/* ── Phase 2: Active exercise counter ── */
+.escape-active-heading {
+  margin-bottom: 8px;
+}
+
+.escape-coaching-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  font-size: 0.86rem;
+  color: var(--color-muted);
+  max-width: 480px;
+  text-align: left;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Large rep counter */
+.escape-rep-counter {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  margin: 10px 0;
+  transition: transform 0.15s ease;
+}
+
+.escape-rep-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  transition: color 0.3s ease;
+  text-shadow: 0 0 30px currentColor;
+}
+
+.escape-rep-slash {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  color: var(--color-muted);
+  line-height: 1;
+}
+
+.escape-rep-goal {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  color: var(--color-muted);
+  line-height: 1;
+}
+
+/* Progress bar */
+.escape-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(480px, 100%);
+  margin: 0 auto;
+}
+
+.escape-progress-track {
+  flex: 1;
+  height: 18px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 9px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+.escape-progress-fill {
+  height: 100%;
+  border-radius: 9px;
+  transition: width 0.3s ease, background 0.3s ease;
+  box-shadow: 0 0 8px rgba(248,113,113,0.3);
+}
+
+.escape-progress-done {
+  background: #4ade80 !important;
+  box-shadow: 0 0 16px rgba(74, 222, 128, 0.4);
+}
+
+.escape-progress-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* Buttons */
+.escape-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.escape-rep-btn {
+  padding: 18px 48px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.12em;
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.35);
+  min-width: 220px;
+}
+
+.escape-rep-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(220, 38, 38, 0.45);
+}
+
+.escape-rep-btn-active {
+  transform: scale(0.96) !important;
+  box-shadow: 0 0 28px rgba(220,38,38,0.6) !important;
+}
+
+.escape-rep-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.escape-go-btn {
+  min-width: 220px;
+  animation: goButtonPop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes goButtonPop {
+  from { transform: scale(0.8); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ── Phase 1: Route choice ── */
+.escape-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.escape-choice-prompt {
+  font-size: 0.92rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.escape-choice-buttons {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.escape-option-btn {
+  flex: 1;
+  min-width: 180px;
+  max-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #e8e8f0;
+}
+
+.escape-option-btn:hover {
+  transform: translateY(-3px);
+  background: rgba(255,255,255,0.08);
+}
+
+.escape-option--slam:hover {
+  border-color: rgba(220, 38, 38, 0.5);
+  box-shadow: 0 6px 20px rgba(220,38,38,0.2);
+}
+
+.escape-option--squat:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 6px 20px rgba(59,130,246,0.2);
+}
+
+.escape-option-icon {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.escape-option-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.escape-option-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.1em;
+  color: #e8e8f0;
+}
+
+.escape-option-text {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.escape-option-target {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  margin-top: 2px;
+}
+
+@media (max-width: 480px) {
+  .escape-rep-num { font-size: 4rem; }
+  .escape-rep-btn { font-size: 1.3rem; padding: 15px 32px; min-width: 180px; }
+}

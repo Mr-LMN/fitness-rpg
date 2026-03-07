@@ -1,20 +1,42 @@
 const baseUrl = import.meta.env.BASE_URL || '/';
 
 const SOUND_MAP = {
-  pickup: `${baseUrl}pickup.wav`,
-  menuPress: `${baseUrl}SoundEffects/menuPresser.mp3`,
-  ambient: `${baseUrl}SoundEffects/dark-horror-ambience-296781.mp3`,
-  openingDoor: `${baseUrl}SoundEffects/opening_door.mp3`,
+  // ── Existing sounds ──────────────────────────────────────────
+  pickup:       `${baseUrl}pickup.wav`,
+  menuPress:    `${baseUrl}SoundEffects/menuPresser.mp3`,
+  ambient:      `${baseUrl}SoundEffects/dark-horror-ambience-296781.mp3`,
+  openingDoor:  `${baseUrl}SoundEffects/opening_door.mp3`,
   creakingDoor: `${baseUrl}SoundEffects/creaking-door-41706.mp3`,
-  lockedDoor: `${baseUrl}SoundEffects/trying-to-open-a-locked-door-104302.mp3`,
-  quizDoor: `${baseUrl}SoundEffects/QuizDoor.mp3`,
-  safeOpen: `${baseUrl}SoundEffects/Safe_opening.mp3`,
-  correct: `${baseUrl}SoundEffects/CorrectButton.mp3`,
-  alarm: `${baseUrl}SoundEffects/alarm-301729.mp3`,
-  footsteps: `${baseUrl}SoundEffects/heavy-walking-footsteps-352771.mp3`,
-  monsterRoar: `${baseUrl}SoundEffects/low-monster-roar-97413.mp3`,
-  rowing: `${baseUrl}SoundEffects/rowingMachine.mp3`,
-  xpLevel: `${baseUrl}SoundEffects/XpLevelUp.mp3`,
+  lockedDoor:   `${baseUrl}SoundEffects/trying-to-open-a-locked-door-104302.mp3`,
+  quizDoor:     `${baseUrl}SoundEffects/QuizDoor.mp3`,
+  safeOpen:     `${baseUrl}SoundEffects/Safe_opening.mp3`,
+  correct:      `${baseUrl}SoundEffects/CorrectButton.mp3`,
+  alarm:        `${baseUrl}SoundEffects/alarm-301729.mp3`,
+  footsteps:    `${baseUrl}SoundEffects/heavy-walking-footsteps-352771.mp3`,
+  monsterRoar:  `${baseUrl}SoundEffects/low-monster-roar-97413.mp3`,
+  rowing:       `${baseUrl}SoundEffects/rowingMachine.mp3`,
+  xpLevel:      `${baseUrl}SoundEffects/XpLevelUp.mp3`,
+
+  // ── New sounds — upload these files to /public/SoundEffects/ ─
+  // Tension & atmosphere
+  heartbeat:    `${baseUrl}SoundEffects/heartbeat.mp3`,
+  titanBoot:    `${baseUrl}SoundEffects/titan-boot.mp3`,
+  typing:       `${baseUrl}SoundEffects/typing.mp3`,
+  doorSlam:     `${baseUrl}SoundEffects/door-slam.mp3`,
+  phoneBuzz:    `${baseUrl}SoundEffects/phone-buzz.mp3`,
+
+  // Quiz feedback
+  wrongAnswer:  `${baseUrl}SoundEffects/wrong-answer.mp3`,
+
+  // Exercise / workout
+  repClick:     `${baseUrl}SoundEffects/rep-click.mp3`,
+  bossHit:      `${baseUrl}SoundEffects/boss-hit.mp3`,
+
+  // Music loops (will loop = true)
+  bossMusic:    `${baseUrl}SoundEffects/boss-music.mp3`,
+
+  // Victory
+  victoryFanfare: `${baseUrl}SoundEffects/victory-fanfare.mp3`,
 };
 
 let globalMuted = false;

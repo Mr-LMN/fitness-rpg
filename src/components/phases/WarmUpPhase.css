@@ -1,0 +1,204 @@
+/* ============================================================
+   WARM-UP PHASE — 500m Rowing Challenge
+   ============================================================ */
+
+.warmup-heading {
+  margin-bottom: 8px;
+}
+
+/* Main panel */
+.warmup-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(520px, 100%);
+  transition: filter 0.2s ease;
+}
+
+/* Flash effect when logging a rep */
+.warmup-flash {
+  filter: brightness(1.18) saturate(1.2);
+}
+
+/* Challenge badge */
+.warmup-target-badge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 10px;
+  border: 1px solid rgba(185, 28, 28, 0.45);
+}
+
+.warmup-target-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.warmup-target-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.12em;
+  color: #e8e8f0;
+  margin: 0;
+}
+
+.warmup-target-sub {
+  font-size: 0.75rem;
+  color: rgba(255, 68, 68, 0.8);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 2px 0 0;
+}
+
+/* Progress bar */
+.warmup-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.warmup-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.warmup-dist-label {
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.warmup-dist-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+}
+
+.warmup-progress-track {
+  position: relative;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 13px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.warmup-progress-fill {
+  height: 100%;
+  border-radius: 13px;
+  box-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+  position: relative;
+}
+
+.warmup-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: 5%;
+  right: 5%;
+  height: 28%;
+  background: rgba(255,255,255,0.2);
+  border-radius: 999px;
+}
+
+.warmup-pct {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+/* Coaching tip */
+.warmup-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  color: var(--color-muted);
+  animation: tipFadeIn 0.4s ease-out;
+}
+@keyframes tipFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.warmup-tip-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+/* Metre add buttons */
+.warmup-add-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.warmup-add-label {
+  font-size: 0.82rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.warmup-add-row {
+  display: flex;
+  gap: 10px;
+}
+
+.warmup-add-btn {
+  flex: 1;
+  padding: 13px 0;
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  border-radius: 8px;
+  color: #60a5fa;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.warmup-add-btn:hover:not(:disabled) {
+  background: rgba(96, 165, 250, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(96, 165, 250, 0.2);
+}
+
+.warmup-add-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.warmup-add-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Confirm button */
+.warmup-confirm-btn {
+  margin-top: 4px;
+  transition: all 0.25s ease !important;
+}
+
+.warmup-confirm-ready {
+  background: linear-gradient(135deg, #16a34a, #15803d) !important;
+  box-shadow: 0 0 24px rgba(22,163,74,0.35) !important;
+  animation: confirmPop 0.4s cubic-bezier(0.34,1.56,0.64,1) !important;
+}
+@keyframes confirmPop {
+  from { transform: scale(0.95); }
+  to   { transform: scale(1); }
+}

@@ -1,0 +1,63 @@
+/* ============================================================
+   INTRO PHASE — TITAN lockdown opening
+   ============================================================ */
+
+.intro-phase-container {
+  /* Slight red atmospheric tint for lockdown feel */
+  background-color: #080010;
+}
+
+/* ── Lockdown sweep — animates red across the screen ── */
+.intro-lockdown-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(ellipse at 50% 30%, rgba(139, 0, 0, 0.14) 0%, transparent 65%);
+  animation: lockdownPulse 2.8s ease-in-out infinite;
+}
+@keyframes lockdownPulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+
+/* ── Video wrapper ── */
+.intro-video-wrap {
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(139,0,0,0.3), 0 20px 60px rgba(0,0,0,0.7);
+  border: 1px solid rgba(185, 28, 28, 0.4);
+}
+
+/* ── TITAN header badge ── */
+.intro-titan-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  max-width: 520px;
+  width: 100%;
+}
+
+.intro-titan-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.25em;
+  color: #ff2222;
+  text-shadow: 0 0 12px rgba(255,34,34,0.4);
+}
+
+.intro-titan-sub {
+  font-family: 'Courier New', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  color: rgba(255, 80, 80, 0.75);
+  text-transform: uppercase;
+}
