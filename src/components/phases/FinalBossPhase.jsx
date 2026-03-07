@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import ParallaxDust from "../ParallaxDust";
 import BlazePods from "../BlazePods";
+import VideoSlot from "../VideoSlot";
 import { playSound, updateLifetimeSummary, logWorkoutMinutes } from "../../utils";
 import TTSLine from "../TTSLine";
 import "../styles/RoomScene.css";
@@ -38,6 +39,7 @@ const WORKOUT_PHASES = [
 ];
 
 function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
+  const [introVideoWatched, setIntroVideoWatched] = useState(false);
   const [battleStarted, setBattleStarted] = useState(false);
   const [battleFinished, setBattleFinished] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -86,8 +88,9 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
 
   const handleStart = () => {
     playSound("alarm");
+    playSound("bossMusic");
     setBattleStarted(true);
-    addLog("BATTLE STARTED! Complete all 3 exercises to shut down TITAN!");
+    addLog("⚔ BATTLE STARTED! Complete all 3 exercises to shut down TITAN!");
   };
 
   const handlePhaseSubmit = () => {
@@ -195,7 +198,36 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
       <img src="/images/FitnessSuite.png" alt="Fitness Suite" className="final-boss-bg" />
       <ParallaxDust />
 
+      {/* ── Boss intro video (plays before battle UI) ── */}
+      {!introVideoWatched && (
+        <div className="final-boss-intro-video-wrap">
+          <VideoSlot
+            src="/videos/boss-intro.mp4"
+            onEnd={() => setIntroVideoWatched(true)}
+            poster="/images/FitnessSuite.png"
+            label="TITAN final boss introduction"
+          />
+        </div>
+      )}
+
+      {introVideoWatched && (
       <div className={`final-boss-arena ${shake ? "boss-shake" : ""}`}>
+
+        {/* ── TITAN "face" — glitching terminal ── */}
+        {!battleStarted && !battleFinished && (
+          <div className="titan-face-panel scanlines">
+            <div className="titan-face-grid">
+              <span className="titan-face-char flicker">T</span>
+              <span className="titan-face-char">I</span>
+              <span className="titan-face-char flicker" style={{animationDelay:'0.3s'}}>T</span>
+              <span className="titan-face-char">A</span>
+              <span className="titan-face-char flicker" style={{animationDelay:'0.7s'}}>N</span>
+            </div>
+            <div className="titan-face-status">
+              <span className="titan-face-dot" /><span className="titan-face-status-text">MAINFRAME ACTIVE — THREAT LEVEL: MAXIMUM</span>
+            </div>
+          </div>
+        )}
 
         {/* Header */}
         <div className="final-boss-header">
@@ -376,6 +408,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
           ))}
         </div>
       </div>
+      )} {/* end introVideoWatched */}
     </div>
   );
 }

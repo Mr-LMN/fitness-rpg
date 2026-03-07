@@ -1,142 +1,195 @@
 /* ============================================================
-   SCROLLING NARRATION BOX — Floating text over scene
-   Clean, cinematic — no card borders
+   SCROLLING NARRATION BOX — Cinematic typewriter panel
    ============================================================ */
 
 .box {
-  background: transparent;
+  position: relative;
+  background: linear-gradient(160deg, rgba(10, 10, 22, 0.92), rgba(6, 8, 18, 0.96));
+  border: 1px solid rgba(200, 168, 75, 0.18);
+  border-radius: 10px;
   color: var(--color-text);
-  padding: 28px 24px 20px;
-  margin: 20px auto;
-  width: min(680px, 92%);
+  padding: 28px 28px 20px;
+  margin: 16px auto;
+  width: min(700px, 94%);
   max-width: 100%;
   text-align: left;
   font-family: 'Inter', sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.06rem;
   font-weight: 400;
-  line-height: 1.8;
-  max-height: min(58vh, 460px);
+  line-height: 1.82;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  /* Subtle left accent bar */
+  border-left: 3px solid var(--color-accent);
 }
 
+/* Enhanced reading (cream / dyslexia-friendly) */
 .enhanced {
   background: linear-gradient(170deg, #fffde8, #fff8d6);
   color: #1c1917;
   font-size: 1.35rem;
-  line-height: 1.85;
-  font-family: 'OpenDyslexic', Arial, sans-serif;
+  line-height: 1.9;
+  font-family: 'OpenDyslexic', 'Arial', sans-serif;
   border: 1px solid rgba(0, 0, 0, 0.12);
+  border-left: 3px solid #2d7d32;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
+.enhanced * { color: #1c1917; }
 
-.enhanced * {
-  color: #1c1917;
+/* ── Progress dots ──────────────────────────────────────────── */
+.progressDots {
+  display: flex;
+  gap: 7px;
+  justify-content: flex-end;
+  margin-bottom: -4px;
 }
 
-/* Entry reading level (under 9) */
-.entry {
-  font-size: 1.3rem;
-  line-height: 2;
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(200, 168, 75, 0.18);
+  border: 1px solid rgba(200, 168, 75, 0.35);
+  transition: all 0.3s ease;
 }
 
-.lineContainer {
+.dotActive {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 8px rgba(200, 168, 75, 0.5);
+  transform: scale(1.3);
+}
+
+.dotDone {
+  background: rgba(200, 168, 75, 0.45);
+  border-color: rgba(200, 168, 75, 0.55);
+}
+
+/* ── Speaker label ───────────────────────────────────────────── */
+.speaker {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: -6px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 3em;
+  gap: 8px;
+}
+.speaker::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  background: var(--color-accent);
+  opacity: 0.6;
+}
+
+/* ── Text line ───────────────────────────────────────────────── */
+.lineContainer {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  min-height: 3.6em;
   overflow-y: auto;
-  padding-right: 4px;
+  padding-right: 2px;
 }
 
 .line {
-  opacity: 0;
-  animation: narrateFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Typewriter fills this in character by character */
+  white-space: pre-wrap;
 }
 
-@keyframes narrateFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--color-accent);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: cursorBlink 0.55s step-end infinite;
+  flex-shrink: 0;
 }
 
-.buttonContainer {
-  text-align: center;
-  margin-top: 20px;
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
 }
 
+/* ── Continue button ────────────────────────────────────────── */
 .continueButton {
-  align-self: center;
+  align-self: flex-end;
   margin-top: auto;
-  padding: 14px 32px;
-  font-size: 1.1rem;
+  padding: 11px 28px;
+  font-size: 0.88rem;
   font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   background: var(--color-accent);
   color: #0a0a0f;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.15s;
   text-transform: uppercase;
+  font-weight: 700;
+  min-width: 160px;
 }
 
 .continueButton:hover:not(:disabled) {
-  opacity: 0.85;
+  opacity: 0.88;
+  transform: translateY(-1px);
 }
 
 .continueButton:active:not(:disabled) {
   opacity: 0.75;
+  transform: translateY(0) scale(0.98);
 }
 
 .continueButton:disabled {
-  opacity: 0.45;
+  background: rgba(200, 168, 75, 0.3);
+  color: rgba(10, 10, 15, 0.6);
   cursor: not-allowed;
-  transform: none;
 }
 
-.ttsButton {
-  margin-left: 0.5rem;
-  background: transparent;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  font-size: 1.2em;
-  opacity: 0.6;
-  transition: opacity 0.2s ease;
+/* ── Hint ────────────────────────────────────────────────────── */
+.hint {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  letter-spacing: 0.06em;
+  margin: -8px 0 0;
+  opacity: 0.7;
+  text-align: right;
 }
 
-.ttsButton:hover {
-  opacity: 1;
-}
-
-/* Enhanced mode button overrides */
+/* ── Enhanced overrides ─────────────────────────────────────── */
 .enhanced .continueButton {
   background: #2d7d32;
   color: #fff;
   border: 2px solid rgba(0, 0, 0, 0.12);
 }
+.enhanced .cursor { background: #2d7d32; }
+.enhanced .speaker { color: #1a5f1e; }
+.enhanced .dot { border-color: #2d7d32; }
+.enhanced .dotActive { background: #2d7d32; border-color: #2d7d32; box-shadow: 0 0 6px rgba(45,125,50,0.5); }
 
-.enhanced .continueButton:hover:not(:disabled) {
-  opacity: 0.85;
-}
-
-
+/* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .box {
     width: 96%;
-    max-height: 62vh;
     padding: 18px 16px 14px;
+    font-size: 0.98rem;
   }
 
   .continueButton {
     width: 100%;
+    align-self: stretch;
+    text-align: center;
   }
 }
