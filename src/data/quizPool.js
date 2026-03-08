@@ -54,39 +54,6 @@ export const quizPool = {
           { label: 'Domingo', correct: false },
         ],
       },
-      {
-        question: "Translate 'verde' to English:",
-        level: "ks3",
-        subject: "Spanish",
-        options: [
-          { label: 'Green', correct: true },
-          { label: 'Blue', correct: false },
-          { label: 'Yellow', correct: false },
-          { label: 'Orange', correct: false },
-        ],
-      },
-      {
-        question: "What is the Spanish word for 'dog'?",
-        level: "entry",
-        subject: "Spanish",
-        options: [
-          { label: 'Perro', correct: true },
-          { label: 'Gato', correct: false },
-          { label: 'Caballo', correct: false },
-          { label: 'Vaca', correct: false },
-        ],
-      },
-      {
-        question: "What does 'grande' mean in Spanish?",
-        level: "ks4",
-        subject: "Spanish",
-        options: [
-          { label: 'Big', correct: true },
-          { label: 'Small', correct: false },
-          { label: 'Tall', correct: false },
-          { label: 'Fast', correct: false },
-        ],
-      },
     ],
     rocheBoss: [
       {
