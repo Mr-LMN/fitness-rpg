@@ -106,9 +106,21 @@ export function playVoice(filePath) {
   audio.play().catch(() => {});
 }
 
-// Speak text using the backend /speak endpoint which proxies Google TTS
+// Use the browser's built-in speech synthesis
+function speakWithBrowser(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-GB';
+    utterance.rate = 0.8;
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
+// Speak text using the backend /speak endpoint which proxies Google TTS,
+// falling back to the browser's built-in speechSynthesis API.
 export async function speakText(text) {
-  if (!ttsEnabled || globalMuted || typeof fetch === 'undefined') return;
+  if (globalMuted || !text) return;
 
   try {
     const response = await fetch('/speak', {
@@ -116,39 +128,29 @@ export async function speakText(text) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, voice: 'en-GB-Wavenet-D' }),
     });
-    if (!response.ok) throw new Error('TTS request failed');
 
-    // Try handling both raw blobs and JSON { audioContent }
     const contentType = response.headers.get('Content-Type') || '';
-    let audioUrl = null;
 
-    if (contentType.includes('application/json')) {
+    // Only process the response if it looks like valid audio or JSON with audio
+    if (response.ok && contentType.includes('application/json')) {
       const data = await response.json();
       if (data.audioContent) {
-        audioUrl = `data:audio/mp3;base64,${data.audioContent}`;
+        const audio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
+        audio.play().catch(() => {});
+        return;
       }
-    } else {
+    } else if (response.ok && contentType.includes('audio')) {
       const blob = await response.blob();
-      audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(URL.createObjectURL(blob));
+      audio.play().catch(() => {});
+      return;
     }
 
-    if (audioUrl) {
-      const audio = new Audio(audioUrl);
-      audio.play().catch(() => {});
-    } else if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-GB';
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
-    }
+    // Server didn't return valid audio — use browser TTS
+    speakWithBrowser(text);
   } catch (err) {
-    console.error('Failed to speak text via backend', err);
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-GB';
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
-    }
+    // Network error or /speak endpoint unavailable — use browser TTS
+    speakWithBrowser(text);
   }
 }
 
