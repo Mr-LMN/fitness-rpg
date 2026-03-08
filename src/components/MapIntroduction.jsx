@@ -1,5 +1,6 @@
 import React from "react";
 import ParallaxDust from "./ParallaxDust";
+import VideoBackground from "./VideoBackground";
 import "./styles/RoomScene.css";
 import { playSound } from "../utils";
 import narrationLines from "../data/narrationLines";
@@ -19,11 +20,7 @@ function MapIntroduction({ setGameState, textToSpeech = false, enhancedReading =
 
   return (
     <div className="room-container">
-      <img
-        src="/images/Leaving_the_LockerRoom.png"
-        alt="Leaving the Locker Room"
-        className="scene-image"
-      />
+      <VideoBackground src="/videos/Map-Screen.mp4" fallbackImage="/images/map-screen.png" />
       <ParallaxDust />
       <div className="room-content rpg-text">
         <h2 className="phase-heading">MISSION BRIEFING</h2>

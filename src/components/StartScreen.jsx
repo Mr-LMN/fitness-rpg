@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./StartScreen.module.css";
 import { playSound } from "../utils";
+import VideoBackground from "./VideoBackground";
 
 // TITAN boot-up messages that scroll across the ticker
 const TITAN_TICKERS = [
@@ -54,6 +55,8 @@ export default function StartScreen({ onStart, onSLTAccess }) {
 
   return (
     <div className={`${styles.container} scanlines`}>
+      <VideoBackground src="/videos/Start-Screen.mp4" fallbackImage="/images/start-screen.png" />
+
       {/* Dark gradient overlay */}
       <div className={styles.overlay} />
 

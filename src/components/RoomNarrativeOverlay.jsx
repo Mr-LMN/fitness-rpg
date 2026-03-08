@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi";
 import "./styles/Overlay.css";
 import VideoSlot from "./VideoSlot";
+import VideoBackground from "./VideoBackground";
 import { playSound } from "../utils";
 import narrationLines from "../data/narrationLines";
 import ScrollingNarrationBox from "./ScrollingNarrationBox";
@@ -64,17 +65,26 @@ function RoomNarrativeOverlay({
     ? `1px solid ${config.accentColor}66`
     : '1px solid rgba(255,255,255,0.08)';
 
+  const isBossRoom = roomName === "Mrs. Roche's Room";
+
   return (
     <div
       className="overlay-bg"
       style={{
-        backgroundImage: `url(${config.background || ''})`,
-        backgroundSize:     'cover',
-        backgroundPosition: 'center',
-        backgroundBlendMode: 'multiply',
+        ...(!isBossRoom && {
+          backgroundImage: `url(${config.background || ''})`,
+          backgroundSize:     'cover',
+          backgroundPosition: 'center',
+          backgroundBlendMode: 'multiply',
+        }),
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
-      <div className="overlay-box" style={{ border: accentBorder, boxShadow: config.accentColor ? `0 0 40px ${config.accentColor}33, 0 24px 64px rgba(0,0,0,0.7)` : undefined }}>
+      {isBossRoom && (
+        <VideoBackground src="/videos/Boss-Intro.mp4" fallbackImage="/images/mrs-roches-room.png" />
+      )}
+      <div className="overlay-box" style={{ border: accentBorder, boxShadow: config.accentColor ? `0 0 40px ${config.accentColor}33, 0 24px 64px rgba(0,0,0,0.7)` : undefined, position: 'relative', zIndex: 1 }}>
 
         {/* ── Room intro video (optional) ── */}
         {!videoWatched && config.introVideo && (
