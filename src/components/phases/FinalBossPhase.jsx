@@ -367,7 +367,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
             <div className="fv-burst"></div>
             <h2 className="fv-title">VICTORY!</h2>
             <p className="fv-sub">
-              TITAN's systems collapse. The red lights shift to green. Every door in the school unlocks.
+              TITAN's systems collapse. The red lights shift to green. Every door unlocks. The steel shutters on the stairwells grind open — the pathway to the Maths Department is clear.
             </p>
             <div className="fv-stats">
               <div className="fvs-item">
