@@ -30,6 +30,7 @@ const SafeQuizEvent = ({
   const [feedback, setFeedback] = useState("");
   const [loot, setLoot] = useState(null);
   const [mistakes, setMistakes] = useState(0);
+  const [forfeitExercise, setForfeitExercise] = useState(null);
 
   const currentQuestion = questionPool[currentQuestionIndex];
 
@@ -58,6 +59,7 @@ const SafeQuizEvent = ({
 
       if (lives - 1 === 0) {
         const exercise = FAILURE_EXERCISES[Math.floor(Math.random() * FAILURE_EXERCISES.length)];
+        setForfeitExercise(exercise);
         setQuizCompleted(true);
         setFeedback(`TITAN: "The code failed, but I can override the lock. Complete ${exercise} and I'll force the safe open for you."`);
         onFailure(exercise);
@@ -67,18 +69,31 @@ const SafeQuizEvent = ({
 
   if (quizCompleted && loot) {
     return (
-      <div>
+      <div className="safe-event">
         <TTSLine
-          text={`You’ve finished scavenging and discovered ${loot.name}. It’s been added to your backpack for later use.`}
+          text={`You've finished scavenging and discovered ${loot.name}. It's been added to your backpack for later use.`}
         />
         <button onClick={onComplete}>Continue</button>
       </div>
     );
   }
 
+  if (quizCompleted && forfeitExercise) {
+    return (
+      <div className="safe-event">
+        <h2>TITAN Override</h2>
+        <TTSLine text="You didn't crack the code this time, but TITAN can override the lock." />
+        <p className="safe-forfeit-exercise">
+          Complete <strong>{forfeitExercise}</strong> to force the safe open!
+        </p>
+        <button onClick={onComplete}>I've done it - Open the Safe!</button>
+      </div>
+    );
+  }
+
   if (quizCompleted) {
     return (
-      <div>
+      <div className="safe-event">
         <TTSLine text={feedback} />
         <button onClick={onComplete}>Continue</button>
       </div>
@@ -90,7 +105,7 @@ const SafeQuizEvent = ({
       <img src={`${baseUrl}images/safe.png`} alt="Digital Safe" className="safe-image" />
       <h2>Digital Safe - {roomName}</h2>
       <TTSLine text={`Lives: ${lives} / 3`} />
-      <TTSLine text={currentQuestion?.question} />
+      {currentQuestion?.question && <TTSLine text={currentQuestion.question} />}
       {currentQuestion?.options.map((option, index) => (
         <button key={index} onClick={() => handleAnswer(option.correct)}>
           {option.label}

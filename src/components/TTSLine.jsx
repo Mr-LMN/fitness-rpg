@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { speakText, isTtsEnabled, subscribeToTts } from '../utils';
 
-function TTSLine({ text, autoRead, className = '' }) {
+function TTSLine({ text = '', autoRead, className = '' }) {
+  const safeText = text || '';
   const [display, setDisplay] = useState('');
   const [ttsEnabled, setTtsEnabled] = useState(isTtsEnabled());
   const shouldAutoRead = autoRead ?? true;
@@ -16,29 +17,28 @@ function TTSLine({ text, autoRead, className = '' }) {
     setDisplay('');
     const interval = setInterval(() => {
       i += 1;
-      setDisplay(text.slice(0, i));
-      if (i >= text.length) {
+      setDisplay(safeText.slice(0, i));
+      if (i >= safeText.length) {
         clearInterval(interval);
       }
     }, 30);
     return () => clearInterval(interval);
-  }, [text]);
+  }, [safeText]);
 
   useEffect(() => {
-    if (!shouldAutoRead || !ttsEnabled) return undefined;
-    const timeout = setTimeout(() => speakText(text), Math.max(text.length * 30, 300));
+    if (!shouldAutoRead || !ttsEnabled || !safeText) return undefined;
+    const timeout = setTimeout(() => speakText(safeText), Math.max(safeText.length * 30, 300));
     return () => clearTimeout(timeout);
-  }, [shouldAutoRead, text, ttsEnabled]);
+  }, [shouldAutoRead, safeText, ttsEnabled]);
 
   return (
     <p className={`tts-line ${className}`.trim()}>
       {display}
       <button
         type="button"
-        onClick={() => ttsEnabled && speakText(text)}
+        onClick={() => speakText(safeText)}
         aria-label="Play narration"
         className="tts-play"
-        disabled={!ttsEnabled}
       >
         Play
       </button>
