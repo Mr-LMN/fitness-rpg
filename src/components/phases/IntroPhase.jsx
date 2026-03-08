@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ParallaxDust from "../ParallaxDust";
 import VideoSlot from "../VideoSlot";
+import VideoBackground from "../VideoBackground";
 import "../styles/RoomScene.css";
 import "./IntroPhase.css";
 import { playVoice, playSound } from "../../utils";
@@ -25,7 +26,7 @@ function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = fals
   return (
     <div className="room-container intro-phase-container">
       {/* Background scene */}
-      <img src="/images/locker_Room.png" alt="Locker Room" className="scene-image" />
+      <VideoBackground src="/videos/Locker-Room.mp4" fallbackImage="/images/locker-room.png" />
       <ParallaxDust />
 
       {/* Red lockdown sweep */}
