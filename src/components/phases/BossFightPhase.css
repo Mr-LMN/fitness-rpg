@@ -394,6 +394,124 @@
   box-shadow: 0 8px 20px rgba(164, 198, 57, 0.35);
 }
 
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .boss-fight-page {
+    padding: 12px;
+    align-items: flex-start;
+  }
+
+  .boss-arena {
+    gap: 14px;
+  }
+
+  .boss-portrait {
+    padding: 14px;
+  }
+
+  .boss-emoji {
+    font-size: 3rem;
+  }
+
+  .boss-name {
+    font-size: 1.2rem;
+  }
+
+  .boss-phase-card {
+    padding: 14px 16px;
+  }
+
+  .boss-input-row {
+    padding: 14px 16px;
+  }
+
+  .boss-victory-panel {
+    padding: 22px 16px;
+  }
+
+  .victory-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .boss-fight-page {
+    padding: 8px;
+  }
+
+  .boss-arena {
+    gap: 10px;
+  }
+
+  .boss-portrait {
+    padding: 12px 10px;
+  }
+
+  .boss-emoji {
+    font-size: 2.5rem;
+  }
+
+  .boss-name {
+    font-size: 1rem;
+  }
+
+  .boss-phase-card {
+    padding: 12px;
+  }
+
+  .phase-title {
+    font-size: 0.95rem;
+  }
+
+  .phase-description {
+    font-size: 0.82rem;
+  }
+
+  .boss-hp-section {
+    padding: 10px 12px;
+  }
+
+  .boss-input-row {
+    padding: 12px;
+  }
+
+  .boss-input-group {
+    flex-direction: column;
+  }
+
+  .boss-hit-btn {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  .boss-reps-input {
+    font-size: 1rem;
+    padding: 14px;
+  }
+
+  .battle-log {
+    max-height: 100px;
+  }
+
+  .boss-victory-panel {
+    padding: 18px 12px;
+  }
+
+  .victory-title {
+    font-size: 1.3rem;
+  }
+
+  .victory-burst {
+    font-size: 2.5rem;
+  }
+
+  .boss-continue-btn {
+    width: 100%;
+    padding: 14px;
+  }
+}
+
 /* Battle Log */
 .battle-log {
   background: rgba(0, 0, 0, 0.5);

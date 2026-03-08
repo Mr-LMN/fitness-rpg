@@ -556,6 +556,185 @@
   border: 1px solid rgba(74, 222, 128, 0.2);
 }
 
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .final-boss-page {
+    padding: 12px;
+  }
+
+  .final-boss-arena {
+    gap: 14px;
+  }
+
+  .final-boss-intro-video-wrap {
+    margin-top: 30px;
+  }
+
+  .titan-face-char {
+    font-size: 2.5rem;
+  }
+
+  .final-boss-header {
+    padding: 12px 14px;
+    gap: 6px;
+  }
+
+  .final-boss-title {
+    font-size: 1.1rem;
+  }
+
+  .final-boss-timer {
+    font-size: 0.88rem;
+  }
+
+  .final-hp-section {
+    padding: 12px 14px;
+  }
+
+  .final-prebattle {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  .final-phase-card {
+    padding: 14px 16px;
+  }
+
+  .final-input-row {
+    padding: 12px 14px;
+  }
+
+  .final-victory-panel {
+    padding: 22px 16px;
+  }
+
+  .fv-title {
+    font-size: 1.8rem;
+  }
+
+  .fv-stats {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .final-boss-page {
+    padding: 8px;
+  }
+
+  .final-boss-arena {
+    gap: 10px;
+  }
+
+  .final-boss-intro-video-wrap {
+    margin-top: 16px;
+  }
+
+  .titan-face-char {
+    font-size: 2rem;
+  }
+
+  .titan-face-panel {
+    padding: 10px 12px 12px;
+  }
+
+  .final-boss-header {
+    padding: 10px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .final-boss-title {
+    font-size: 1rem;
+  }
+
+  .final-hp-section {
+    padding: 10px 12px;
+  }
+
+  .final-exercise-dots {
+    gap: 6px;
+  }
+
+  .exercise-dot {
+    padding: 6px 8px;
+    min-width: 0;
+  }
+
+  .dot-nm {
+    font-size: 0.65rem;
+  }
+
+  .final-prebattle {
+    padding: 12px;
+  }
+
+  .final-lore {
+    font-size: 0.85rem;
+  }
+
+  .final-phase-card {
+    padding: 12px;
+  }
+
+  .final-phase-name {
+    font-size: 0.95rem;
+  }
+
+  .final-phase-tip {
+    font-size: 0.82rem;
+  }
+
+  .final-input-row {
+    padding: 12px;
+  }
+
+  .final-input-group {
+    flex-direction: column;
+  }
+
+  .final-attack-btn {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  .final-reps-input {
+    font-size: 1rem;
+    padding: 14px;
+  }
+
+  .final-wrap-up {
+    padding: 14px 12px;
+  }
+
+  .final-victory-panel {
+    padding: 18px 12px;
+  }
+
+  .fv-burst {
+    font-size: 2.5rem;
+  }
+
+  .fv-title {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+  }
+
+  .fv-stats {
+    gap: 12px;
+  }
+
+  .fvs-val {
+    font-size: 1.2rem;
+  }
+
+  .final-finish-btn,
+  .final-start-btn {
+    padding: 14px 20px;
+  }
+}
+
 /* Battle Log */
 .final-battle-log {
   background: rgba(0, 0, 0, 0.5);
