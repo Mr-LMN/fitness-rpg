@@ -1062,6 +1062,151 @@ input, select, textarea {
   margin-top: 1px;
 }
 
+/* ── Global Responsive ── */
+
+@media (max-width: 768px) {
+  /* Narration manager breathes on tablet */
+  .narration-manager {
+    padding: 16px 14px;
+  }
+
+  /* Escape choice buttons stack vertically */
+  .escape-choice-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .escape-option-btn {
+    width: 100%;
+    max-width: 320px;
+    min-width: unset;
+  }
+
+  /* Fitness suite wraps tighter */
+  .fitness-suite-preview {
+    gap: 10px;
+  }
+
+  .fitness-suite-exercise {
+    padding: 14px 16px;
+    min-width: 100px;
+  }
+
+  /* Victory panel */
+  .victory-panel {
+    padding: 0 4px;
+  }
+
+  /* Streak banner */
+  .streak-banner-inner {
+    padding: 24px 20px;
+  }
+
+  /* Global audio controls move up slightly on mobile to avoid overlapping buttons */
+  .global-audio-controls {
+    bottom: 10px;
+    right: 10px;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Phase headings slightly smaller */
+  .phase-heading {
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  /* Narration manager tighter padding */
+  .narration-manager {
+    padding: 12px 10px;
+  }
+
+  /* Escape choice buttons: full width */
+  .escape-option-btn {
+    max-width: 100%;
+  }
+
+  .escape-rep-btn {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .escape-go-btn {
+    width: 100%;
+    min-width: unset;
+  }
+
+  /* Warmup confirm button full width */
+  .warmup-confirm-btn {
+    width: 100%;
+  }
+
+  /* Streak banner compact */
+  .streak-banner-inner {
+    padding: 20px 16px;
+    width: 95%;
+  }
+
+  .streak-dismiss {
+    width: 100%;
+    padding: 12px;
+  }
+
+  /* Titan transmission compact */
+  .titan-transmission {
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+
+  /* TITAN text slightly smaller on phones */
+  .titan-transmission-text {
+    font-size: 0.86rem;
+  }
+
+  /* Victory stats grid: 2 cols on tiny screens */
+  .victory-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  /* Fitness suite exercises smaller */
+  .fitness-suite-exercise {
+    padding: 12px 10px;
+    min-width: 80px;
+  }
+
+  .fse-target {
+    font-size: 2rem;
+  }
+
+  .fse-name {
+    font-size: 0.75rem;
+  }
+
+  /* Global audio control label hidden — icon only */
+  .audio-toggle span:not(.audio-icon) {
+    display: none;
+  }
+
+  .audio-toggle {
+    padding: 6px 10px;
+  }
+
+  /* Map codes chips wrap */
+  .map-codes-chips {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .code-chip {
+    font-size: 0.68rem;
+    padding: 5px 12px;
+  }
+}
+
 /* ── Reduced motion ── */
 
 @media (prefers-reduced-motion: reduce) {

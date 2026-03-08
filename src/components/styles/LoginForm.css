@@ -198,3 +198,24 @@
   font-size: 0.78rem;
   margin: 16px 0 0;
 }
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .login-screen {
+    padding: 16px 12px;
+  }
+
+  .login-logo {
+    width: 72px;
+    margin-bottom: 16px;
+  }
+
+  .login-card {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .login-heading {
+    font-size: 1.35rem;
+  }
+}

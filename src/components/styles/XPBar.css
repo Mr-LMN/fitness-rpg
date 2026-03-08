@@ -148,11 +148,35 @@
 }
 
 @media (max-width: 480px) {
+  .xpbar-wrap {
+    padding: 0 10px;
+    gap: 8px;
+  }
+
   .xpbar-name {
-    max-width: 80px;
+    max-width: 72px;
+    font-size: 12px;
   }
 
   .xpbar-xp-count {
+    display: none;
+  }
+
+  .xpbar-level-num {
+    font-size: 11px;
+  }
+
+  .xpbar-injured-text {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .xpbar-name {
+    max-width: 56px;
+  }
+
+  .xpbar-badges {
     display: none;
   }
 }

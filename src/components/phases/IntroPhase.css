@@ -44,6 +44,7 @@
   border-radius: 6px;
   max-width: 520px;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .intro-titan-label {
@@ -60,4 +61,31 @@
   letter-spacing: 0.18em;
   color: rgba(255, 80, 80, 0.75);
   text-transform: uppercase;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .intro-video-wrap {
+    margin-bottom: 12px;
+  }
+
+  .intro-titan-header {
+    padding: 8px 14px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-video-wrap {
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+
+  .intro-titan-label {
+    font-size: 0.95rem;
+  }
+
+  .intro-titan-header {
+    padding: 8px 12px;
+  }
 }
