@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { playSound } from "../../utils";
+import VideoBackground from "../VideoBackground";
 import "./BossFightPhase.css";
 
 const TOTAL_HP = 100;
@@ -89,6 +90,7 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
 
   return (
     <div className="boss-fight-page">
+      <VideoBackground src="/videos/Boss-Intro.mp4" fallbackImage="/images/boss-intro.png" />
       <div className={`boss-arena ${shake ? "boss-shake" : ""}`}>
 
         {/* Boss Portrait */}
