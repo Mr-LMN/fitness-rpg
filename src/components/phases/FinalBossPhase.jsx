@@ -202,7 +202,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
       {!introVideoWatched && (
         <div className="final-boss-intro-video-wrap">
           <VideoSlot
-            src="/videos/boss-intro.mp4"
+            src="/videos/Boss-Intro.mp4"
             onEnd={() => setIntroVideoWatched(true)}
             poster="/images/FitnessSuite.png"
             label="TITAN final boss introduction"
