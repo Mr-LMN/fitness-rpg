@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import BadgeCase from "./BadgeCase";
 import InventoryModal from "./InventoryModal";
 import Leaderboard from "./Leaderboard";
+import VideoBackground from "./VideoBackground";
 import { GiBackpack } from "react-icons/gi";
 import { FaTrophy } from "react-icons/fa";
 import "./styles/Map.css";
@@ -133,6 +134,8 @@ function Map({ gameState, setGameState, userId }) {
 
   return (
     <div className="map-page">
+      <VideoBackground src="/videos/Map-Screen.mp4" fallbackImage="/images/Pamphletmap.png" />
+
       {/* ── Top bar ── */}
       <div className="map-topbar">
         <div className="map-title-group">
