@@ -13,14 +13,14 @@
 }
 
 .safe-event button {
-  position: sticky;
-  bottom: 16px;
+  position: relative;
   z-index: 10;
-  margin-top: auto;
+  margin-top: 12px;
   padding: 14px 32px;
   font-size: 1rem;
   font-weight: 700;
   min-width: 200px;
+  flex-shrink: 0;
 }
 
 .safe-image {

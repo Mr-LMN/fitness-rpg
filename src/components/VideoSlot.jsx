@@ -40,7 +40,8 @@ export default function VideoSlot({
 
   const handleError = () => {
     setMissing(true);
-    if (onEnd) onEnd();
+    // If there's no poster to show, skip immediately
+    if (!poster && onEnd) onEnd();
   };
 
   const handleSkip = () => {
@@ -49,6 +50,45 @@ export default function VideoSlot({
     }
     if (onEnd) onEnd();
   };
+
+  // Video missing but we have a poster — show the still image with a continue button
+  if (missing && poster) {
+    return (
+      <div
+        className={`video-slot ${className}`}
+        style={{ position: 'relative', width: '100%', borderRadius: 8, overflow: 'hidden', background: '#000', ...style }}
+      >
+        <img
+          src={poster}
+          alt={label || 'Scene'}
+          style={{ width: '100%', display: 'block', maxHeight: '70vh', objectFit: 'contain' }}
+        />
+        {onEnd && (
+          <button
+            onClick={onEnd}
+            aria-label="Continue"
+            style={{
+              position: 'absolute',
+              bottom: 16,
+              right: 16,
+              background: 'rgba(0,0,0,0.75)',
+              border: '1px solid rgba(200,168,75,0.6)',
+              color: '#c8a84b',
+              borderRadius: 4,
+              padding: '6px 16px',
+              fontSize: '0.78rem',
+              cursor: 'pointer',
+              fontFamily: "'Bebas Neue', sans-serif",
+              letterSpacing: '0.12em',
+              zIndex: 10,
+            }}
+          >
+            CONTINUE ▶
+          </button>
+        )}
+      </div>
+    );
+  }
 
   if (missing) return null;
 

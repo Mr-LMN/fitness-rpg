@@ -27,11 +27,13 @@ export default function VideoBackground({ src, fallbackImage }) {
 
   return (
     <video
+      key={src}
       src={src}
       autoPlay
       muted
       loop
       playsInline
+      preload="auto"
       onError={() => setFailed(true)}
       style={{
         position: "absolute",

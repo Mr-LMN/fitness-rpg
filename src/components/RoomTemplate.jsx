@@ -217,7 +217,17 @@ function RoomTemplate({
   };
 
   const handleSafeComplete = () => {
-    if (failureExercise) return setStage(STAGES.SAFE_PENALTY);
+    if (failureExercise) {
+      // Exercise was already completed in SafeQuizEvent — award the reward and proceed
+      const reward = {
+        id: 'safe_energy_bar',
+        name: 'Energy Bar',
+        rarity: 'uncommon',
+        description: 'Restores stamina when used.',
+      };
+      handleSafeSuccess(reward);
+      setFailureExercise(null);
+    }
     setStage(nextAfterBossOrSafe());
   };
 

@@ -35,35 +35,43 @@ const SafeQuizEvent = ({
   const currentQuestion = questionPool[currentQuestionIndex];
 
   const handleAnswer = (isCorrect) => {
-    if (isCorrect) {
-      if (currentQuestionIndex + 1 < questionPool.length) {
-        setCurrentQuestionIndex((prev) => prev + 1);
-        setFeedback("Correct!");
-        playSound('correct');
-      } else {
-        const reward = {
-          id: 'safe_energy_bar',
-          name: 'Energy Bar',
-          rarity: 'uncommon',
-          description: 'Restores stamina when used.',
-        };
-        setLoot(reward);
-        setQuizCompleted(true);
-        setFeedback('Safe unlocked!');
-        onSuccess(reward, mistakes === 0);
-      }
-    } else {
-      setLives((prev) => prev - 1);
-      setMistakes((m) => m + 1);
-      setFeedback("Incorrect");
+    let currentMistakes = mistakes;
 
-      if (lives - 1 === 0) {
+    if (isCorrect) {
+      playSound('correct');
+      setFeedback("Correct!");
+    } else {
+      currentMistakes += 1;
+      setMistakes(currentMistakes);
+      setFeedback("Incorrect");
+      const newLives = lives - 1;
+      setLives(newLives);
+
+      if (newLives === 0) {
         const exercise = FAILURE_EXERCISES[Math.floor(Math.random() * FAILURE_EXERCISES.length)];
         setForfeitExercise(exercise);
         setQuizCompleted(true);
         setFeedback(`TITAN: "The code failed, but I can override the lock. Complete ${exercise} and I'll force the safe open for you."`);
         onFailure(exercise);
+        return;
       }
+    }
+
+    // Always advance to next question or complete the quiz
+    if (currentQuestionIndex + 1 < questionPool.length) {
+      setCurrentQuestionIndex((prev) => prev + 1);
+    } else {
+      // All questions answered with lives remaining = success
+      const reward = {
+        id: 'safe_energy_bar',
+        name: 'Energy Bar',
+        rarity: 'uncommon',
+        description: 'Restores stamina when used.',
+      };
+      setLoot(reward);
+      setQuizCompleted(true);
+      setFeedback('Safe unlocked!');
+      onSuccess(reward, currentMistakes === 0);
     }
   };
 
