@@ -3,17 +3,26 @@ import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
 import "./WarmUpPhase.css";
 import { playSound } from "../../utils";
+import { showXPPopup } from "../XPPopup";
 import narrationLines from "../../data/narrationLines";
 import ScrollingNarrationBox from "../ScrollingNarrationBox";
 
 const ROW_TARGET = 500;
 
 const COACHING_TIPS = [
-  "Drive hard with your legs — they're the engine!",
+  "Drive hard with your legs \u2014 they\u2019re the engine!",
   "Keep your back straight, pull to your lower chest.",
   "Breathe out on the pull, in on the recovery.",
-  "Short rest between strokes — keep it consistent.",
-  "Every metre counts against TITAN. You've got this!",
+  "Short rest between strokes \u2014 keep it consistent.",
+  "Every metre counts against TITAN. You\u2019ve got this!",
+];
+
+const TITAN_ROW_TAUNTS = [
+  "Slow. Predictable. I expected more.",
+  "The machine works harder than you do.",
+  "At this rate, I\u2019ll have locked down the entire county.",
+  "Interesting. Your heart rate is climbing. Good.",
+  "Perhaps you aren\u2019t entirely useless after all.",
 ];
 
 function WarmUpPhase({ setGameState, gameState = {} }) {
@@ -38,17 +47,22 @@ function WarmUpPhase({ setGameState, gameState = {} }) {
     return () => clearInterval(tipRef.current);
   }, [showRow, done]);
 
+  const [tauntIdx, setTauntIdx] = useState(0);
+
   const addMetres = (m) => {
     setDistance((prev) => {
       const next = Math.min(prev + m, ROW_TARGET);
       if (next >= ROW_TARGET) {
         setDone(true);
         playSound('correct');
+        showXPPopup("500m COMPLETE!", { variant: "xp" });
       } else {
         playSound('repClick');
+        showXPPopup(`+${m}m`, { variant: "xp" });
       }
       return next;
     });
+    setTauntIdx((prev) => (prev + 1) % TITAN_ROW_TAUNTS.length);
     setRepFlash(true);
     setTimeout(() => setRepFlash(false), 320);
   };
@@ -108,6 +122,16 @@ function WarmUpPhase({ setGameState, gameState = {} }) {
               </div>
             </div>
 
+            {/* TITAN taunt */}
+            {distance > 0 && !done && (
+              <div className="titan-terminal" style={{ padding: '8px 14px', fontSize: '0.78rem' }} key={`taunt-${tauntIdx}`}>
+                <span style={{ color: '#ff4444', marginRight: '6px', fontWeight: 700 }}>TITAN:</span>
+                <span style={{ color: 'rgba(255,60,60,0.7)', fontStyle: 'italic' }}>
+                  {TITAN_ROW_TAUNTS[tauntIdx]}
+                </span>
+              </div>
+            )}
+
             {/* Coaching tip */}
             <div className="warmup-tip" key={tipIdx}>
               <span className="warmup-tip-icon">💡</span>
@@ -135,10 +159,11 @@ function WarmUpPhase({ setGameState, gameState = {} }) {
 
             {/* Confirm */}
             <button
-              className={`primary-btn warmup-confirm-btn ${done ? 'warmup-confirm-ready' : ''}`}
+              className={`${done ? 'btn-neon btn-neon--green' : 'btn-neon'} warmup-confirm-btn`}
               onClick={confirmDone}
+              style={{ width: '100%' }}
             >
-              {done ? '✓  500m Complete — Move On!' : "I've rowed 500m"}
+              {done ? '\u2713  500m Complete \u2014 Move On!' : "I\u2019ve rowed 500m"}
             </button>
           </div>
         )}

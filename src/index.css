@@ -4,13 +4,13 @@
    ============================================================ */
 
 :root {
-  --color-bg:        #0a0a0f;
-  --color-surface:   #12121a;
-  --color-border:    #2a2a3a;
-  --color-accent:    #c8a84b;
-  --color-danger:    #b91c1c;
-  --color-success:   #16a34a;
-  --color-text:      #e8e8f0;
+  --color-bg:        #050508;
+  --color-surface:   #0c0c14;
+  --color-border:    #1e1e30;
+  --color-accent:    #f0c940;
+  --color-danger:    #ff2a2a;
+  --color-success:   #00ff88;
+  --color-text:      #eeeef4;
   --color-muted:     #6b6b80;
 
   /* TITAN theme */
@@ -18,6 +18,19 @@
   --titan-dim-red:   #8b0000;
   --titan-glow:      rgba(255, 30, 30, 0.35);
   --titan-border:    rgba(185, 28, 28, 0.55);
+
+  /* Neon accent palette */
+  --neon-cyan:       #00f0ff;
+  --neon-pink:       #ff00aa;
+  --neon-blue:       #3366ff;
+  --neon-green:      #00ff88;
+  --neon-orange:     #ff8800;
+  --neon-purple:     #aa44ff;
+
+  /* Class colours */
+  --class-berserker: #ff4444;
+  --class-phantom:   #00ccff;
+  --class-guardian:   #00ff88;
 
   /* Scanline overlay */
   --scanline-gap:    3px;
@@ -1369,4 +1382,726 @@ input, select, textarea {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ============================================================
+   ENHANCED GAME ENGINE — New effects & components
+   ============================================================ */
+
+/* ── Screen Shake ── */
+@keyframes screenShake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  10% { transform: translate(-4px, -2px) rotate(-0.5deg); }
+  20% { transform: translate(3px, 1px) rotate(0.5deg); }
+  30% { transform: translate(-3px, 2px) rotate(-0.3deg); }
+  40% { transform: translate(2px, -1px) rotate(0.2deg); }
+  50% { transform: translate(-2px, 1px) rotate(-0.2deg); }
+  60% { transform: translate(1px, -1px) rotate(0.1deg); }
+  70% { transform: translate(-1px, 0) rotate(0deg); }
+}
+.screen-shake { animation: screenShake 0.5s ease-out; }
+
+/* ── Neon Glow Text ── */
+.neon-text {
+  text-shadow:
+    0 0 7px currentColor,
+    0 0 14px currentColor,
+    0 0 28px currentColor;
+}
+
+.neon-text-cyan { color: var(--neon-cyan); text-shadow: 0 0 7px var(--neon-cyan), 0 0 20px rgba(0, 240, 255, 0.4); }
+.neon-text-pink { color: var(--neon-pink); text-shadow: 0 0 7px var(--neon-pink), 0 0 20px rgba(255, 0, 170, 0.4); }
+.neon-text-green { color: var(--neon-green); text-shadow: 0 0 7px var(--neon-green), 0 0 20px rgba(0, 255, 136, 0.4); }
+
+/* ── Floating XP Popup ── */
+@keyframes xpFloat {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  70% { opacity: 1; transform: translateY(-60px) scale(1.1); }
+  100% { opacity: 0; transform: translateY(-90px) scale(0.8); }
+}
+
+.xp-popup {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--color-accent);
+  text-shadow: 0 0 10px rgba(240, 201, 64, 0.6), 0 2px 4px rgba(0,0,0,0.8);
+  animation: xpFloat 1.5s ease-out forwards;
+}
+
+.xp-popup--damage {
+  color: var(--titan-red);
+  text-shadow: 0 0 10px rgba(255, 30, 30, 0.6), 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.xp-popup--heal {
+  color: var(--neon-green);
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.6), 0 2px 4px rgba(0,0,0,0.8);
+}
+
+/* ── Combo Counter ── */
+@keyframes comboPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+@keyframes comboFlame {
+  0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+  50% { filter: hue-rotate(15deg) brightness(1.2); }
+}
+
+.combo-counter {
+  position: fixed;
+  top: 68px;
+  right: 16px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(12,12,20,0.95), rgba(20,20,35,0.95));
+  border: 1px solid var(--neon-orange);
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(255, 136, 0, 0.3), inset 0 0 10px rgba(255, 136, 0, 0.05);
+  animation: comboPulse 1s ease-in-out infinite;
+}
+
+.combo-counter--hot {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 30px rgba(255, 0, 170, 0.4), inset 0 0 15px rgba(255, 0, 170, 0.08);
+  animation: comboPulse 0.7s ease-in-out infinite, comboFlame 2s ease-in-out infinite;
+}
+
+.combo-counter--fire {
+  border-color: var(--titan-red);
+  box-shadow: 0 0 40px rgba(255, 30, 30, 0.5), inset 0 0 20px rgba(255, 30, 30, 0.1);
+  animation: comboPulse 0.5s ease-in-out infinite, comboFlame 1s ease-in-out infinite;
+}
+
+.combo-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--neon-orange);
+}
+
+.combo-number {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+
+.combo-multiplier {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--neon-green);
+}
+
+/* ── Boss Health Bar (Enhanced) ── */
+@keyframes bossBarPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 30, 30, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(255, 30, 30, 0.5); }
+}
+
+@keyframes bossBarCritical {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 30, 30, 0.3); background-color: rgba(255,30,30,0.05); }
+  50% { box-shadow: 0 0 30px rgba(255, 30, 30, 0.6); background-color: rgba(255,30,30,0.12); }
+}
+
+@keyframes damageFlash {
+  0% { background: rgba(255, 30, 30, 0.4); }
+  100% { background: transparent; }
+}
+
+.boss-hp-container {
+  position: relative;
+  padding: 12px 16px;
+  background: rgba(12,12,20,0.9);
+  border: 1px solid rgba(255, 30, 30, 0.3);
+  border-radius: 8px;
+  animation: bossBarPulse 2s ease-in-out infinite;
+}
+
+.boss-hp-container--critical {
+  animation: bossBarCritical 1s ease-in-out infinite;
+}
+
+.boss-hp-container--hit {
+  animation: damageFlash 0.5s ease-out;
+}
+
+.boss-hp-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--titan-red);
+  margin-bottom: 6px;
+}
+
+.boss-hp-track {
+  height: 14px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.boss-hp-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.boss-hp-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+  animation: hpShimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes hpShimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+.boss-hp-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* ── Class System Cards ── */
+.class-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 18px;
+  border-radius: 12px;
+  border: 2px solid var(--color-border);
+  background: linear-gradient(180deg, rgba(12,12,20,0.95), rgba(8,8,14,0.98));
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 130px;
+  overflow: hidden;
+}
+
+.class-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--class-color, var(--color-border));
+  transition: height 0.3s ease;
+}
+
+.class-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+}
+
+.class-card:hover::before {
+  height: 5px;
+}
+
+.class-card.selected {
+  border-color: var(--class-color, var(--color-accent));
+  box-shadow: 0 0 20px rgba(var(--class-rgb, 240,201,64), 0.3), 0 12px 32px rgba(0,0,0,0.5);
+}
+
+.class-card.selected::before {
+  height: 5px;
+}
+
+.class-icon {
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.class-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.class-desc {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.class-ability {
+  font-size: 0.68rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--class-color, var(--neon-green));
+  font-weight: 600;
+}
+
+/* ── Confetti Burst ── */
+@keyframes confettiDrop {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  animation: confettiDrop 3s ease-in forwards;
+}
+
+/* ── Enhanced Badge Unlock ── */
+@keyframes badgeUnlock {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+  80% { transform: scale(0.95) rotate(-5deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes badgeGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(240, 201, 64, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(240, 201, 64, 0.6), 0 0 60px rgba(240, 201, 64, 0.2); }
+}
+
+.badge-unlock-anim {
+  animation: badgeUnlock 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.badge-glow {
+  animation: badgeGlow 2s ease-in-out infinite;
+}
+
+/* ── Orbitron Font Usage ── */
+.titan-font {
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.retro-font {
+  font-family: 'Press Start 2P', cursive;
+}
+
+/* ── Workout Logger Enhanced ── */
+@keyframes exerciseAdded {
+  0% { transform: translateX(-20px) scale(0.9); opacity: 0; }
+  60% { transform: translateX(4px) scale(1.02); }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+.exercise-added-anim {
+  animation: exerciseAdded 0.4s ease-out both;
+}
+
+@keyframes repTick {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); color: var(--neon-green); }
+  100% { transform: scale(1); }
+}
+
+.rep-tick { animation: repTick 0.25s ease-out; }
+
+/* ── Progress Ring ── */
+.progress-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-ring svg {
+  transform: rotate(-90deg);
+}
+
+.progress-ring-bg {
+  stroke: rgba(255,255,255,0.06);
+}
+
+.progress-ring-fill {
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Map Enhanced ── */
+@keyframes roomUnlock {
+  0% { transform: scale(0.5); opacity: 0; filter: brightness(3); }
+  50% { transform: scale(1.1); filter: brightness(1.5); }
+  100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+}
+
+@keyframes threatPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 30, 30, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(255, 30, 30, 0.5); }
+}
+
+.room-unlock-anim { animation: roomUnlock 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.room-threat-pulse { animation: threatPulse 1.5s ease-in-out infinite; }
+
+/* ── Titan Eye Effect ── */
+@keyframes titanEye {
+  0%, 100% { box-shadow: 0 0 10px var(--titan-red), 0 0 20px rgba(255,30,30,0.3); }
+  50% { box-shadow: 0 0 20px var(--titan-red), 0 0 40px rgba(255,30,30,0.5), 0 0 60px rgba(255,30,30,0.2); }
+}
+
+.titan-eye {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--titan-red);
+  animation: titanEye 2s ease-in-out infinite;
+}
+
+/* ── Enhanced Buttons ── */
+.btn-neon {
+  position: relative;
+  padding: 14px 32px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border: 1px solid var(--neon-cyan);
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-neon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btn-neon:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.btn-neon:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(0, 240, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.btn-neon:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-neon--danger {
+  border-color: var(--titan-red);
+}
+.btn-neon--danger::before {
+  background: linear-gradient(135deg, rgba(255, 30, 30, 0.1), transparent);
+}
+.btn-neon--danger:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(255, 30, 30, 0.3), inset 0 0 10px rgba(255, 30, 30, 0.05);
+}
+
+.btn-neon--gold {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+.btn-neon--gold::before {
+  background: linear-gradient(135deg, rgba(240, 201, 64, 0.1), transparent);
+}
+.btn-neon--gold:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(240, 201, 64, 0.3), inset 0 0 10px rgba(240, 201, 64, 0.05);
+}
+
+.btn-neon--green {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+}
+
+/* ── Workout Complete Celebration ── */
+@keyframes celebrationBurst {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes starSparkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+}
+
+.celebration-burst { animation: celebrationBurst 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* ── TITAN Terminal ── */
+.titan-terminal {
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 30, 30, 0.4);
+  border-radius: 4px;
+  padding: 16px 20px;
+  font-family: 'Courier New', monospace;
+  position: relative;
+  overflow: hidden;
+}
+
+.titan-terminal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--titan-red), transparent);
+  animation: terminalScan 3s ease-in-out infinite;
+}
+
+@keyframes terminalScan {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+.titan-terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.titan-terminal-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--titan-red);
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+.titan-terminal-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: rgba(255, 30, 30, 0.7);
+  text-transform: uppercase;
+}
+
+/* ── Enhanced Level Title Bar ── */
+.level-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.level-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: rgba(240, 201, 64, 0.1);
+  border: 1px solid rgba(240, 201, 64, 0.2);
+  color: var(--color-accent);
+}
+
+/* ── Power Move (special ability) indicator ── */
+@keyframes powerReady {
+  0%, 100% { box-shadow: 0 0 6px currentColor; }
+  50% { box-shadow: 0 0 16px currentColor, 0 0 32px currentColor; }
+}
+
+.power-ready {
+  animation: powerReady 1.5s ease-in-out infinite;
+}
+
+/* ── Ambient particles ── */
+@keyframes ambientFloat {
+  0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
+  10% { opacity: 0.6; transform: translateY(90vh) translateX(10px) scale(1); }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-10vh) translateX(-20px) scale(0.5); opacity: 0; }
+}
+
+/* ── Map room door images ── */
+.room-door-img {
+  width: 100%;
+  max-width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  opacity: 0.85;
+  transition: opacity 0.3s;
+}
+
+.room-door-img:hover {
+  opacity: 1;
+}
+
+/* ── Exercise Category Pills ── */
+.exercise-category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.exercise-category-pill--cardio {
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  color: var(--neon-cyan);
+}
+
+.exercise-category-pill--strength {
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.2);
+  color: var(--class-berserker);
+}
+
+.exercise-category-pill--functional {
+  background: rgba(170, 68, 255, 0.1);
+  border: 1px solid rgba(170, 68, 255, 0.2);
+  color: var(--neon-purple);
+}
+
+/* ── Glitch effect V2 (for headings) ── */
+@keyframes glitchV2 {
+  0%, 85%, 100% { text-shadow: none; transform: none; }
+  86% {
+    text-shadow: -2px 0 var(--neon-cyan), 2px 0 var(--neon-pink);
+    transform: translateX(-1px);
+  }
+  87% {
+    text-shadow: 2px 0 var(--neon-pink), -2px 0 var(--neon-cyan);
+    transform: translateX(1px);
+  }
+  88% {
+    text-shadow: -1px 0 var(--neon-cyan), 1px 0 var(--neon-pink);
+    transform: translateX(0);
+  }
+  89% { text-shadow: none; transform: none; }
+}
+
+.glitch-v2 {
+  animation: glitchV2 4s infinite;
+}
+
+/* ── Victory Confetti Colours ── */
+.confetti-gold { background: var(--color-accent); }
+.confetti-cyan { background: var(--neon-cyan); }
+.confetti-pink { background: var(--neon-pink); }
+.confetti-green { background: var(--neon-green); }
+.confetti-white { background: #fff; }
+
+/* ── Workout Logger XP toast ── */
+@keyframes toastSlide {
+  0% { transform: translateX(100%); opacity: 0; }
+  10% { transform: translateX(0); opacity: 1; }
+  90% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+.xp-toast {
+  position: fixed;
+  top: 70px;
+  right: 16px;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, rgba(12,12,20,0.95), rgba(20,20,35,0.95));
+  border: 1px solid var(--color-accent);
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(240, 201, 64, 0.2);
+  animation: toastSlide 3s ease-in-out forwards;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-accent);
+}
+
+/* ── Enhanced scavenge toast ── */
+.scavenge-toast {
+  text-align: center;
+  padding: 8px 16px;
+  margin: 8px 0;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 4px;
+  color: var(--neon-green);
+  font-weight: 600;
+  font-size: 0.85rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ── Explore prompt actions ── */
+.explore-prompt-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.explore-btn {
+  padding: 14px 24px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.scavenge-btn {
+  background: rgba(0, 255, 136, 0.08);
+  border-color: rgba(0, 255, 136, 0.3);
+  color: var(--neon-green);
+}
+.scavenge-btn:hover { background: rgba(0, 255, 136, 0.15); border-color: var(--neon-green); transform: translateY(-2px); }
+
+.press-on-btn {
+  background: var(--color-accent);
+  color: #0a0a0f;
+  border-color: var(--color-accent);
+}
+.press-on-btn:hover { opacity: 0.85; transform: translateY(-2px); }
 .stat-reveal { animation: countUp 0.5s ease-out both; }

@@ -2,8 +2,18 @@ import React, { useState, useEffect, useRef } from "react";
 import { playSound } from "../../utils";
 import VideoBackground from "../VideoBackground";
 import "./BossFightPhase.css";
+import { showXPPopup } from "../XPPopup";
+import Confetti from "../Confetti";
 
 const TOTAL_HP = 100;
+
+const TITAN_TAUNTS = [
+  "Is that all you've got? My circuits aren't even warm!",
+  "Pathetic. I've seen Year 7s hit harder than that.",
+  "You're slowing down, human. Just give up.",
+  "Every rep makes me stronger... wait, that's YOU.",
+  "I'll admit — that actually stung a little.",
+];
 
 function BossFightPhase({ config, gameState, setGameState, onComplete }) {
   const phases = config?.phases || [];
@@ -17,6 +27,8 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
   const [shake, setShake] = useState(false);
   const [hitFlash, setHitFlash] = useState(false);
   const [defeated, setDefeated] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [tauntIdx, setTauntIdx] = useState(0);
   const logRef = useRef(null);
 
   const totalReps = phases.reduce((s, p) => s + (p.reps || 10), 0);
@@ -35,6 +47,8 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
     setShake(true);
     setTimeout(() => { setHitFlash(false); setShake(false); }, 600);
     playSound("xpLevel");
+    showXPPopup(`-${damage} HP!`, { variant: "damage" });
+    setTauntIdx((prev) => (prev + 1) % TITAN_TAUNTS.length);
 
     setBossHp((prev) => {
       const next = Math.max(0, prev - damage);
@@ -82,6 +96,8 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
     setDefeated(true);
     addLog(`${bossName} has been defeated!`);
     playSound("alarm");
+    setShowConfetti(true);
+    showXPPopup("+30 XP!", { variant: "xp" });
     setGameState((prev) => ({ ...prev, xp: (prev.xp || 0) + 30 }));
   };
 
@@ -91,6 +107,7 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
   return (
     <div className="boss-fight-page">
       <VideoBackground src="/videos/Boss-Intro.mp4" fallbackImage="/images/boss-intro.png" />
+      {showConfetti && <Confetti count={80} duration={5000} />}
       <div className={`boss-arena ${shake ? "boss-shake" : ""}`}>
 
         {/* Boss Portrait */}
@@ -151,6 +168,10 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
                   {Math.max(0, (phase?.reps || 0) - repsLeft)}/{phase?.reps || 0} reps
                 </span>
               </div>
+              <div className="titan-terminal" style={{ marginTop: '10px', padding: '8px 12px', fontSize: '0.78rem' }}>
+                <span style={{ color: '#ff4444', marginRight: '6px' }}>TITAN:</span>
+                <span style={{ color: 'rgba(255,60,60,0.7)', fontStyle: 'italic' }}>{TITAN_TAUNTS[tauntIdx]}</span>
+              </div>
             </div>
 
             {/* Rep input */}
@@ -191,7 +212,7 @@ function BossFightPhase({ config, gameState, setGameState, onComplete }) {
               {bossName} has been defeated! Your strength and determination won the day.
             </p>
             <p className="victory-xp">+30 XP earned!</p>
-            <button className="boss-continue-btn" onClick={onComplete}>
+            <button className="btn-neon btn-neon--gold" onClick={onComplete} style={{ width: '100%' }}>
               Continue Adventure
             </button>
           </div>

@@ -144,14 +144,16 @@
 /* ── Text ── */
 
 .badge-reveal-tag {
-  font-size: 0.65rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: rgba(255, 215, 100, 0.85);
+  letter-spacing: 0.25em;
+  color: var(--color-accent);
   font-weight: 700;
   margin-bottom: 8px;
   position: relative;
   z-index: 2;
+  text-shadow: 0 0 10px rgba(240, 201, 64, 0.4);
 }
 
 .badge-reveal-label {

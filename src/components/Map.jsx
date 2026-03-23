@@ -139,7 +139,7 @@ function Map({ gameState, setGameState, userId }) {
       {/* ── Top bar ── */}
       <div className="map-topbar">
         <div className="map-title-group">
-          <h2 className="map-title">TACTICAL MAP</h2>
+          <h2 className="map-title glitch-v2">TACTICAL MAP</h2>
           <p className="map-subtitle">Pencoedtre High School — TITAN Lockdown Active</p>
         </div>
         <div className="map-topbar-actions">
@@ -274,7 +274,7 @@ function Map({ gameState, setGameState, userId }) {
                       <span className="room-card-name">{room.name}</span>
                       <span className="room-card-desc">{room.description}</span>
                       {isClickable && (
-                        <span className="room-card-cta">Enter Room</span>
+                        <span className="room-card-cta pulse-text">▶ Enter Room</span>
                       )}
                       {room.status === "cleared" && (
                         <span className="room-cleared">CODE ACQUIRED</span>
@@ -309,7 +309,7 @@ function Map({ gameState, setGameState, userId }) {
 
       {/* ── Hint ── */}
       <p className="map-hint">
-        Collect all 3 override codes to unlock the Fitness Suite. Complete TITAN's challenges to progress.
+        Collect all 3 override codes to unlock the Fitness Suite and shut down TITAN for good.
       </p>
 
       {/* ── Modals ── */}

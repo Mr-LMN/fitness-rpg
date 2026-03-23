@@ -63,6 +63,50 @@
   text-transform: uppercase;
 }
 
+/* ── TITAN Status Bar ── */
+.intro-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 16px;
+  margin-bottom: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  max-width: 520px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.intro-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff2222;
+  box-shadow: 0 0 6px #ff2222;
+  flex-shrink: 0;
+  animation: introDotPulse 1s ease-in-out infinite;
+}
+
+@keyframes introDotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.intro-status-text {
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: rgba(255, 60, 60, 0.8);
+  text-transform: uppercase;
+  animation: statusSlide 0.3s ease-out;
+}
+
+@keyframes statusSlide {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .intro-video-wrap {

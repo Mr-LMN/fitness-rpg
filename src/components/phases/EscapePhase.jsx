@@ -3,6 +3,7 @@ import ParallaxDust from "../ParallaxDust";
 import "../styles/RoomScene.css";
 import "./EscapePhase.css";
 import { playSound } from "../../utils";
+import { showXPPopup } from "../XPPopup";
 import narrationLines from "../../data/narrationLines";
 import ScrollingNarrationBox from "../ScrollingNarrationBox";
 import { getReadingProfile } from "../../helpers/readingProfile";
@@ -29,7 +30,12 @@ function EscapePhase({ setGameState, gameState = {}, slamBallGoal = 10, squatJum
     playSound('repClick');
     setCount((c) => {
       const next = c + 1;
-      if (next >= goal) playSound('alarm');
+      if (next >= goal) {
+        playSound('alarm');
+        showXPPopup("ESCAPE READY!", { variant: "xp" });
+      } else if (next % 5 === 0) {
+        showXPPopup(`${next}/${goal}!`, { variant: "xp" });
+      }
       return next;
     });
     clearTimeout(bounceRef.current);
@@ -80,7 +86,7 @@ function EscapePhase({ setGameState, gameState = {}, slamBallGoal = 10, squatJum
     const btnEmoji     = isSlamRoute ? '💥' : '⬆️';
     const btnLabel     = isSlamRoute ? 'SLAM!' : 'JUMP!';
     const coachingTip  = isSlamRoute
-      ? 'Pick up, reach overhead, then slam it with everything you've got!'
+      ? 'Pick up, reach overhead, then slam it with everything you\u2019ve got!'
       : 'Squat deep, then explode upward — arms drive you higher!';
     const barColor     = isComplete ? '#4ade80' : percent >= 60 ? '#ffd166' : '#f87171';
 
@@ -123,7 +129,7 @@ function EscapePhase({ setGameState, gameState = {}, slamBallGoal = 10, squatJum
               {btnEmoji} {btnLabel}
             </button>
             {isComplete && (
-              <button className="primary-btn escape-go-btn" onClick={handleEscape}>
+              <button className="btn-neon btn-neon--green escape-go-btn" onClick={handleEscape}>
                 🚪 Break Free!
               </button>
             )}

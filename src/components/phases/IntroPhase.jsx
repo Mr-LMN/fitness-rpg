@@ -8,12 +8,26 @@ import { playVoice, playSound } from "../../utils";
 import narrationLines from "../../data/narrationLines";
 import ScrollingNarrationBox from "../ScrollingNarrationBox";
 
+const TITAN_STATUS_LINES = [
+  "SECURITY PROTOCOL: ACTIVE",
+  "EXITS: SEALED",
+  "CAMERAS: ONLINE",
+  "THREAT LEVEL: MAXIMUM",
+];
+
 function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = false, readingAge = 'not-sure' }) {
   const [videoWatched, setVideoWatched] = useState(false);
+  const [statusIdx, setStatusIdx] = useState(0);
 
   useEffect(() => {
-    // Voice-over starts after any intro video ends
     if (videoWatched) playVoice('/voices/intro-phase.wav');
+  }, [videoWatched]);
+
+  // Cycle TITAN status lines
+  useEffect(() => {
+    if (!videoWatched) return;
+    const t = setInterval(() => setStatusIdx((i) => (i + 1) % TITAN_STATUS_LINES.length), 2500);
+    return () => clearInterval(t);
   }, [videoWatched]);
 
   const handleVideoDone = () => setVideoWatched(true);
@@ -25,7 +39,6 @@ function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = fals
 
   return (
     <div className="room-container intro-phase-container">
-      {/* Background scene */}
       <VideoBackground src="/videos/Locker-Room.mp4" fallbackImage="/images/locker-room.png" />
       <ParallaxDust />
 
@@ -33,7 +46,6 @@ function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = fals
       <div className="intro-lockdown-sweep" aria-hidden="true" />
 
       <div className="room-content rpg-text">
-        {/* ── Intro cinematic video (upload /videos/intro-cinematic.mp4) ── */}
         {!videoWatched && (
           <div className="intro-video-wrap">
             <VideoSlot
@@ -45,7 +57,6 @@ function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = fals
           </div>
         )}
 
-        {/* ── Narration (shown after video or immediately if video missing) ── */}
         {videoWatched && (
           <>
             {/* TITAN transmission header */}
@@ -54,7 +65,15 @@ function IntroPhase({ setGameState, textToSpeech = false, enhancedReading = fals
               <span className="intro-titan-sub">FACILITY LOCKDOWN — ALL EXITS SEALED</span>
             </div>
 
-            <h2 className="phase-heading phase-heading--danger">LOCKDOWN</h2>
+            {/* Cycling status bar */}
+            <div className="intro-status-bar">
+              <span className="intro-status-dot" />
+              <span className="intro-status-text" key={statusIdx}>
+                {TITAN_STATUS_LINES[statusIdx]}
+              </span>
+            </div>
+
+            <h2 className="phase-heading phase-heading--danger glitch-v2">LOCKDOWN</h2>
 
             <ScrollingNarrationBox
               lines={narrationLines.general.introPhase}
