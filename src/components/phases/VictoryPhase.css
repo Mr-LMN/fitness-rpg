@@ -1,0 +1,385 @@
+/* ============================================================
+   VICTORY PHASE — End-game celebration screen
+   ============================================================ */
+
+.victory-video-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #050508;
+  overflow: hidden;
+}
+
+.victory-video-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.2) saturate(0.4);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.victory-video-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 720px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(164, 198, 57, 0.4);
+  box-shadow: 0 0 60px rgba(164, 198, 57, 0.2), 0 30px 80px rgba(0, 0, 0, 0.7);
+  animation: videoReveal 0.6s ease-out;
+}
+
+@keyframes videoReveal {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Stats panel ── */
+
+.victory-panel {
+  background: linear-gradient(160deg, rgba(10, 20, 10, 0.85), rgba(5, 5, 8, 0.92));
+  border: 1px solid rgba(164, 198, 57, 0.3);
+  border-radius: 20px;
+  padding: 36px 28px;
+  max-width: 580px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(164, 198, 57, 0.1);
+}
+
+.victory-panel-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ── Title ── */
+
+.victory-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: #ffd764;
+  text-align: center;
+  margin: 0 0 4px;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 30px rgba(255, 215, 100, 0.4);
+}
+
+.victory-subtitle {
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: rgba(164, 198, 57, 0.7);
+  text-transform: uppercase;
+  margin: 0 0 24px;
+}
+
+/* ── Player card ── */
+
+.victory-player-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 18px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.victory-player-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #f0e8ff;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.victory-player-class {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ── Stats grid ── */
+
+.victory-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.victory-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+
+.victory-stat:hover {
+  transform: translateY(-2px);
+}
+
+.stat-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: statReveal 0.5s ease-out forwards;
+}
+
+@keyframes statReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.victory-stat-val {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #ffd764;
+  text-shadow: 0 0 10px rgba(255, 215, 100, 0.3);
+}
+
+.victory-stat-lbl {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(200, 200, 220, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Sections (badges, quests) ── */
+
+.victory-section {
+  margin-bottom: 20px;
+}
+
+.victory-section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(240, 201, 64, 0.15);
+}
+
+.slide-in-left {
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideInLeft 0.5s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.slide-in-right {
+  opacity: 0;
+  transform: translateX(20px);
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Badge chips */
+
+.victory-badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.victory-badge-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(147, 92, 255, 0.1);
+  border: 1px solid rgba(147, 92, 255, 0.3);
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #d0b8ff;
+}
+
+/* Quest list */
+
+.victory-quest-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.victory-quest-list li {
+  font-size: 0.82rem;
+  color: #b8c8b8;
+  padding: 6px 10px;
+  background: rgba(74, 222, 128, 0.04);
+  border-radius: 6px;
+  border-left: 3px solid rgba(74, 222, 128, 0.4);
+}
+
+/* ── Teaser ── */
+
+.victory-teaser {
+  margin-bottom: 20px;
+}
+
+.victory-teaser-inner {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 30, 30, 0.3);
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-align: center;
+}
+
+.victory-teaser-inner.titan-border {
+  box-shadow: 0 0 20px rgba(255, 30, 30, 0.1);
+}
+
+.victory-teaser-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 60, 60, 0.8);
+  margin: 0 0 8px;
+}
+
+.victory-teaser-text {
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  color: rgba(255, 60, 60, 0.65);
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+
+.victory-teaser-hint {
+  font-size: 0.72rem;
+  color: rgba(107, 107, 128, 0.6);
+  margin: 0;
+  font-style: italic;
+}
+
+/* ── Actions ── */
+
+.victory-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Celebration burst (title animation) ── */
+
+.celebration-burst {
+  animation: celebBurst 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes celebBurst {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.victory-burst {
+  animation: victoryBurst 0.6s ease-out;
+}
+
+@keyframes victoryBurst {
+  0%   { opacity: 0; transform: scale(0.5) translateY(20px); }
+  60%  { transform: scale(1.05) translateY(-4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .victory-panel {
+    padding: 28px 20px;
+    border-radius: 16px;
+  }
+
+  .victory-title {
+    font-size: 1.8rem;
+  }
+
+  .victory-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .victory-stat-val {
+    font-size: 1rem;
+  }
+
+  .victory-player-name {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .victory-panel {
+    padding: 22px 14px;
+    border-radius: 14px;
+  }
+
+  .victory-title {
+    font-size: 1.5rem;
+  }
+
+  .victory-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .victory-stat {
+    padding: 10px 6px;
+  }
+
+  .victory-stat-val {
+    font-size: 0.95rem;
+  }
+
+  .victory-stat-lbl {
+    font-size: 0.6rem;
+  }
+
+  .victory-badge-list {
+    gap: 6px;
+  }
+
+  .victory-badge-chip {
+    font-size: 0.72rem;
+    padding: 5px 10px;
+  }
+
+  .victory-teaser-inner {
+    padding: 12px 14px;
+  }
+}

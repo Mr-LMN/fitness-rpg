@@ -497,6 +497,75 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
+/* ── Override Code Bar ── */
+.map-codes-bar {
+  width: 100%;
+  max-width: 900px;
+  padding: 12px 24px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.map-codes-chips {
+  display: flex;
+  gap: 10px;
+}
+
+.code-chip {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.code-chip--active {
+  border-color: rgba(0, 255, 136, 0.5);
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.08);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.2);
+  animation: codeGlow 2s ease-in-out infinite;
+}
+
+@keyframes codeGlow {
+  0%, 100% { box-shadow: 0 0 12px rgba(0, 255, 136, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.4); }
+}
+
+/* Room card description */
+.room-card-desc {
+  font-size: 0.65rem;
+  color: #6b7280;
+  margin-top: 1px;
+}
+
+.pulse-text {
+  animation: pulseText 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseText {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Map title fonts */
+.map-title {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.1em;
+}
+
+.map-subtitle {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
 /* ── Responsive ── */
 @media (max-width: 600px) {
   .map-topbar {

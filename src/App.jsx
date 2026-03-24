@@ -16,6 +16,8 @@ import FinalBossPhase from "./components/phases/FinalBossPhase";
 import XPBar from "./components/XPBar";
 import AccountabilityPopup from "./components/AccountabilityPopup";
 import BadgeUnlockedModal from "./components/BadgeUnlockedModal";
+import ComboCounter from "./components/ComboCounter";
+import XPPopupLayer, { showXPPopup } from "./components/XPPopup";
 import { playSound, stopSound, setMuted, setTtsEnabled } from "./utils";
 import GlobalAudioControls from "./components/GlobalAudioControls";
 import StartScreen from "./components/StartScreen";
@@ -23,7 +25,7 @@ import QuestTracker from "./components/QuestTracker";
 import questDeck from "./data/questDeck";
 import GameMenu from "./components/GameMenu";
 import SLTDashboard from "./components/SLTDashboard";
-import { ROOMS } from "./constants";
+import { ROOMS, CLASSES } from "./constants";
 import { updateUserProfile, syncUserXP } from "./helpers/userProfile";
 import { getReadingProfile } from "./helpers/readingProfile";
 import StreakBanner, { updateStreak } from "./components/StreakBanner";
@@ -36,6 +38,7 @@ const INITIAL_STATE = {
   weight: "",
   workoutFocus: "",
   avatar: "pirate",
+  playerClass: null,
   readingAge: "not-sure",
   introStage: 0,
   currentRoom: null,
@@ -63,6 +66,8 @@ const INITIAL_STATE = {
   survivorStatus: null,
   recoveryWorkoutsNeeded: 2,
   recoveryWorkoutsCompleted: 0,
+  combo: 0,
+  totalWorkoutsLogged: 0,
 };
 
 const CHECKPOINT_PREFIX = "checkpoint_";
@@ -95,6 +100,26 @@ const ROOM_COMPONENTS = {
   [ROOMS.FITNESS_SUITE]: FinalBossPhase,
 };
 
+// Combo system: calculate XP multiplier from combo count
+function getComboMultiplier(combo) {
+  if (combo >= 10) return 2.0;
+  if (combo >= 6) return 1.5;
+  if (combo >= 3) return 1.2;
+  return 1.0;
+}
+
+// Class XP bonus calculation
+function getClassXPBonus(playerClass, workoutFocus) {
+  if (!playerClass) return 0;
+  const cls = CLASSES[playerClass];
+  if (!cls) return 0;
+  const bonus = cls.xpBonus;
+  if (bonus.all) return bonus.all;
+  if (bonus.strength && workoutFocus === "strength") return bonus.strength;
+  if (bonus.cardio && workoutFocus === "cardio") return bonus.cardio;
+  return 0;
+}
+
 function App() {
   const [user, setUser] = useState(null);
   const [gameState, setGameState] = useState({ ...INITIAL_STATE });
@@ -103,7 +128,7 @@ function App() {
   const [muted, setMutedState] = useState(false);
   const [showHome, setShowHome] = useState(true);
   const [showSLT, setShowSLT] = useState(false);
-  const [streakData, setStreakData] = useState(null); // { streak, lastLogin }
+  const [streakData, setStreakData] = useState(null);
   const [showStreak, setShowStreak] = useState(false);
 
   const ambientRef = useRef(null);
@@ -122,7 +147,6 @@ function App() {
         console.error("Failed to parse checkpoint", err);
       }
     }
-    // Update daily streak (scoped by user.uid)
     const newStreak = updateStreak(user.uid);
     setStreakData(newStreak);
     if (newStreak.streak > 0) setShowStreak(true);
@@ -142,7 +166,7 @@ function App() {
     setMuted(muted);
   }, [muted]);
 
-  // Weekly challenge check — runs once on mount
+  // Weekly challenge check
   useEffect(() => {
     const now = new Date();
     localStorage.setItem("lastOpenDate", now.toISOString());
@@ -155,10 +179,12 @@ function App() {
       if ((week.minutes || 0) >= 60) {
         setPopupMessage("Great job! You hit your weekly workout target!");
       } else {
-        setPopupMessage("⚠️ You've been weakened — complete 2 workouts to recover.");
+        setPopupMessage(
+          "You've been weakened — complete 2 workouts to recover."
+        );
         setGameState((prev) => ({
           ...prev,
-          survivorStatus: 'injured',
+          survivorStatus: "injured",
           recoveryWorkoutsNeeded: 2,
           recoveryWorkoutsCompleted: 0,
         }));
@@ -174,6 +200,10 @@ function App() {
     const level = Math.floor(gameState.xp / 100);
     if (level > prevXpLevel.current) {
       playSound("xpLevel");
+      showXPPopup(`LEVEL UP! Level ${level}`, {
+        variant: "heal",
+        y: 80,
+      });
     }
     prevXpLevel.current = level;
   }, [gameState.xp]);
@@ -206,13 +236,12 @@ function App() {
     setTtsEnabled(gameState.textToSpeech);
   }, [gameState.textToSpeech]);
 
-  // Sync user profile to Firestore when character is created or XP/badges change
+  // Sync user profile to Firestore
   useEffect(() => {
     if (!user || !gameState.characterCreated) return;
 
     const syncProfile = async () => {
       if (!profileSyncedRef.current) {
-        // Full sync on first character creation
         await updateUserProfile({
           userId: user.uid,
           studentName: gameState.studentName,
@@ -222,7 +251,6 @@ function App() {
         });
         profileSyncedRef.current = true;
       } else {
-        // Lightweight XP/badge sync on change
         await syncUserXP({
           userId: user.uid,
           xp: gameState.xp,
@@ -233,7 +261,13 @@ function App() {
     };
 
     syncProfile();
-  }, [gameState.xp, gameState.badges, gameState.avatar, gameState.characterCreated, user]);
+  }, [
+    gameState.xp,
+    gameState.badges,
+    gameState.avatar,
+    gameState.characterCreated,
+    user,
+  ]);
 
   const handleQuestEvent = useCallback(
     (eventType, payload = {}) => {
@@ -250,7 +284,11 @@ function App() {
 
         if (isInit) {
           questDeck.forEach((quest) => {
-            if (quest.autoUnlock && !activeSet.has(quest.id) && !completedSet.has(quest.id)) {
+            if (
+              quest.autoUnlock &&
+              !activeSet.has(quest.id) &&
+              !completedSet.has(quest.id)
+            ) {
               activeSet.add(quest.id);
               changed = true;
             }
@@ -284,31 +322,70 @@ function App() {
         questDeck.forEach((quest) => {
           if (activeSet.has(quest.id) || completedSet.has(quest.id)) return;
           const prerequisites = quest.prerequisites || [];
-          const prerequisitesMet = prerequisites.every((id) => completedSet.has(id));
+          const prerequisitesMet = prerequisites.every((id) =>
+            completedSet.has(id)
+          );
           if (isInit ? quest.autoUnlock : prerequisitesMet) {
             activeSet.add(quest.id);
             changed = true;
           }
         });
 
-        // Handle injury recovery — track workouts logged while injured
+        // Handle injury recovery
         let recoveryUpdate = {};
-        if (eventType === 'workoutLogged' && prev.survivorStatus === 'injured') {
+        if (eventType === "workoutLogged" && prev.survivorStatus === "injured") {
+          const recoveryNeeded = prev.playerClass === "guardian"
+            ? 1
+            : prev.recoveryWorkoutsNeeded || 2;
           const newCompleted = (prev.recoveryWorkoutsCompleted || 0) + 1;
-          const recovered = newCompleted >= (prev.recoveryWorkoutsNeeded || 2);
+          const recovered = newCompleted >= recoveryNeeded;
           recoveryUpdate = {
             recoveryWorkoutsCompleted: recovered ? 0 : newCompleted,
-            survivorStatus: recovered ? null : 'injured',
+            survivorStatus: recovered ? null : "injured",
           };
+          changed = true;
+        }
+
+        // Update combo on workout logged
+        let comboUpdate = {};
+        if (eventType === "workoutLogged") {
+          const newCombo = (prev.combo || 0) + 1;
+          comboUpdate = {
+            combo: newCombo,
+            totalWorkoutsLogged: (prev.totalWorkoutsLogged || 0) + 1,
+          };
+          // Combo badge
+          if (newCombo >= 5 && !badgeSet.has("comboMaster")) {
+            badgeSet.add("comboMaster");
+          }
           changed = true;
         }
 
         if (!changed) return prev;
 
-        // Halve XP gains while injured
-        const effectiveXpBonus = prev.survivorStatus === 'injured'
-          ? Math.floor(xpBonus / 2)
-          : xpBonus;
+        // Apply class XP bonus + combo multiplier
+        const classBonus = getClassXPBonus(
+          prev.playerClass,
+          payload.focus || prev.workoutFocus
+        );
+        const comboMult = getComboMultiplier(
+          comboUpdate.combo ?? prev.combo ?? 0
+        );
+        const injuredPenalty = prev.survivorStatus === "injured" ? 0.5 : 1;
+        const effectiveXpBonus = Math.round(
+          xpBonus * (1 + classBonus) * comboMult * injuredPenalty
+        );
+
+        // Show XP popup for quest rewards
+        if (effectiveXpBonus > 0) {
+          setTimeout(
+            () =>
+              showXPPopup(`+${effectiveXpBonus} XP`, {
+                variant: "xp",
+              }),
+            200
+          );
+        }
 
         return {
           ...prev,
@@ -318,6 +395,7 @@ function App() {
           completedQuests: Array.from(completedSet),
           questProgress,
           ...recoveryUpdate,
+          ...comboUpdate,
         };
       });
     },
@@ -329,7 +407,11 @@ function App() {
       handleQuestEvent("init");
       setGameState((prev) => ({ ...prev, questInitialised: true }));
     }
-  }, [gameState.characterCreated, gameState.questInitialised, handleQuestEvent]);
+  }, [
+    gameState.characterCreated,
+    gameState.questInitialised,
+    handleQuestEvent,
+  ]);
 
   const handleResetProgress = useCallback(() => {
     const confirmed = window.confirm(
@@ -354,21 +436,21 @@ function App() {
     prevBadgesRef.current = [];
   }, [user]);
 
-  // SLT Dashboard — no auth required, just passcode gated
+  // SLT Dashboard
   if (showSLT) {
     return <SLTDashboard onBack={() => setShowSLT(false)} />;
   }
 
   const renderPhase = () => {
     if (!user) {
-      return showHome
-        ? <StartScreen onStart={() => setShowHome(false)} />
-        : (
-          <LoginForm
-            onLogin={(u) => setUser(u)}
-            onSLTAccess={() => setShowSLT(true)}
-          />
-        );
+      return showHome ? (
+        <StartScreen onStart={() => setShowHome(false)} />
+      ) : (
+        <LoginForm
+          onLogin={(u) => setUser(u)}
+          onSLTAccess={() => setShowSLT(true)}
+        />
+      );
     }
 
     if (!gameState.characterCreated) {
@@ -399,11 +481,17 @@ function App() {
           />
         );
       case 1:
-        return <WarmUpPhase setGameState={setGameState} gameState={gameState} />;
+        return (
+          <WarmUpPhase setGameState={setGameState} gameState={gameState} />
+        );
       case 2:
-        return <MobilityPhase setGameState={setGameState} gameState={gameState} />;
+        return (
+          <MobilityPhase setGameState={setGameState} gameState={gameState} />
+        );
       case 3:
-        return <EscapePhase setGameState={setGameState} gameState={gameState} />;
+        return (
+          <EscapePhase setGameState={setGameState} gameState={gameState} />
+        );
       case 4:
         return (
           <MapIntroduction
@@ -440,20 +528,37 @@ function App() {
         return RoomComponent ? <RoomComponent {...sharedRoomProps} /> : null;
       }
       case 7:
-        return gameState.victory ? <VictoryPhase gameState={gameState} /> : null;
+        return gameState.victory ? (
+          <VictoryPhase gameState={gameState} />
+        ) : null;
       default:
         console.error("Unknown introStage:", gameState.introStage);
         return <div>Something went wrong. No valid phase loaded.</div>;
     }
   };
 
-  const readingProfile = getReadingProfile(gameState.readingAge || 'not-sure');
-  const readingLevelClass = readingProfile.level === 'entry' ? 'reading-entry'
-    : readingProfile.level === 'simple' ? 'reading-simple'
-    : '';
+  const readingProfile = getReadingProfile(gameState.readingAge || "not-sure");
+  const readingLevelClass =
+    readingProfile.level === "entry"
+      ? "reading-entry"
+      : readingProfile.level === "simple"
+      ? "reading-simple"
+      : "";
+
+  const comboMultiplier = getComboMultiplier(gameState.combo || 0);
 
   return (
-    <div className={[gameState.enhancedReading ? 'enhanced-reading' : '', readingLevelClass].filter(Boolean).join(' ')}>
+    <div
+      className={[
+        gameState.enhancedReading ? "enhanced-reading" : "",
+        readingLevelClass,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      {/* Floating XP popups */}
+      <XPPopupLayer />
+
       {user && gameState.characterCreated && (
         <>
           <XPBar
@@ -464,11 +569,17 @@ function App() {
             survivorStatus={gameState.survivorStatus}
             recoveryWorkoutsCompleted={gameState.recoveryWorkoutsCompleted}
             recoveryWorkoutsNeeded={gameState.recoveryWorkoutsNeeded}
+            playerClass={gameState.playerClass}
+            combo={gameState.combo}
           />
           <QuestTracker
             activeQuests={gameState.activeQuests}
             completedQuests={gameState.completedQuests}
             questProgress={gameState.questProgress}
+          />
+          <ComboCounter
+            combo={gameState.combo || 0}
+            multiplier={comboMultiplier}
           />
           <GameMenu
             setGameState={setGameState}

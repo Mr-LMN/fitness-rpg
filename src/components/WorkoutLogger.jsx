@@ -17,6 +17,7 @@ import {
 import { persistWorkoutLog } from "../helpers/workoutPersistence";
 import { updateUserProfile } from "../helpers/userProfile";
 import BenchmarkAmrapTracker from "./BenchmarkAmrapTracker";
+import { showXPPopup } from "./XPPopup";
 import "./styles/WorkoutLogger.css";
 
 const ALLOWED_CATEGORIES = ["Core", "Legs", "Chest", "Back", "Arms", "Functional"];
@@ -184,6 +185,7 @@ function WorkoutLogger({
       ]);
       setExerciseInput(EMPTY_CARDIO_INPUT);
       playSound("correct", { volume: 0.4 });
+      showXPPopup("+1 Exercise!", { variant: "xp" });
     } else {
       const { sets, reps, weight } = exerciseInput;
       if (!name || !sets || !reps || !weight) return;
@@ -203,6 +205,7 @@ function WorkoutLogger({
       ]);
       setExerciseInput(EMPTY_STRENGTH_INPUT);
       playSound("correct", { volume: 0.4 });
+      showXPPopup("+1 Exercise!", { variant: "xp" });
     }
     setFormError("");
   };
@@ -393,6 +396,17 @@ function WorkoutLogger({
 
       {formError && <p className="form-error">{formError}</p>}
 
+      {workoutLog.length > 0 && (
+        <div className="exercise-count">
+          💪 {workoutLog.length} exercise{workoutLog.length > 1 ? 's' : ''} logged
+          {workoutLog.length >= 5
+            ? ' — 💥 Beast mode!'
+            : workoutLog.length >= 3
+            ? ' — 🔥 Getting stronger!'
+            : ' — ✨ Nice start!'}
+        </div>
+      )}
+
       <div className="logged-workout">
         {workoutLog.map((entry, i) => (
           <div key={i} className="logged-card">
@@ -403,14 +417,15 @@ function WorkoutLogger({
                 : `${entry.sets} sets × ${entry.reps} reps @ ${entry.weight}`}
             </div>
             <div className="tags">
-              {entry.type || "—"} | {entry.category || "—"}
+              <span className="exercise-category-pill">{entry.category || "—"}</span>
+              {entry.type || "—"}
             </div>
           </div>
         ))}
       </div>
 
       {boostToast && <p className="boost-toast">{boostToast}</p>}
-      <button className="primary-btn finish-btn" onClick={handleFinishWorkout}>
+      <button className="btn-neon btn-neon--gold finish-btn" onClick={handleFinishWorkout}>
         Finish Workout
       </button>
 

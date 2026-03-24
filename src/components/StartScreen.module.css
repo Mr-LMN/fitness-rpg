@@ -1,5 +1,5 @@
 /* ============================================================
-   START SCREEN — Cinematic full-screen landing
+   START SCREEN — Cinematic full-screen landing (Enhanced)
    ============================================================ */
 
 .container {
@@ -15,83 +15,154 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* Dark gradient overlay — heaviest at bottom */
 .overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.45) 0%,
-    rgba(10, 10, 15, 0.65) 45%,
-    rgba(10, 10, 15, 0.97) 100%
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(5, 5, 8, 0.7) 45%,
+    rgba(5, 5, 8, 0.98) 100%
   );
   z-index: 1;
 }
 
-/* Pulsing red tint — lockdown atmosphere */
 .redTint {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 50%, rgba(139, 0, 0, 0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 50%, rgba(139, 0, 0, 0.15) 0%, transparent 70%);
   z-index: 1;
   animation: redBreath 3s ease-in-out infinite;
   pointer-events: none;
 }
 @keyframes redBreath {
-  0%, 100% { opacity: 0.6; }
+  0%, 100% { opacity: 0.5; }
   50%       { opacity: 1; }
 }
 
-/* ── Logo ── */
 .logo {
   position: absolute;
   top: 24px;
   left: 24px;
-  width: 110px;
+  width: 100px;
   height: auto;
   z-index: 4;
-  opacity: 0.92;
+  opacity: 0.9;
   filter: drop-shadow(0 2px 12px rgba(0,0,0,0.7));
 }
 
-/* ── TITAN boot-up panel ── */
+/* TITAN Boot Terminal */
 .titanBoot {
   position: relative;
   z-index: 4;
-  max-width: 680px;
+  max-width: 600px;
   width: 90%;
-  background: rgba(0, 0, 0, 0.75);
-  border: 1px solid rgba(185, 28, 28, 0.5);
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 30, 30, 0.4);
   border-radius: 6px;
-  padding: 14px 20px;
+  padding: 14px 18px;
   text-align: left;
-  margin-bottom: 24px;
-  box-shadow: 0 0 28px rgba(185, 28, 28, 0.2);
-  animation: titanBorderPulse 2s ease-in-out infinite;
+  margin-bottom: 28px;
+  box-shadow: 0 0 30px rgba(255, 30, 30, 0.15);
+  overflow: hidden;
 }
-@keyframes titanBorderPulse {
-  0%, 100% { box-shadow: 0 0 18px rgba(185,28,28,0.18); }
-  50%       { box-shadow: 0 0 36px rgba(185,28,28,0.38); }
+
+.titanBoot::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--titan-red), transparent);
+  animation: bootScan 3s ease-in-out infinite;
+}
+@keyframes bootScan {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+.titanBootHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 30, 30, 0.15);
+}
+
+.titanDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--titan-red);
+  box-shadow: 0 0 6px var(--titan-red);
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 .titanBootLabel {
-  display: block;
-  font-family: 'Courier New', monospace;
-  font-size: 0.65rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
   letter-spacing: 0.2em;
-  color: rgba(185, 28, 28, 0.8);
+  color: rgba(255, 30, 30, 0.7);
   text-transform: uppercase;
-  margin-bottom: 6px;
+}
+
+.titanBootLines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.titanBootComplete {
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  color: rgba(0, 255, 136, 0.7);
+  margin: 0;
+  line-height: 1.5;
+  animation: lineSlide 0.3s ease-out;
+}
+@keyframes lineSlide {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.titanCheck {
+  color: rgba(0, 255, 136, 0.9);
+  margin-right: 4px;
+}
+
+.titanPrompt {
+  color: var(--titan-red);
+  margin-right: 4px;
 }
 
 .titanBootText {
   font-family: 'Courier New', monospace;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   color: #ff4444;
   margin: 0;
   line-height: 1.5;
   min-height: 1.4em;
-  text-shadow: 0 0 10px rgba(255, 68, 68, 0.35);
+  text-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+}
+
+.titanBootFinal {
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  color: var(--titan-red);
+  margin: 4px 0 0;
+  animation: finalBlink 1.5s ease-in-out infinite;
+  text-shadow: 0 0 10px rgba(255, 30, 30, 0.4);
+}
+@keyframes finalBlink {
+  0%, 70% { opacity: 1; }
+  71%, 100% { opacity: 0.4; }
 }
 
 .bootCursor {
@@ -108,7 +179,7 @@
   50%      { opacity: 0; }
 }
 
-/* ── Main content ── */
+/* Main content */
 .content {
   position: relative;
   z-index: 4;
@@ -126,44 +197,42 @@
   transform: translateY(0);
 }
 
-/* Title */
 .title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 104px;
+  font-size: 100px;
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--color-text);
   margin: 0;
   line-height: 0.95;
   text-transform: uppercase;
   text-shadow:
-    0 0 40px rgba(200,168,75,0.12),
+    0 0 40px rgba(240,201,64,0.15),
     0 4px 20px rgba(0,0,0,0.8);
 }
 
 .subtitle {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 76px;
-  font-weight: 400;
-  letter-spacing: 0.08em;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
   color: var(--color-accent);
   margin: 0;
-  line-height: 1;
+  line-height: 1.2;
   text-transform: uppercase;
-  text-shadow: 0 0 30px rgba(200,168,75,0.28);
+  text-shadow: 0 0 30px rgba(240,201,64,0.3);
 }
 
 .chapter {
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--color-muted);
-  margin: 14px 0 36px;
-  letter-spacing: 0.14em;
+  margin: 16px 0 36px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
-/* Action buttons */
 .actions {
   display: flex;
   flex-direction: column;
@@ -171,29 +240,39 @@
   gap: 14px;
 }
 
-/* Primary CTA — glowing gold pulse */
 .startBtn {
-  position: relative;
   padding: 16px 48px !important;
-  font-size: 1.15rem !important;
-  letter-spacing: 0.16em !important;
-  animation: ctaPulse 2.5s ease-in-out infinite;
-}
-@keyframes ctaPulse {
-  0%, 100% { box-shadow: 0 0 18px rgba(200,168,75,0.18), 0 6px 24px rgba(0,0,0,0.5); }
-  50%       { box-shadow: 0 0 36px rgba(200,168,75,0.38), 0 8px 32px rgba(0,0,0,0.6); }
+  font-size: 0.9rem !important;
+  letter-spacing: 0.18em !important;
 }
 
-/* ── Ticker bar ── */
+.sltBtn {
+  padding: 8px 20px;
+  font-size: 0.75rem;
+  font-family: 'Orbitron', sans-serif;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+}
+.sltBtn:hover {
+  border-color: var(--color-muted);
+  color: var(--color-text);
+}
+
+/* Ticker */
 .ticker {
   position: absolute;
   bottom: 44px;
   left: 0;
   right: 0;
   z-index: 4;
-  background: rgba(0, 0, 0, 0.72);
-  border-top: 1px solid rgba(185, 28, 28, 0.35);
-  border-bottom: 1px solid rgba(185, 28, 28, 0.35);
+  background: rgba(0, 0, 0, 0.75);
+  border-top: 1px solid rgba(255, 30, 30, 0.3);
+  border-bottom: 1px solid rgba(255, 30, 30, 0.3);
   padding: 8px 0;
   overflow: hidden;
   text-align: center;
@@ -201,42 +280,41 @@
 
 .tickerInner {
   display: inline-block;
-  font-family: 'Courier New', monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255, 60, 60, 0.88);
-  animation: tickerFade 0.45s ease-in-out;
+  color: rgba(255, 60, 60, 0.85);
+  animation: tickerFade 0.4s ease-in-out;
 }
-
 @keyframes tickerFade {
   from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Version tag */
 .version {
   position: absolute;
   bottom: 18px;
   right: 20px;
   z-index: 4;
-  font-size: 11px;
-  color: rgba(107, 107, 128, 0.65);
-  letter-spacing: 0.04em;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  color: rgba(107, 107, 128, 0.5);
+  letter-spacing: 0.08em;
 }
 
-/* ── Responsive ── */
+/* Responsive */
 @media (max-width: 768px) {
   .title    { font-size: 68px; }
-  .subtitle { font-size: 50px; }
-  .logo     { width: 80px; top: 14px; left: 14px; }
+  .subtitle { font-size: 24px; letter-spacing: 0.2em; }
+  .logo     { width: 70px; top: 14px; left: 14px; }
   .titanBoot { padding: 10px 14px; }
-  .titanBootText { font-size: 0.78rem; }
+  .titanBootText { font-size: 0.72rem; }
 }
 
 @media (max-width: 480px) {
   .title    { font-size: 52px; }
-  .subtitle { font-size: 38px; }
+  .subtitle { font-size: 18px; }
   .startBtn { padding: 14px 32px !important; }
 }

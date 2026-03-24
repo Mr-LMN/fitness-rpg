@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 import { setUserWeight } from "../utils";
-import { GiPirateCaptain, GiBlackKnightHelm, GiNinjaHead } from "react-icons/gi";
-import { Brain, Volume2 } from "lucide-react";
+import { Brain, Volume2, Zap } from "lucide-react";
 import { updateUserProfile } from "../helpers/userProfile";
+import { CLASSES } from "../constants";
 import "./styles/CharacterCreation.css";
 
-const AVATARS = [
-  { id: "pirate", icon: <GiPirateCaptain />, label: "Pirate", desc: "Bold and fearless" },
-  { id: "knight", icon: <GiBlackKnightHelm />, label: "Knight", desc: "Strong and brave" },
-  { id: "ninja", icon: <GiNinjaHead />, label: "Ninja", desc: "Fast and focused" },
-];
+const CLASS_LIST = Object.values(CLASSES);
 
 const STEPS = [
-  { id: "identity", label: "Your Name" },
-  { id: "details", label: "About You" },
-  { id: "avatar", label: "Choose Hero" },
-  { id: "settings", label: "Accessibility" },
+  { id: "identity", label: "Agent Name" },
+  { id: "details", label: "Intel" },
+  { id: "class", label: "Choose Class" },
+  { id: "settings", label: "Settings" },
 ];
 
 function StepProgress({ currentStep, total }) {
@@ -25,7 +21,9 @@ function StepProgress({ currentStep, total }) {
       <div className="cc-progress-track">
         <div className="cc-progress-fill" style={{ width: `${pct}%` }} />
       </div>
-      <span className="cc-progress-label">Step {currentStep + 1} of {total}</span>
+      <span className="cc-progress-label">
+        Step {currentStep + 1} of {total}
+      </span>
     </div>
   );
 }
@@ -43,31 +41,31 @@ function CharacterCreation({ gameState, setGameState, userId }) {
     switch (step) {
       case 0:
         if (!gameState.studentName?.trim()) {
-          setError("Please enter your name to continue.");
+          setError("Enter your agent name to continue.");
           return false;
         }
         break;
       case 1:
         if (!gameState.yearGroup) {
-          setError("Please select your year group.");
+          setError("Select your year group.");
           return false;
         }
         if (!gameState.gender) {
-          setError("Please select a gender option.");
+          setError("Select a gender option.");
           return false;
         }
         if (!gameState.weight || parseFloat(gameState.weight) < 20) {
-          setError("Please enter a valid weight (in kg).");
+          setError("Enter a valid weight (in kg).");
           return false;
         }
         if (!gameState.workoutFocus) {
-          setError("Please choose a workout focus.");
+          setError("Choose a workout focus.");
           return false;
         }
         break;
       case 2:
-        if (!gameState.avatar) {
-          setError("Please choose your hero.");
+        if (!gameState.playerClass) {
+          setError("Choose your class to continue.");
           return false;
         }
         break;
@@ -91,62 +89,84 @@ function CharacterCreation({ gameState, setGameState, userId }) {
     const wt = parseFloat(gameState.weight) || 50;
     setUserWeight(wt);
 
+    // Set avatar based on class
+    const classToAvatar = {
+      berserker: "knight",
+      phantom: "ninja",
+      guardian: "pirate",
+    };
+
     const finalState = {
       ...gameState,
       weight: wt,
+      avatar: classToAvatar[gameState.playerClass] || "pirate",
       characterCreated: true,
     };
     setGameState(finalState);
 
-    // Bootstrap user profile in Firestore
     if (userId) {
       await updateUserProfile({
         userId,
         studentName: gameState.studentName,
         yearGroup: gameState.yearGroup,
-        avatar: gameState.avatar || "pirate",
+        avatar: classToAvatar[gameState.playerClass] || "pirate",
         xp: gameState.xp || 0,
         readingAge: gameState.readingAge || "not-sure",
       });
     }
   };
 
-  return (
-    <div className={`character-creation-container ${gameState.enhancedReading ? "enhanced-reading" : ""}`}>
-      <div className="character-creation-box">
+  const selectedClass = gameState.playerClass
+    ? CLASSES[gameState.playerClass]
+    : null;
 
+  return (
+    <div
+      className={`character-creation-container ${
+        gameState.enhancedReading ? "enhanced-reading" : ""
+      }`}
+    >
+      <div className="character-creation-box">
         {/* Header */}
         <div className="cc-header">
-          <h2 className="cc-title">Create Your Hero</h2>
-          <p className="cc-subtitle">Pencoedtre High School — Fitness RPG</p>
+          <div className="cc-titan-badge">TITAN DOSSIER</div>
+          <h2 className="cc-title">Create Your Agent</h2>
+          <p className="cc-subtitle">
+            Pencoedtre High School — Survival Protocol
+          </p>
         </div>
 
-        {/* Step progress bar */}
         <StepProgress currentStep={step} total={STEPS.length} />
 
-        {/* Step label */}
         <div className="cc-step-label">
-          <span className="cc-step-name">Step {step + 1}: {STEPS[step].label}</span>
+          <span className="cc-step-name">
+            Step {step + 1}: {STEPS[step].label}
+          </span>
         </div>
 
         {/* STEP 0: Name */}
         {step === 0 && (
           <div className="cc-step-content">
             <div className="cc-field">
-              <label className="cc-label" htmlFor="cc-name">Your Name</label>
+              <label className="cc-label" htmlFor="cc-name">
+                Agent Name
+              </label>
               <input
                 id="cc-name"
                 className="cc-input"
                 type="text"
-                placeholder="Enter your name here"
+                placeholder="Enter your name, agent..."
                 value={gameState.studentName || ""}
                 onChange={(e) => update("studentName", e.target.value)}
                 autoFocus
                 autoComplete="given-name"
-                onKeyDown={(e) => { if (e.key === "Enter") handleNext(); }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleNext();
+                }}
               />
               <p className="cc-field-hint">
-                This is the name that will appear on the leaderboard.
+                This will appear on the school leaderboard and in TITAN's
+                records.
               </p>
             </div>
           </div>
@@ -156,7 +176,9 @@ function CharacterCreation({ gameState, setGameState, userId }) {
         {step === 1 && (
           <div className="cc-step-content">
             <div className="cc-field">
-              <label className="cc-label" htmlFor="cc-year">Year Group</label>
+              <label className="cc-label" htmlFor="cc-year">
+                Year Group
+              </label>
               <select
                 id="cc-year"
                 className="cc-select"
@@ -173,7 +195,9 @@ function CharacterCreation({ gameState, setGameState, userId }) {
             </div>
             <div className="cc-row">
               <div className="cc-field">
-                <label className="cc-label" htmlFor="cc-gender">Gender</label>
+                <label className="cc-label" htmlFor="cc-gender">
+                  Gender
+                </label>
                 <select
                   id="cc-gender"
                   className="cc-select"
@@ -187,7 +211,9 @@ function CharacterCreation({ gameState, setGameState, userId }) {
                 </select>
               </div>
               <div className="cc-field">
-                <label className="cc-label" htmlFor="cc-weight">Weight (kg)</label>
+                <label className="cc-label" htmlFor="cc-weight">
+                  Weight (kg)
+                </label>
                 <input
                   id="cc-weight"
                   type="number"
@@ -201,7 +227,9 @@ function CharacterCreation({ gameState, setGameState, userId }) {
               </div>
             </div>
             <div className="cc-field">
-              <label className="cc-label" htmlFor="cc-focus">Workout Focus</label>
+              <label className="cc-label" htmlFor="cc-focus">
+                Primary Training
+              </label>
               <select
                 id="cc-focus"
                 className="cc-select"
@@ -209,22 +237,25 @@ function CharacterCreation({ gameState, setGameState, userId }) {
                 onChange={(e) => update("workoutFocus", e.target.value)}
               >
                 <option value="">Choose focus...</option>
-                <option value="cardio">Cardio — running, cycling, rowing</option>
-                <option value="strength">Strength — lifting, resistance</option>
+                <option value="cardio">
+                  Cardio — running, cycling, rowing
+                </option>
+                <option value="strength">
+                  Strength — lifting, resistance
+                </option>
               </select>
-              <p className="cc-field-hint">
-                You can change this at any time in the menu.
-              </p>
             </div>
             <div className="cc-field">
-              <label className="cc-label" htmlFor="cc-reading-age">Reading Age</label>
+              <label className="cc-label" htmlFor="cc-reading-age">
+                Reading Level
+              </label>
               <select
                 id="cc-reading-age"
                 className="cc-select"
                 value={gameState.readingAge || "not-sure"}
                 onChange={(e) => update("readingAge", e.target.value)}
               >
-                <option value="not-sure">Not sure — use my year group default</option>
+                <option value="not-sure">Auto-detect from year group</option>
                 <option value="under7">Under 7</option>
                 <option value="7-8">7–8</option>
                 <option value="9-10">9–10</option>
@@ -233,32 +264,65 @@ function CharacterCreation({ gameState, setGameState, userId }) {
                 <option value="15+">15+</option>
               </select>
               <p className="cc-field-hint">
-                This adjusts the story text to match your reading level.
+                Adjusts story complexity to match your reading level.
               </p>
             </div>
           </div>
         )}
 
-        {/* STEP 2: Avatar */}
+        {/* STEP 2: Class Selection */}
         {step === 2 && (
           <div className="cc-step-content">
-            <p className="cc-step-intro">Choose the hero that represents you on this adventure.</p>
-            <div className="cc-avatar-grid">
-              {AVATARS.map(({ id, icon, label, desc }) => (
+            <p className="cc-step-intro">
+              Choose your combat class. Each class has a unique passive ability
+              that boosts your XP in different ways.
+            </p>
+            <div className="cc-class-grid">
+              {CLASS_LIST.map((cls) => (
                 <button
-                  key={id}
+                  key={cls.id}
                   type="button"
-                  className={`cc-avatar-option ${gameState.avatar === id ? "selected" : ""}`}
-                  onClick={() => update("avatar", id)}
-                  aria-pressed={gameState.avatar === id}
-                  aria-label={`${label}: ${desc}`}
+                  className={`class-card ${
+                    gameState.playerClass === cls.id ? "selected" : ""
+                  }`}
+                  style={{
+                    "--class-color": cls.color,
+                    "--class-rgb": cls.rgb,
+                  }}
+                  onClick={() => update("playerClass", cls.id)}
+                  aria-pressed={gameState.playerClass === cls.id}
+                  aria-label={`${cls.name}: ${cls.desc}`}
                 >
-                  <span className="cc-avatar-icon">{icon}</span>
-                  <span className="cc-avatar-label">{label}</span>
-                  <span className="cc-avatar-desc">{desc}</span>
+                  <span className="class-icon">{cls.icon}</span>
+                  <span className="class-name" style={{ color: cls.color }}>
+                    {cls.name}
+                  </span>
+                  <span className="class-desc">{cls.desc}</span>
+                  <span
+                    className="class-ability"
+                    style={{ color: cls.color }}
+                  >
+                    <Zap size={10} /> {cls.ability}
+                  </span>
                 </button>
               ))}
             </div>
+            {selectedClass && (
+              <div
+                className="cc-class-preview"
+                style={{ borderColor: selectedClass.color }}
+              >
+                <span className="cc-class-preview-icon">
+                  {selectedClass.icon}
+                </span>
+                <div>
+                  <strong style={{ color: selectedClass.color }}>
+                    {selectedClass.name}
+                  </strong>{" "}
+                  selected — {selectedClass.ability}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -285,7 +349,7 @@ function CharacterCreation({ gameState, setGameState, userId }) {
                   }}
                 />
                 <Brain size={16} aria-hidden="true" />
-                Enhanced Reading — larger text on a cream background
+                Enhanced Reading — larger text on cream background
               </label>
               <label className="cc-toggle">
                 <input
@@ -299,23 +363,33 @@ function CharacterCreation({ gameState, setGameState, userId }) {
                   }
                 />
                 <Volume2 size={16} aria-hidden="true" />
-                Text-to-Speech — the game reads the story out loud
+                Text-to-Speech — the game reads the story aloud
               </label>
             </div>
-            <p className="cc-step-intro" style={{ marginTop: 12 }}>
-              You're all set, <strong>{gameState.studentName}</strong>! Press Start to begin your adventure.
-            </p>
+            <div className="cc-ready-panel">
+              <p className="cc-ready-text">
+                You're all set,{" "}
+                <strong>{gameState.studentName}</strong>!
+                {selectedClass && (
+                  <>
+                    {" "}
+                    Class: <strong style={{ color: selectedClass.color }}>{selectedClass.name}</strong>.
+                  </>
+                )}
+              </p>
+              <p className="cc-ready-hint">
+                TITAN is waiting. Press Start to begin your survival.
+              </p>
+            </div>
           </div>
         )}
 
-        {/* Error message */}
         {error && (
           <p className="cc-error" role="alert">
             {error}
           </p>
         )}
 
-        {/* Navigation Buttons */}
         <div className="cc-nav">
           {step > 0 && (
             <button className="cc-back-btn" onClick={handleBack} type="button">
@@ -332,7 +406,7 @@ function CharacterCreation({ gameState, setGameState, userId }) {
               onClick={handleStart}
               type="button"
             >
-              Start Adventure
+              ▶ Start Survival
             </button>
           )}
         </div>

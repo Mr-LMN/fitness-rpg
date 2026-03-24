@@ -29,12 +29,27 @@
 /* Header */
 .cc-header {
   text-align: center;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--color-border);
 }
 
+.cc-titan-badge {
+  display: inline-block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border: 1px solid rgba(255, 30, 30, 0.3);
+  border-radius: 3px;
+  color: var(--titan-red);
+  background: rgba(255, 30, 30, 0.05);
+  margin-bottom: 10px;
+}
+
 .cc-title {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-family: 'Bebas Neue', sans-serif;
   color: var(--color-accent);
   margin: 0 0 4px;
@@ -368,22 +383,70 @@
   color: #374151;
 }
 
+/* Class Selection Grid */
+.cc-class-grid {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Class Preview Panel */
+.cc-class-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.cc-class-preview-icon {
+  font-size: 1.6rem;
+}
+
+/* Ready Panel (step 4) */
+.cc-ready-panel {
+  text-align: center;
+  padding: 16px;
+  background: rgba(240, 201, 64, 0.04);
+  border: 1px solid rgba(240, 201, 64, 0.15);
+  border-radius: 6px;
+}
+
+.cc-ready-text {
+  font-size: 0.95rem;
+  margin: 0 0 6px;
+  color: var(--color-text);
+}
+
+.cc-ready-hint {
+  font-size: 0.8rem;
+  margin: 0;
+  color: var(--color-muted);
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   .cc-row {
     grid-template-columns: 1fr;
   }
 
-  .cc-avatar-grid {
-    gap: 10px;
+  .cc-class-grid {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .cc-avatar-option {
-    padding: 10px 14px;
-    min-width: 80px;
+  .class-card {
+    min-width: unset;
   }
 
-  .cc-avatar-icon {
-    font-size: 1.8rem;
+  .cc-class-preview {
+    flex-direction: column;
+    text-align: center;
   }
 }

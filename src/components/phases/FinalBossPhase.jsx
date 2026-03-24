@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import ParallaxDust from "../ParallaxDust";
 import BlazePods from "../BlazePods";
 import VideoSlot from "../VideoSlot";
+import Confetti from "../Confetti";
+import { showXPPopup } from "../XPPopup";
 import { playSound, updateLifetimeSummary, logWorkoutMinutes } from "../../utils";
 import TTSLine from "../TTSLine";
 import "../styles/RoomScene.css";
@@ -18,7 +20,9 @@ const WORKOUT_PHASES = [
     target: 21,
     unit: "Calories",
     hpChunk: 34,
-    tip: "Drive the Assault Bike hard — arm and legs together!",
+    icon: "🚴",
+    tip: "Drive the Assault Bike hard — arms and legs together! Every calorie is a blow to TITAN!",
+    titanTaunt: "TITAN: \"Your cardiovascular output is... disappointing.\"",
   },
   {
     id: "slam",
@@ -26,7 +30,9 @@ const WORKOUT_PHASES = [
     target: 15,
     unit: "Reps",
     hpChunk: 33,
-    tip: "Pick up the ball, reach overhead, then slam it hard!",
+    icon: "💥",
+    tip: "Grab the ball. Reach overhead. SLAM it down! Each slam sends a shockwave through TITAN's systems!",
+    titanTaunt: "TITAN: \"Impact detected... systems destabilising...\"",
   },
   {
     id: "burpee",
@@ -34,11 +40,13 @@ const WORKOUT_PHASES = [
     target: 9,
     unit: "Reps",
     hpChunk: 33,
-    tip: "Drop to the floor, push up, then jump with hands above head!",
+    icon: "🔥",
+    tip: "Drop, push up, explode upward! Your speed is TITAN's weakness! This is the final push!",
+    titanTaunt: "TITAN: \"ERROR... CANNOT TRACK SUBJECT... TOO FAST...\"",
   },
 ];
 
-function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
+function FinalBossPhase({ setGameState, gameState, onQuestEvent = () => {} }) {
   const [introVideoWatched, setIntroVideoWatched] = useState(false);
   const [battleStarted, setBattleStarted] = useState(false);
   const [battleFinished, setBattleFinished] = useState(false);
@@ -50,6 +58,8 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
   const [battleLog, setBattleLog] = useState([]);
   const [shake, setShake] = useState(false);
   const [hitFlash, setHitFlash] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [titanTaunt, setTitanTaunt] = useState("");
   const finalTimerRef = useRef(0);
   const logRef = useRef(null);
 
@@ -78,12 +88,17 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
 
   const addLog = (line) => setBattleLog((prev) => [...prev, line]);
 
-  const triggerHit = (newHp) => {
+  const triggerHit = (newHp, dmg) => {
     setHitFlash(true);
     setShake(true);
-    setTimeout(() => { setHitFlash(false); setShake(false); }, 650);
+    setTimeout(() => {
+      setHitFlash(false);
+      setShake(false);
+    }, 650);
     playSound("alarm");
     setBossHp(Math.max(0, newHp));
+    // Floating damage number
+    showXPPopup(`-${dmg} HP`, { variant: "damage", x: window.innerWidth / 2, y: 200 });
   };
 
   const handleStart = () => {
@@ -91,6 +106,7 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
     playSound("bossMusic");
     setBattleStarted(true);
     addLog("⚔ BATTLE STARTED! Complete all 3 exercises to shut down TITAN!");
+    addLog(`Phase 1: ${WORKOUT_PHASES[0].icon} ${WORKOUT_PHASES[0].label} — ${WORKOUT_PHASES[0].target} ${WORKOUT_PHASES[0].unit}`);
   };
 
   const handlePhaseSubmit = () => {
@@ -103,9 +119,13 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
     const newHp = Math.max(0, bossHp - dmg);
 
     addLog(
-      `${currentPhase.label}: ${actual}/${currentPhase.target} ${currentPhase.unit} — ${dmg} damage dealt!`
+      `${currentPhase.icon} ${currentPhase.label}: ${actual}/${currentPhase.target} ${currentPhase.unit} — ${dmg} DAMAGE!`
     );
-    triggerHit(newHp);
+    triggerHit(newHp, dmg);
+
+    // Show TITAN taunt after phase
+    setTitanTaunt(currentPhase.titanTaunt);
+    setTimeout(() => setTitanTaunt(""), 4000);
 
     const newCompleted = [...completedPhases, currentPhase.id];
     setCompletedPhases(newCompleted);
@@ -115,10 +135,11 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
     if (nextIdx < WORKOUT_PHASES.length) {
       setCurrentPhaseIdx(nextIdx);
       setTimeout(() => {
-        addLog(`Phase ${currentPhaseIdx + 1} done! Next: ${WORKOUT_PHASES[nextIdx].label}`);
-      }, 300);
+        addLog(
+          `Phase ${nextIdx + 1}: ${WORKOUT_PHASES[nextIdx].icon} ${WORKOUT_PHASES[nextIdx].label} — ${WORKOUT_PHASES[nextIdx].target} ${WORKOUT_PHASES[nextIdx].unit}`
+        );
+      }, 800);
     } else {
-      // All phases complete
       setTimeout(() => doFinish(newHp, newCompleted.length), 500);
     }
   };
@@ -126,9 +147,12 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
   const doFinish = (finalHp, phasesCount) => {
     finalTimerRef.current = timer;
     setBattleFinished(true);
+    setShowConfetti(true);
 
     const dealtDamage = BOSS_MAX_HP - Math.max(0, finalHp);
-    addLog(`TITAN DEFEATED! ${dealtDamage} total damage dealt!`);
+    addLog(`🏆 TITAN DEFEATED! ${dealtDamage} total damage dealt!`);
+
+    showXPPopup("+50 XP — TITAN DESTROYED!", { variant: "xp", y: 100 });
 
     setGameState((prev) => {
       const newBadges = [BADGES.BOSS_VANQUISHER];
@@ -139,7 +163,6 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
 
       const badgesToAdd = newBadges.filter((b) => !prev.badges.includes(b));
 
-      // Apply xpBoost from first matching consumable in inventory
       const inventory = prev.inventory || [];
       const xpItem = inventory.find((it) => it.effect?.xpBoost);
       const baseXP = 50;
@@ -191,14 +214,21 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
   const handleManualFinish = () => doFinish(bossHp, completedPhases.length);
 
   const hpPercent = (bossHp / BOSS_MAX_HP) * 100;
-  const hpColor = hpPercent > 50 ? "#ef4444" : hpPercent > 20 ? "#f59e0b" : "#7f1d1d";
+  const hpColor =
+    hpPercent > 50 ? "#ef4444" : hpPercent > 20 ? "#f59e0b" : "#7f1d1d";
+  const isCritical = hpPercent <= 20 && hpPercent > 0;
 
   return (
     <div className="final-boss-page">
-      <img src="/images/FitnessSuite.png" alt="Fitness Suite" className="final-boss-bg" />
+      <img
+        src="/images/FitnessSuite.png"
+        alt="Fitness Suite"
+        className="final-boss-bg"
+      />
       <ParallaxDust />
+      {showConfetti && <Confetti count={80} duration={5000} />}
 
-      {/* ── Boss intro video (plays before battle UI) ── */}
+      {/* Boss intro video */}
       {!introVideoWatched && (
         <div className="final-boss-intro-video-wrap">
           <VideoSlot
@@ -211,204 +241,266 @@ function FinalBossPhase({ setGameState, onQuestEvent = () => {} }) {
       )}
 
       {introVideoWatched && (
-      <div className={`final-boss-arena ${shake ? "boss-shake" : ""}`}>
-
-        {/* ── TITAN "face" — glitching terminal ── */}
-        {!battleStarted && !battleFinished && (
-          <div className="titan-face-panel scanlines">
-            <div className="titan-face-grid">
-              <span className="titan-face-char flicker">T</span>
-              <span className="titan-face-char">I</span>
-              <span className="titan-face-char flicker" style={{animationDelay:'0.3s'}}>T</span>
-              <span className="titan-face-char">A</span>
-              <span className="titan-face-char flicker" style={{animationDelay:'0.7s'}}>N</span>
-            </div>
-            <div className="titan-face-status">
-              <span className="titan-face-dot" /><span className="titan-face-status-text">MAINFRAME ACTIVE — THREAT LEVEL: MAXIMUM</span>
-            </div>
-          </div>
-        )}
-
-        {/* Header */}
-        <div className="final-boss-header">
-          <h1 className="final-boss-title">FINAL BOSS: OPERATION SLAMSTORM</h1>
-          <div className="final-boss-timer">
-            {battleStarted ? (
-              <span className={`timer-value ${!battleFinished ? "timer-ticking" : "timer-done"}`}>
-                {formattedTime}
-              </span>
-            ) : (
-              <span className="timer-standby">Ready to start</span>
-            )}
-          </div>
-        </div>
-
-        {/* Boss HP Bar */}
-        <div className={`final-hp-section ${hitFlash ? "hp-hit-flash" : ""}`}>
-          <div className="final-hp-label">
-            <span>TITAN MAINFRAME</span>
-            <span className="final-hp-num">{Math.max(0, bossHp)} / {BOSS_MAX_HP} HP</span>
-          </div>
-          <div className="final-hp-track">
-            <div
-              className="final-hp-fill"
-              style={{ width: `${hpPercent}%`, background: hpColor }}
-            />
-          </div>
-          {/* Exercise tracker dots */}
-          <div className="final-exercise-dots">
-            {WORKOUT_PHASES.map((ph, i) => (
-              <div
-                key={ph.id}
-                className={`exercise-dot ${
-                  completedPhases.includes(ph.id)
-                    ? "dot-complete"
-                    : i === currentPhaseIdx && battleStarted && !battleFinished
-                    ? "dot-current"
-                    : ""
-                }`}
-              >
-                <span className="dot-nm">{ph.target} {ph.unit}</span>
+        <div
+          className={`final-boss-arena ${shake ? "screen-shake" : ""}`}
+        >
+          {/* TITAN face panel */}
+          {!battleStarted && !battleFinished && (
+            <div className="titan-face-panel scanlines">
+              <div className="titan-face-grid">
+                <span className="titan-face-char flicker">T</span>
+                <span className="titan-face-char">I</span>
+                <span className="titan-face-char flicker" style={{ animationDelay: "0.3s" }}>T</span>
+                <span className="titan-face-char">A</span>
+                <span className="titan-face-char flicker" style={{ animationDelay: "0.7s" }}>N</span>
               </div>
-            ))}
-          </div>
-        </div>
+              <div className="titan-face-status">
+                <span className="titan-eye" />
+                <span className="titan-face-status-text">
+                  MAINFRAME ACTIVE — THREAT LEVEL: MAXIMUM
+                </span>
+              </div>
+            </div>
+          )}
 
-        {/* PRE-BATTLE */}
-        {!battleStarted && (
-          <div className="final-prebattle">
-            <p className="final-lore">
-              TITAN's arena flares to life. Every screen blazes red. The assault bikes,
-              slam balls, and burpee stations form a gauntlet designed to break you.
-            </p>
-            <p className="final-lore">
-              Complete the <strong>21-15-9 Hero Workout</strong> to shut TITAN down for good!
-            </p>
-            <div className="final-workout-preview">
-              {WORKOUT_PHASES.map((ph) => (
-                <div key={ph.id} className="preview-row">
-                  <span className="preview-txt">
-                    <strong>{ph.target}</strong> {ph.label} ({ph.unit})
+          {/* Header */}
+          <div className="final-boss-header">
+            <h1 className="final-boss-title glitch-v2">
+              OPERATION SLAMSTORM
+            </h1>
+            <div className="final-boss-timer">
+              {battleStarted ? (
+                <span
+                  className={`timer-value ${
+                    !battleFinished ? "timer-ticking" : "timer-done"
+                  }`}
+                >
+                  {formattedTime}
+                </span>
+              ) : (
+                <span className="timer-standby">Ready to engage</span>
+              )}
+            </div>
+          </div>
+
+          {/* Boss HP Bar (Enhanced) */}
+          <div
+            className={`boss-hp-container ${
+              isCritical ? "boss-hp-container--critical" : ""
+            } ${hitFlash ? "boss-hp-container--hit" : ""}`}
+          >
+            <div className="boss-hp-name">
+              TITAN MAINFRAME {isCritical && "— CRITICAL"}
+            </div>
+            <div className="boss-hp-track">
+              <div
+                className="boss-hp-fill"
+                style={{ width: `${hpPercent}%`, background: hpColor }}
+              />
+            </div>
+            <div className="boss-hp-text">
+              {Math.max(0, bossHp)} / {BOSS_MAX_HP} HP
+            </div>
+            {/* Exercise phase tracker */}
+            <div className="final-exercise-dots">
+              {WORKOUT_PHASES.map((ph, i) => (
+                <div
+                  key={ph.id}
+                  className={`exercise-dot ${
+                    completedPhases.includes(ph.id)
+                      ? "dot-complete"
+                      : i === currentPhaseIdx && battleStarted && !battleFinished
+                      ? "dot-current"
+                      : ""
+                  }`}
+                >
+                  <span className="dot-icon">{ph.icon}</span>
+                  <span className="dot-nm">
+                    {ph.target} {ph.unit}
                   </span>
                 </div>
               ))}
             </div>
-            <TTSLine text="Mrs. Roche reels, the Blaze Pods primed around you. Strap in and start the finisher before she rallies." />
-            <button className="final-start-btn" onClick={handleStart}>
-              Start Boss Battle
-            </button>
           </div>
-        )}
 
-        {/* ACTIVE BATTLE */}
-        {battleStarted && !battleFinished && !allPhasesComplete && (
-          <div className="final-active">
-            <div className="final-phase-card">
-              <div className="final-phase-top">
-                <span className="final-phase-pill">
-                  Exercise {currentPhaseIdx + 1} / {WORKOUT_PHASES.length}
-                </span>
-                <h3 className="final-phase-name">
-                  {currentPhase.label}
-                </h3>
-              </div>
-              <p className="final-phase-tip">{currentPhase.tip}</p>
-              <p className="final-phase-target">
-                Target: <strong>{currentPhase.target} {currentPhase.unit}</strong>
+          {/* TITAN Taunt */}
+          {titanTaunt && (
+            <div className="titan-terminal" style={{ margin: "12px 0", textAlign: "center" }}>
+              <p style={{ color: "var(--titan-red)", margin: 0, fontSize: "0.85rem" }}>
+                {titanTaunt}
               </p>
             </div>
-
-            <div className="final-input-row">
-              <label htmlFor="final-reps" className="final-input-label">
-                Enter your {currentPhase.unit.toLowerCase()} completed:
-              </label>
-              <div className="final-input-group">
-                <input
-                  id="final-reps"
-                  type="number"
-                  min="1"
-                  max={currentPhase.target}
-                  value={phaseInput}
-                  onChange={(e) => setPhaseInput(e.target.value)}
-                  placeholder={`0 – ${currentPhase.target}`}
-                  className="final-reps-input"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handlePhaseSubmit();
-                  }}
-                  autoFocus
-                />
-                <button
-                  className="final-attack-btn"
-                  onClick={handlePhaseSubmit}
-                  disabled={!phaseInput}
-                >
-                  Attack!
-                </button>
-              </div>
-            </div>
-
-            <BlazePods />
-          </div>
-        )}
-
-        {/* MANUAL FINISH */}
-        {battleStarted && !battleFinished && allPhasesComplete && (
-          <div className="final-wrap-up">
-            <p className="wrap-up-msg">All exercises done! You've destroyed the boss!</p>
-            <button className="final-finish-btn" onClick={handleManualFinish}>
-              Finish Battle
-            </button>
-          </div>
-        )}
-
-        {/* VICTORY */}
-        {battleFinished && (
-          <div className="final-victory-panel">
-            <div className="fv-burst"></div>
-            <h2 className="fv-title">VICTORY!</h2>
-            <p className="fv-sub">
-              TITAN's systems collapse. The red lights shift to green. Every door unlocks. The steel shutters on the stairwells grind open — the pathway to the Maths Department is clear.
-            </p>
-            <div className="fv-stats">
-              <div className="fvs-item">
-                <span className="fvs-val">{formattedTime}</span>
-                <span className="fvs-lbl">Completion Time</span>
-              </div>
-              <div className="fvs-item">
-                <span className="fvs-val">+50 XP</span>
-                <span className="fvs-lbl">Earned</span>
-              </div>
-              <div className="fvs-item">
-                <span className="fvs-val">{completedPhases.length}/{WORKOUT_PHASES.length}</span>
-                <span className="fvs-lbl">Exercises</span>
-              </div>
-            </div>
-            <TTSLine text={`You completed Operation Slamstorm in ${formattedTime}!`} />
-            <TTSLine text="Your heroic effort has been recorded on the school leaderboard." />
-            <p className="fv-loot">
-              Found: <strong>Map Piece #2 — Maths Department</strong> (added to backpack)
-            </p>
-          </div>
-        )}
-
-        {/* Battle Log */}
-        <div
-          className="final-battle-log"
-          ref={logRef}
-          role="log"
-          aria-live="polite"
-          aria-label="Battle log"
-        >
-          <p className="fbl-hdr">Battle Log</p>
-          {battleLog.length === 0 && (
-            <p className="fbl-empty">Start the battle to see the action!</p>
           )}
-          {battleLog.map((line, i) => (
-            <p key={i} className="fbl-line">{line}</p>
-          ))}
+
+          {/* PRE-BATTLE */}
+          {!battleStarted && (
+            <div className="final-prebattle">
+              <p className="final-lore">
+                TITAN's arena blazes red. The assault bikes, slam balls, and
+                burpee stations form a gauntlet designed to break you.
+              </p>
+              <p className="final-lore" style={{ color: "var(--color-accent)" }}>
+                Complete the <strong>21-15-9 Hero Workout</strong> to shut TITAN
+                down for good!
+              </p>
+              <div className="final-workout-preview">
+                {WORKOUT_PHASES.map((ph) => (
+                  <div key={ph.id} className="preview-row">
+                    <span className="preview-icon">{ph.icon}</span>
+                    <span className="preview-txt">
+                      <strong>{ph.target}</strong> {ph.label} ({ph.unit})
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <button className="btn-neon btn-neon--danger" onClick={handleStart} style={{ width: "100%", marginTop: 16 }}>
+                ⚔ ENGAGE TITAN
+              </button>
+            </div>
+          )}
+
+          {/* ACTIVE BATTLE */}
+          {battleStarted && !battleFinished && !allPhasesComplete && (
+            <div className="final-active">
+              <div className="final-phase-card">
+                <div className="final-phase-top">
+                  <span className="final-phase-pill">
+                    {currentPhase.icon} Phase {currentPhaseIdx + 1} /{" "}
+                    {WORKOUT_PHASES.length}
+                  </span>
+                  <h3 className="final-phase-name">{currentPhase.label}</h3>
+                </div>
+                <p className="final-phase-tip">{currentPhase.tip}</p>
+                <p className="final-phase-target">
+                  Target:{" "}
+                  <strong>
+                    {currentPhase.target} {currentPhase.unit}
+                  </strong>
+                </p>
+              </div>
+
+              <div className="final-input-row">
+                <label htmlFor="final-reps" className="final-input-label">
+                  Enter your {currentPhase.unit.toLowerCase()} completed:
+                </label>
+                <div className="final-input-group">
+                  <input
+                    id="final-reps"
+                    type="number"
+                    min="1"
+                    max={currentPhase.target}
+                    value={phaseInput}
+                    onChange={(e) => setPhaseInput(e.target.value)}
+                    placeholder={`0 – ${currentPhase.target}`}
+                    className="final-reps-input"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handlePhaseSubmit();
+                    }}
+                    autoFocus
+                  />
+                  <button
+                    className="btn-neon btn-neon--danger"
+                    onClick={handlePhaseSubmit}
+                    disabled={!phaseInput}
+                  >
+                    ⚔ ATTACK!
+                  </button>
+                </div>
+              </div>
+
+              <BlazePods />
+            </div>
+          )}
+
+          {/* MANUAL FINISH */}
+          {battleStarted && !battleFinished && allPhasesComplete && (
+            <div className="final-wrap-up">
+              <p className="wrap-up-msg">
+                All exercises complete! TITAN's systems are failing!
+              </p>
+              <button
+                className="btn-neon btn-neon--gold"
+                onClick={handleManualFinish}
+                style={{ width: "100%" }}
+              >
+                🏆 DELIVER FINAL BLOW
+              </button>
+            </div>
+          )}
+
+          {/* VICTORY */}
+          {battleFinished && (
+            <div className="final-victory-panel celebration-burst">
+              <h2 className="fv-title neon-text-green">TITAN DESTROYED!</h2>
+              <p className="fv-sub">
+                TITAN's systems collapse. The red lights shift to green. Every
+                door unlocks. The steel shutters grind open — the pathway to the
+                Maths Department is clear.
+              </p>
+              <div className="fv-stats">
+                <div className="fvs-item">
+                  <span className="fvs-val">{formattedTime}</span>
+                  <span className="fvs-lbl">Time</span>
+                </div>
+                <div className="fvs-item">
+                  <span className="fvs-val" style={{ color: "var(--color-accent)" }}>
+                    +50 XP
+                  </span>
+                  <span className="fvs-lbl">Earned</span>
+                </div>
+                <div className="fvs-item">
+                  <span className="fvs-val">
+                    {completedPhases.length}/{WORKOUT_PHASES.length}
+                  </span>
+                  <span className="fvs-lbl">Phases</span>
+                </div>
+              </div>
+              {finalTimerRef.current <= SPEED_THRESHOLDS.SPEED_RUNNER && (
+                <div className="fv-speed-badge">
+                  ⚡ SPEED BADGE UNLOCKED!{" "}
+                  {finalTimerRef.current <= SPEED_THRESHOLDS.TOP_TEN
+                    ? "TOP TEN — Elite performance!"
+                    : "Speed Runner — Under 2 minutes!"}
+                </div>
+              )}
+              <p className="fv-loot">
+                Found: <strong>Map Piece #2 — Maths Department</strong> (added
+                to backpack)
+              </p>
+              <button
+                className="btn-neon btn-neon--gold"
+                onClick={() =>
+                  setGameState((prev) => ({ ...prev, introStage: 7 }))
+                }
+                style={{ width: "100%", marginTop: 12 }}
+              >
+                VIEW VICTORY REPORT →
+              </button>
+            </div>
+          )}
+
+          {/* Battle Log */}
+          <div
+            className="final-battle-log"
+            ref={logRef}
+            role="log"
+            aria-live="polite"
+            aria-label="Battle log"
+          >
+            <p className="fbl-hdr">
+              <span className="titan-eye" style={{ width: 8, height: 8 }} /> Battle Log
+            </p>
+            {battleLog.length === 0 && (
+              <p className="fbl-empty">Engage TITAN to begin...</p>
+            )}
+            {battleLog.map((line, i) => (
+              <p key={i} className="fbl-line">
+                {line}
+              </p>
+            ))}
+          </div>
         </div>
-      </div>
-      )} {/* end introVideoWatched */}
+      )}
     </div>
   );
 }
